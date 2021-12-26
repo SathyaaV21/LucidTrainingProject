@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.demo.model.RoleModel;
-import com.example.demo.repository.RoleRepository;
+
 import com.example.demo.service.RoleService;
 
 @RestController
 @RequestMapping("/api/v1")
 public class RoleController {
-@Autowired
-private RoleRepository roleRepo;
+
 @Autowired
 private RoleService roleservice;
 
@@ -32,7 +31,7 @@ public String addEmp(@RequestBody RoleModel newrole) {
 }
 @GetMapping("/role")
 public List<RoleModel> getRoles(){
-	return roleRepo.findAll();
+	return roleservice.viewRoles();
 
 }
 @GetMapping("/test")
