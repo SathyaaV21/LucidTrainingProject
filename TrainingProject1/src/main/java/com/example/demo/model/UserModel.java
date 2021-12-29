@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+@Document(collection="UserDb")
 public class UserModel {
 
-	@Document(collection="UserDb")
-	public class UserDb {
+	
+	
 		
 		    
 		@Id
@@ -82,4 +82,4 @@ public class UserModel {
 			this.userStatus = userStatus;
 		}
 }
-}
+

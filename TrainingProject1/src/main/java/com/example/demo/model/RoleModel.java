@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+@Document(collection="RoleDb2")
 public class RoleModel {
 
 	
-	@Document(collection="RoleDb")
-	public class RoleDb {
+	
+	
 		
 		    
 		@Id
@@ -66,4 +66,4 @@ public class RoleModel {
 		
 		
 }
-}
+
