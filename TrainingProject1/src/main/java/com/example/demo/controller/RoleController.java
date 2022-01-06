@@ -3,8 +3,8 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +27,7 @@ private RoleService roleservice;
 
 @PostMapping("/role")
 
-public String addEmp(@RequestBody RoleModel newrole) {
+public String addRole(@RequestBody RoleModel newrole) {
 	//Creating a new role
 	roleservice.saveRole(newrole);
 	
@@ -43,11 +43,16 @@ public String test() {
 	return "It is Connecting";
 }
 @DeleteMapping("/role/{Id}")
-public ResponseEntity<Object> deleteRole(@PathVariable int Id) throws RoleNotFoundException{
+public String deleteRole(@PathVariable int Id) throws RoleNotFoundException{
 	
 	roleservice.deleteRole(Id);
-	return new ResponseEntity<Object>(Id, HttpStatus.OK);
+	return "role Deleted";
+	}
+	//return new ResponseEntity<Object>(Id, HttpStatus.OK);
+@GetMapping("/role/{Id}")
+public List<RoleModel> getRole(@PathVariable int Id){
 	
-	
+	return roleservice.findRole(Id)	;
+
 }
 }
