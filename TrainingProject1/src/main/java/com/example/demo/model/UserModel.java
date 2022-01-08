@@ -1,82 +1,100 @@
 package com.example.demo.model;
 
-import java.util.List;
+import java.util.HashSet;
+
+import java.util.Set;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
+
+
 import org.springframework.data.mongodb.core.mapping.Document;
+
+
 @Document(collection="UserDb")
 public class UserModel {
 
+	@Id
+	private String id;
+
+	@NotBlank
+	private String username;
+
+	@Email
+	private String email;
+
+	@NotBlank
+	@Size(min = 2)
+	private String password;
+
+	@Size(min = 10, max = 10)
+	private String phonenumber;
 	
+	private boolean isUserStatusActive;
 	
-		
-		    
-		@Id
-		private int userId;
-		private String username;
-		/*
-		 * private String firstName;
-		 * 
-		 * private String lastName;
-		 */
-		
-		/*
-		 * private List<String> userRoles;
-		 */
-		/* private String userEmail; */
-		
-		public String getUsername() {
-			return username;
-		}
+	@NotBlank
+	private Set<RoleModel> roles = new HashSet<>();
 
-		public void setUsername(String username) {
-			this.username = username;
-		}
+	public UserModel() {
+	}
 
-		private String password;
-		
-		/* private String userStatus; */
+	public String getId() {
+		return id;
+	}
 
-		public int getUserId() {
-			return userId;
-		}
+	public void setId(String id) {
+		this.id = id;
+	}
 
-		public void setUserId(int userId) {
-			this.userId = userId;
-		}
+	public String getUsername() {
+		return username;
+	}
 
-		/*
-		 * public String getFirstName() { return firstName; }
-		 * 
-		 * public void setFirstName(String firstName) { this.firstName = firstName; }
-		 * 
-		 * public String getLastName() { return lastName; }
-		 * 
-		 * public void setLastName(String lastName) { this.lastName = lastName; }
-		 * 
-		 * public List<String> getUserRoles() { return userRoles; }
-		 * 
-		 * public void setUserRoles(List<String> userRoles) { this.userRoles =
-		 * userRoles; }
-		 * 
-		 * public String getUserEmail() { return userEmail; }
-		 * 
-		 * public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
-		 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-		public String getPassword() {
-			return password;
-		}
+	public String getEmail() {
+		return email;
+	}
 
-		public void setPassword(String password) {
-			this.password = password;
-		}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-		/*
-		 * public String getUserStatus() { return userStatus; }
-		 * 
-		 * public void setUserStatus(String userStatus) { this.userStatus = userStatus;
-		 * }
-		 */
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<RoleModel> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<RoleModel> roles) {
+		this.roles = roles;
+	}
+
+	public String getPhonenumber() {
+		return phonenumber;
+	}
+
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
+	}
+	
+	public boolean getIsUserStatusActive() {
+		return isUserStatusActive;
+	}
+	
+	public void setIsuserStatusActive(boolean isUserStatusActive) {
+		this.isUserStatusActive = isUserStatusActive;
+	}
 }
-
+	

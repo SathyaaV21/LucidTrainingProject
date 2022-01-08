@@ -1,69 +1,54 @@
 package com.example.demo.model;
 
-
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 @Document(collection="RoleDb2")
 public class RoleModel {
 
-	
-	
-	
-		
-		    
-		@Id
-		private int roleId;
-	
-		private String roleName;
-		
-		private List<String> rolePermission;
-		
-		private String roleDescription;
-		
-		private String roleStatus;
 
-		public int getRoleId() {
-			return roleId;
-		}
+	@Id
+	private String id;
 
-		public void setRoleId(int roleId) {
-			this.roleId = roleId;
-		}
+	private String name;
 
-		public String getRoleName() {
-			return roleName;
-		}
+	private boolean isrolestatusactive;
 
-		public void setRoleName(String roleName) {
-			this.roleName = roleName;
-		}
+	public RoleModel(String id, String name, boolean isrolestatusactive) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.isrolestatusactive = isrolestatusactive;
+	}
 
-		public List<String> getRolePermission() {
-			return rolePermission;
-		}
+	public RoleModel() {
+	}
 
-		public void setRolePermission(List<String> rolePermission) {
-			this.rolePermission = rolePermission;
-		}
+	public RoleModel(String rolename) {
+		this.name = rolename;
+	}
 
-		public String getRoleDescription() {
-			return roleDescription;
-		}
+	public String getId() {
+		return id;
+	}
 
-		public void setRoleDescription(String roleDescription) {
-			this.roleDescription = roleDescription;
-		}
+	public void setId(String id) {
+		this.id = id;
+	}
 
-		public String getRoleStatus() {
-			return roleStatus;
-		}
+	public String getName() {
+		return name;
+	}
 
-		public void setRoleStatus(String roleStatus) {
-			this.roleStatus = roleStatus;
-		}
-		
-		
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean getIsRolestatusactive() {
+		return isrolestatusactive;
+	}
+
+	public void setIsRolestatusactive(boolean isrolestatusactive) {
+		this.isrolestatusactive = isrolestatusactive;
+	}
 }
-
