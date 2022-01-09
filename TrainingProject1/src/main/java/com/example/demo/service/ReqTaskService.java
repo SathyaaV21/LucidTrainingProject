@@ -13,19 +13,30 @@ import com.example.demo.model.TaskModel;
 
 @Service
 public class ReqTaskService {
+<<<<<<< HEAD
 
+=======
+//Checking source tree
+>>>>>>> 3b951ba320cd0b37a3f9de8dd891dd341a767ccb
 	@Autowired
 	private MongoTemplate mongotemplate;
 	@Autowired
 	private TaskService taskservice;
 	List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 3b951ba320cd0b37a3f9de8dd891dd341a767ccb
 	public void createreqSum(RequirementSummarizationModel reqsummodel) {
 		reqsummodel.setCompletionPercentage(0);
 		mongotemplate.save(reqsummodel);
 	}
 
 	public void addTask(String reqId, TaskModel newtask) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3b951ba320cd0b37a3f9de8dd891dd341a767ccb
 		taskservice.saveTask(newtask);
 		RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId, RequirementSummarizationModel.class);
 		if (reqsummodel.getReqTasks() != null) {

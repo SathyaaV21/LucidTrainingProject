@@ -14,7 +14,11 @@ import com.example.demo.service.ReqTaskService;
 @RestController
 @RequestMapping("/api/v1")
 public class ReqTaskController {
+<<<<<<< HEAD
 //this is ramapriya project
+=======
+
+>>>>>>> 3b951ba320cd0b37a3f9de8dd891dd341a767ccb
 	@Autowired
 	private ReqTaskService reqtaskservice;
 	
@@ -27,6 +31,10 @@ public class ReqTaskController {
 	@PostMapping("/{reqId}/addtask")
 	public String addTask(@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
 		reqtaskservice.addTask(reqId,taskmodel);
+<<<<<<< HEAD
+=======
+		
+>>>>>>> 3b951ba320cd0b37a3f9de8dd891dd341a767ccb
 		return "Task is added";
 	}
 }

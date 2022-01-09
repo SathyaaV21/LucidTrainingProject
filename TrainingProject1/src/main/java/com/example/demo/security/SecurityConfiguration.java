@@ -2,8 +2,10 @@ package com.example.demo.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,8 +18,14 @@ import com.example.demo.security.filter.JwtRequestFilter;
 import com.example.demo.security.JwtTokenUtil;
 import com.example.demo.security.MyUserDetailsService;
 
-
+@Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+		prePostEnabled = true)
+
+//@PreAuthorize("hasRole('ADMIN')")---Add similar function to your controllers to give authorization to certain apis!
+
+
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -46,8 +54,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable()
-				.authorizeRequests().antMatchers("/authenticate","/welcome","/subs","/api/v1/role").permitAll().
+		httpSecurity.cors().and().csrf().disable().
+				authorizeRequests().antMatchers("/authenticate","/welcome","/subs","/api/v1/**").permitAll().
 						anyRequest().authenticated().and().
 						exceptionHandling().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
