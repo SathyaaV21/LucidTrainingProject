@@ -22,6 +22,10 @@ import com.example.demo.security.MyUserDetailsService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
 		prePostEnabled = true)
+
+//@PreAuthorize("hasRole('ADMIN')")---Add similar function to your controllers to give authorization to certain apis!
+
+
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
