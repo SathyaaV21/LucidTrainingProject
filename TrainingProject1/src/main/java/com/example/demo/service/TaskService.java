@@ -1,3 +1,7 @@
+/**
+ * @author Ramapriya
+ */
+
 package com.example.demo.service;
 
 import java.util.ArrayList;
@@ -20,7 +24,7 @@ import com.example.demo.model.TaskHistory;
 public class TaskService {
 	
 	@Autowired
-    private SequenceGeneratorService service;
+    private SequenceGenService service;
 	
 	@Autowired
 	private MongoTemplate mongotemplate;
