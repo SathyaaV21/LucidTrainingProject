@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="RoleDb2")
-public class RoleModel {
+public class Role {
 
 
 	@Id
@@ -14,17 +14,17 @@ public class RoleModel {
 
 	private boolean isrolestatusactive;
 
-	public RoleModel(String id, String name, boolean isrolestatusactive) {
+	public Role(String id, String name, boolean isrolestatusactive) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.isrolestatusactive = isrolestatusactive;
 	}
 
-	public RoleModel() {
+	public Role() {
 	}
 
-	public RoleModel(String rolename) {
+	public Role(String rolename) {
 		this.name = rolename;
 	}
 

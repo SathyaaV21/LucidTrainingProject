@@ -3,15 +3,23 @@ package com.example.demo.service;
 import java.util.List;
 //import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.BadRequestException;
 
-import com.example.demo.exception.RoleNotFoundException;
-import com.example.demo.model.RoleModel;
+import com.example.demo.model.Role;
+
+import com.example.demo.model.UserModel;
+import com.example.demo.payload.response.MessageResponse;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.repository.UserRepository;
 
 
 //import com.example.demo.repository.RoleRepository;
@@ -19,36 +27,104 @@ import com.example.demo.model.RoleModel;
 
 public class RoleService {
 @Autowired
-MongoTemplate mongotemplate;
+MongoTemplate mongoTemplate;
+
+@Autowired
+RoleRepository roleRepository;
+@Autowired
+UserRepository userRepository;
 	
-/*
- * @Autowired private RoleRepository roleRepo;
+
+private static final Logger LOGGER = LoggerFactory.getLogger(RoleService.class);
+
+
+
+/**
+ * Service that allows administrator to add new role to the application,
+ * 
+ * @param role name.
+ * @return MessageResponse stating the the new role has been add to the Role collection.
  */
-
-public String saveRole(RoleModel newrole) {
-	//roleRepo.save(newrole);
-	mongotemplate.save(newrole);
-	return "In Service";
-}
-public List<RoleModel>viewRoles(){
-	return mongotemplate.findAll(RoleModel.class);
-	//return roleRepo.findAll();
-}
-
-public void deleteRole(int Id) throws RoleNotFoundException{
-	//RoleModel rolemodel=mongotemplate.findById(Id, RoleModel.class);
-	//Optional<RoleModel> rolemodel= roleRepo.findById(Id);
-	//if (!rolemodel.isEmpty()) {
-		Query query=Query.query(Criteria.where("Id").is(Id));
-		mongotemplate.findAndRemove(query, RoleModel.class);
-		//roleRepo.deleteById(Id);
-		//}
-	//else {
-	//throw new RoleNotFoundException("ID is not present in Db "+Id);
+public MessageResponse addNewRole(String rolename) {
+	try {
+		if (roleRepository.existsByName("ROLE_" + rolename.toUpperCase())) {
+			return new MessageResponse("Error: Role is already in use!");
+		}
+		Role role = new Role("ROLE_" + rolename.toUpperCase());
+		//setRoleID
+		role.setIsRolestatusactive(true);
+		mongoTemplate.save(role);
+		return new MessageResponse("Role added successfully");
+	} catch (Exception e) {
+		LOGGER.warn(e.getMessage());
+		throw new BadRequestException("Request format is wrong!");
 	}
-public List<RoleModel> findRole(int Id) {
-	Query query=Query.query(Criteria.where("Id").is(Id));
-	return mongotemplate.find(query, RoleModel.class);
+}
+
+/**
+ * Service that allows administrator to delete role from the application.
+ * 
+ * @param role id.
+ * @return MessageResponse stating that the role is successfully set inactive.
+ */
+public MessageResponse deleteRole(String roleid) {
+	if (!roleRepository.existsById(roleid)) {
+		return new MessageResponse("Error: Role is not available");
+	}
+	Query query = Query.query(Criteria.where("_id").is(roleid));
+	Role role = mongoTemplate.findOne(query, Role.class);
+	role.setIsRolestatusactive(false);
+	mongoTemplate.save(role);
+
+	Query query2 = Query.query(Criteria.where("id").exists(true));
+	Query query3 = Query.query(Criteria.where("$id").is(role.getId()));
+	Update update = new Update().pull("roles", query3);
+	mongoTemplate.updateMulti(query2, update, UserModel.class);
+	return new MessageResponse("Role is set inactive");
+}
+
+/**
+ * Service that allows administrator to update a role in the application.
+ * 
+ * @param role id, role name and role status.
+ * @return MessageResponse stating that the role has been updated successfully.
+ */
+public MessageResponse updateRole(String roleid, String rolename, Boolean rolestatus) {
+	if (!roleRepository.existsById(roleid)) {
+		return new MessageResponse("Error: Role is not available");
+	}
+	rolename = "ROLE_" + rolename.toUpperCase();
+	Query query = new Query().addCriteria(Criteria.where("_id").is(roleid));
+	Update update = new Update().set("name", rolename).set("isrolestatusactive", rolestatus);
+	mongoTemplate.findAndModify(query, update, Role.class);
+	return new MessageResponse("Role has been updated");
+}
+
+/**
+ * Service that allows administrator to delete role from the application.
+ * @return  List<Role>.
+ */
+public List<Role> displayAllRoleDetail() {
+	try {
+		return mongoTemplate.findAll(Role.class);
+	} catch (Exception e) {
+		LOGGER.warn(e.getMessage());
+		throw new BadRequestException("Request format is wrong!");
+	}
+}
+
+/**
+ * Service that allows administrator to delete role from the application.
+ * @return List<Role>.
+ */
+public List<Role> displayAllActiveRoleDetail() {
+	try {
+		return mongoTemplate.find(new Query().addCriteria(Criteria.where("isrolestatusactive").is(true)),
+				Role.class);
+	} catch (Exception e) {
+		LOGGER.warn(e.getMessage());
+		throw new BadRequestException("Request format is wrong!");
+	}
 }
 }
 
