@@ -13,7 +13,11 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.constants.Constants;
+<<<<<<< HEAD
 import com.example.demo.exceptions.FileNotFoundException;
+=======
+import com.example.demo.exception.FileNotFoundException;
+>>>>>>> a4f373ed999031d742b3a69440b9a3dca20e3d5f
 import com.example.demo.model.File;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoCommandException;
