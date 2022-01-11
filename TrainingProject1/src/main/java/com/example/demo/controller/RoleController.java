@@ -1,20 +1,24 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.exception.RoleNotFoundException;
-import com.example.demo.model.RoleModel;
+
 
 import com.example.demo.service.RoleService;
 
@@ -23,36 +27,56 @@ import com.example.demo.service.RoleService;
 public class RoleController {
 
 @Autowired
-private RoleService roleservice;
+private RoleService roleService;
 
-@PostMapping("/role")
-
-public String addRole(@RequestBody RoleModel newrole) {
-	//Creating a new role
-	roleservice.saveRole(newrole);
-	
-	return "Added Role details";
+/**
+ * API specific for Administrator to add new role to the application.
+ * @return ResponseEntity stating the the new role has been add to the Role collection.
+ */
+@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER')")
+@PostMapping("/addnewrole")
+public ResponseEntity<?> addNewRole(@Valid @RequestBody HashMap<String, String> dataHashMap) {
+	return ResponseEntity.ok(roleService.addNewRole(dataHashMap.get("rolename")));
 }
-@GetMapping("/role")
-public List<RoleModel> getRoles(){
-	return roleservice.viewRoles();
 
+/**
+ * API specific for Administrator to view all the roles in the system.
+ * @return ResponseEntity with information about all the roles.
+ */
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@GetMapping("/allroleinfo")
+public ResponseEntity<?> displayAllRoleDetail() {
+	return ResponseEntity.ok(roleService.displayAllRoleDetail());
 }
-@GetMapping("/test")
-public String test() {
-	return "It is Connecting";
-}
-@DeleteMapping("/role/{Id}")
-public String deleteRole(@PathVariable int Id) throws RoleNotFoundException{
-	
-	roleservice.deleteRole(Id);
-	return "role Deleted";
-	}
-	//return new ResponseEntity<Object>(Id, HttpStatus.OK);
-@GetMapping("/role/{Id}")
-public List<RoleModel> getRole(@PathVariable int Id){
-	
-	return roleservice.findRole(Id)	;
 
+/**
+ * API specific for Administrator to view all active roles in the system.
+ * @return ResponseEntity with information about all the active roles.
+ */
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@GetMapping("/allactiveroleinfo")
+public ResponseEntity<?> displayAllActiveRoleDetail() {
+	return ResponseEntity.ok(roleService.displayAllActiveRoleDetail());
+}
+
+/**
+ * API specific for Administrator to delete a role to the application.
+ * @return ResponseEntity stating that the role is successfully set inactive.
+ */
+@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER')")
+@PostMapping("/deleterole")
+public ResponseEntity<?> deleteRole(@Valid @RequestBody HashMap<String, String> dataHashMap) {
+	return ResponseEntity.ok(roleService.deleteRole(dataHashMap.get("roleid")));
+}
+
+/**
+ * API specific for Administrator to update a existing role in the application.
+ * @return ResponseEntity stating that the role has been updated successfully.
+ */
+@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER')")
+@PostMapping("/updaterole")
+public ResponseEntity<?> updateRole(@Valid @RequestBody HashMap<String, String> dataHashMap) {
+	return ResponseEntity.ok(roleService.updateRole(dataHashMap.get("roleid"), dataHashMap.get("rolename"),
+			Boolean.valueOf(dataHashMap.get("rolestatus"))));
 }
 }

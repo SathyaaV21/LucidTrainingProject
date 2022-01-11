@@ -36,7 +36,7 @@ public class UserModel {
 	private boolean isUserStatusActive;
 	
 	@NotBlank
-	private Set<RoleModel> roles = new HashSet<>();
+	private Set<Role> roles = new HashSet<>();
 
 	public UserModel() {
 	}
@@ -73,11 +73,11 @@ public class UserModel {
 		this.password = password;
 	}
 
-	public Set<RoleModel> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<RoleModel> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
@@ -96,5 +96,13 @@ public class UserModel {
 	public void setIsuserStatusActive(boolean isUserStatusActive) {
 		this.isUserStatusActive = isUserStatusActive;
 	}
+
+	public UserModel(String username, String password, String email) {
+		this.username = username;
+		this.password = password;
+		this.email = email;
+	}
+
+	
 }
 	

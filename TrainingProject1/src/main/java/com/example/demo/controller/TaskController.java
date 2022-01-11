@@ -1,3 +1,7 @@
+/**
+ * @author Ramapriya
+ */
+
 package com.example.demo.controller;
 import java.util.List;
 
@@ -14,26 +18,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exception.TaskNotFoundException;
+import com.example.demo.model.RequirementSummarizationModel;
 import com.example.demo.model.TaskHistory;
 import com.example.demo.model.TaskModel;
-
+import com.example.demo.service.ReqTaskService;
 import com.example.demo.service.TaskService;
 @RestController
 @RequestMapping("/api/v1")
 public class TaskController {
 	
 	@Autowired
+	private ReqTaskService reqtaskservice;
+	@Autowired
 	private TaskService taskservice;
+	
+	/**
+	 * Controller method to create requirement summarization
+	 * @param reqsummodel
+	 * @return
+	 */
+	@PostMapping("/createsum")
+	public String createreqSum(@RequestBody RequirementSummarizationModel reqsummodel) {
+		reqtaskservice.createreqSum(reqsummodel);
+		return "Requirement Summarization is created";
+	}
 	
 	/**
 	 * Controller method to create task
 	 * @param newtask
 	 * @return String
 	 */
-	@PostMapping("/createtask")
-	public String createTask(@RequestBody TaskModel newtask) {
-		taskservice.saveTask(newtask);
-		return "Task added";
+	@PostMapping("/{reqId}/addtask")
+	public String addTask(@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
+		reqtaskservice.addTask(reqId,taskmodel);
+		
+		return "Task is added";
 	}
 	
 	/**
@@ -45,7 +64,7 @@ public class TaskController {
 	 */
 	@PutMapping("/updatetask/{taskId}")
     public ResponseEntity<Object> updateTask(@RequestBody TaskModel task, @PathVariable String  taskId){
-        taskservice.updateTask(taskId, task);
+        reqtaskservice.updatereqTask(task, taskId);
         return new ResponseEntity<Object>("Task of task id "+taskId+" has been updated", HttpStatus.OK);
     }
 	
@@ -55,9 +74,11 @@ public class TaskController {
 	 * @return String and HTTP status update
 	 * @throws TaskNotFoundException
 	 */
-	@PutMapping("/updatetodo/{taskid}")
-	public ResponseEntity<Object> updateTodo(@PathVariable String taskid, @RequestBody TaskModel taskmodel) {
+	@PutMapping("/{reqId}/updatetodo/{taskid}")
+	public ResponseEntity<Object> updateTodo(@PathVariable String reqId , @RequestBody TaskModel taskmodel,@PathVariable String taskid) {
 		taskservice.updateTodo(taskid,taskmodel);
+		reqtaskservice.updateSum(reqId,taskmodel);
+		
 		return new ResponseEntity<Object>("TODO of task "+taskid+" has been updated", HttpStatus.OK);
 	}
 	
@@ -65,15 +86,24 @@ public class TaskController {
 	 * Controller method to view all tasks in DB
 	 * @return Calls Service method getAllTasks
 	 */
-	@GetMapping("/getalltasks")
-	public List<TaskModel> getAllTasks() {
-		return taskservice.viewTasks();
+	@GetMapping("/{reqId}/getalltasks")
+	public List<TaskModel> getAllTasks(@PathVariable String reqId) {
+		return reqtaskservice.getallreqTasks(reqId);
+		
 	}
 	
 	/**
+	 * Controller method to get all the requirement summarizations
+	 * @return Requirement summarization model
+	 */
+	@GetMapping("/getallreqsum")
+	public List<RequirementSummarizationModel> getallreqSum(){
+		return reqtaskservice.getallreqSum();
+	}
+	/**
 	 * Controller method to get task by Id
 	 * @param taskid
-	 * @return String and HTTP Status update
+	 * @return TaskModel
 	 * @throws TaskNotFoundException
 	 */
 	@GetMapping("/gettask/{taskid}")
