@@ -1,22 +1,63 @@
 package com.example.demo.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 
-public class TestCase {
-
-	private String testcase_Id;
+public class Testcase {
+	
+	private String testCaseId;
+	private String testCaseName;
+	private String description;
+	private String expectedResults;
+	private String actualResults;
 	private String status;
-	public String getTestcase_Id() {
-		return testcase_Id;
+
+
+	public String getTestCaseName() {
+		return testCaseName;
 	}
-	public void setTestcase_Id(String testcase_Id) {
-		this.testcase_Id = testcase_Id;
+
+	public void setTestCaseName(String testCaseName) {
+		this.testCaseName = testCaseName;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getExpectedResults() {
+		return expectedResults;
+	}
+
+	public void setExpectedResults(String expectedResults) {
+		this.expectedResults = expectedResults;
+	}
+
+	public String getActualResults() {
+		return actualResults;
+	}
+
+	public void setActualResults(String actualResults) {
+		this.actualResults = actualResults;
+	}
+
 	public String getStatus() {
 		return status;
 	}
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
-}
 
+	public String getTestCaseId() {
+		return testCaseId;
+	}
+
+	public void setTestCaseId(String testCaseId) {
+		this.testCaseId = testCaseId;
+	}
+
+
+}

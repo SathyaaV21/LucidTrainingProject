@@ -1,17 +1,10 @@
-
-/**
- * test
- */
-
 package com.example.demo.model;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.example.demo.service.Testcase;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Document(collection = "Projects")
@@ -22,13 +15,11 @@ public class Project {
 
 	private String projectName;
 	private String projectDescription;
-	private List<Requirement> rqmt;
-	private List<Testcase> test;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date startDate;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -80,22 +71,6 @@ public class Project {
 
 	public void setTargetedReleaseDate(String targetedReleaseDate) {
 		this.targetedReleaseDate = targetedReleaseDate;
-	}
-
-	public List<Requirement> getRqmt() {
-		return rqmt;
-	}
-
-	public void setRqmt(List<Requirement> rqmt) {
-		this.rqmt = rqmt;
-	}
-
-	public List<Testcase> getTest() {
-		return test;
-	}
-
-	public void setTest(List<Testcase> test) {
-		this.test = test;
 	}
 
 }

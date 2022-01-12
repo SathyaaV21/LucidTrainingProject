@@ -1,23 +1,20 @@
 package com.example.demo.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "Requirements")
 
 public class Requirement {
-
-	@Id
-	private String requirementID;
+	
+	private String requirementId;
 	private String requirementDescription;
 	private String status;
 
-	public String getRequirementID() {
-		return requirementID;
+	
+
+	public String getRequirementId() {
+		return requirementId;
 	}
 
-	public void setRequirementID(String requirementID) {
-		this.requirementID = requirementID;
+	public void setRequirementId(String requirementId) {
+		this.requirementId = requirementId;
 	}
 
 	public String getRequirementDescription() {
@@ -35,6 +32,7 @@ public class Requirement {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 
 	
 }
