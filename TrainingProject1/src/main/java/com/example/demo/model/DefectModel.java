@@ -17,40 +17,15 @@ public class DefectModel {
 	private String projectID;
 	private String assignedUser;
 	private String actualResult;
-	private String expectedResult; 
+	private String expectedResult;
 	private String presentStatus;
-	private List<Status> status; 
+	private List<Status> defectHistory;
 	private List<Comments> comments;
-	private int severity; 
+	private int severity;
 
 	public DefectModel() {
 		super();
 	}
-
-	/*public DefectModel(String id, String description, String projectID, String assignedUser, String actualResult,
-			String expectedResult, int severity) {
-		super();
-		this.id = id;
-		this.description = description;
-		this.projectID = projectID;
-		this.assignedUser = assignedUser;
-		this.actualResult = actualResult;
-		this.expectedResult = expectedResult;
-		this.severity = severity;
-	}
-
-	public DefectModel(String id, String description, String projectID, String assignedUser, String actualResult,
-			String expectedResult, String status, int severity) {
-		super();
-		this.id = id;
-		this.description = description;
-		this.projectID = projectID;
-		this.assignedUser = assignedUser;
-		this.actualResult = actualResult;
-		this.expectedResult = expectedResult;
-		this.status = status;
-		this.severity = severity;
-	}*/
 
 	public String getId() {
 		return id;
@@ -99,7 +74,6 @@ public class DefectModel {
 	public void setExpectedResult(String expectedResult) {
 		this.expectedResult = expectedResult;
 	}
-	
 
 	public String getPresentStatus() {
 		return presentStatus;
@@ -109,14 +83,13 @@ public class DefectModel {
 		this.presentStatus = presentStatus;
 	}
 
-	public List<Status> getStatus() {
-		return status;
+	public List<Status> getDefectHistory() {
+		return defectHistory;
 	}
 
-	public void setStatus(List<Status> status) {
-		this.status = status;
+	public void setDefectHistory(List<Status> defectHistory) {
+		this.defectHistory = defectHistory;
 	}
-	
 
 	public List<Comments> getComments() {
 		return comments;

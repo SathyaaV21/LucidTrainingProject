@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.DefectModel;
-import com.example.demo.model.ResponseModel;
-import com.example.demo.service.DefectService;
-@RequestMapping("/api/v1")
+import com.example.defect.model.DefectModel;
+import com.example.defect.model.ResponseModel;
+import com.example.defect.model.Status;
+import com.example.defect.service.DefectService;
+
 @RestController
 public class DefectController {
 
@@ -102,5 +102,18 @@ public class DefectController {
 	public ResponseEntity<?> deleteDefect(@PathVariable String id) {
 		return ResponseEntity.ok(new ResponseModel(defectService.deleteDefect(id)));
 	} 
+	
+	/**
+	 * Method to get the history of the defect
+	 *
+	 * 
+	 * @param ID(String)
+	 * @return A list of Status.
+	 */
+	@GetMapping("/gethistory/{id}")
+	public List<Status> getHistoryByID(String id){
+		return defectService.getHistoryByID(id);
+	}
+	
 
 }
