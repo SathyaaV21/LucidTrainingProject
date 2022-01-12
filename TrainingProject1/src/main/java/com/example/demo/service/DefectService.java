@@ -268,7 +268,7 @@ public class DefectService {
 		int count=0;
 		List<DefectModel> defects=mongotemplate.findAll(DefectModel.class); 
 		for(DefectModel defect:defects) {
-			if (!(defect.getPresentStatus().equals("Cancelled"))) {
+			if (defect.getPresentStatus().equals("Cancelled")) {
 				count++;
 			}
 		}
