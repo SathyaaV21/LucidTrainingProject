@@ -1,7 +1,10 @@
-package com.example.demo.controller;
-
+/**
+* 	@author Manju
+*/
+package com.example.controller;
 import java.util.List;
-
+import java.util.Map;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,9 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.exception.ProjectNotFoundException;
-import com.example.model.TestHolder;
 import com.example.model.Testcase;
 import com.example.service.TestCaseService;
 
@@ -31,7 +32,7 @@ public class TestCaseController {
 	 */
 
 	@GetMapping("/testcase")
-	public List<TestHolder> getTestcases() {
+	public List<Testcase> getTestcases() {
 		return testservice.viewTestcases();
 	}
 	
@@ -46,7 +47,7 @@ public class TestCaseController {
 
 	@PostMapping("testcase/{projectId}/{requirementId}")
 	public void createTestcase(@PathVariable String projectId, @PathVariable String requirementId,
-			@RequestBody Testcase testcase) {
+			@Valid @RequestBody Testcase testcase) {
 		testservice.addTestcase(testcase, projectId, requirementId);
 	}
 	
@@ -56,12 +57,55 @@ public class TestCaseController {
 	 *
 	 * 
 	 * @param Project id,requirement Id, TestCase Id and TestCaseModel
+	 * @return 
 	 * @return Respective status and information of TestCase Update.
 	 */
 
-	@PutMapping("testcase/{projectId}/{testcaseId}")
-	public void updateTestcase(@PathVariable String projectId, @PathVariable String testcaseId,
-			@RequestBody Testcase testcase) throws ProjectNotFoundException {
-		testservice.updateTestcase(testcase, testcaseId, projectId);
+	@PutMapping("testcase/{testcaseId}")
+	public void updateTestcase(@RequestBody Map<String,String> testcase,@PathVariable String testcaseId)
+			throws ProjectNotFoundException {
+		testservice.updateTestcase( testcase, testcaseId);
 	}
+	
+	
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

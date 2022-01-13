@@ -1,12 +1,12 @@
-package com.example.demo.service;
-
+/**
+* 	@author Manju
+*/
+package com.example.service;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-
 import com.example.exception.ProjectNotFoundException;
 import com.example.model.ReqHolder;
 import com.example.model.Requirement;
@@ -34,7 +34,7 @@ public class RequirementService {
 		if (reqHolder == null) {
 			ReqHolder req_ = new ReqHolder();
 			req_.setProjectId(projectId);
-			requirement.setRequirementId(projectId + "req" + Integer.toString(1));
+			requirement.setRequirementId(projectId + "Req" + Integer.toString(1));
 			List<Requirement> reqArr = new ArrayList<>();
 			reqArr.add(requirement);
 			req_.setRequirement(reqArr);
@@ -43,7 +43,7 @@ public class RequirementService {
 
 		} else {
 			List<Requirement> r = reqHolder.getRequirement();
-			requirement.setRequirementId(projectId + "req" + Integer.toString((r.size() + 1)));
+			requirement.setRequirementId(projectId + "Req" + Integer.toString((r.size() + 1)));
 			r.add(requirement);
 			req.setRequirement(r);
 			mongotemplate.save(req);
@@ -51,12 +51,26 @@ public class RequirementService {
 		}
 
 	}
+	
+	/**
+	 * Method to get all Requirements for the Project in the Database
+	 * 
+	 * @return all requirements .
+	 * @throws ProjectNotFoundException
+	 */
 
 	public List<ReqHolder> viewReq() {
 
 		return mongotemplate.findAll(ReqHolder.class);
 
 	}
+	
+	/**
+	 * Method to Update Requirements for the Project in the Database
+	 * 
+	 * @param the Requirement id and project id is passed.
+	 * @return status of the updated Requirement .
+	 */
 
 	public void updateReq(Requirement requirement, String requirementId, String projectId) {
 
@@ -65,7 +79,9 @@ public class RequirementService {
 
 		for (Requirement r : req) {
 			if (r.getRequirementId().equals(requirementId)) {
+				if(requirement.getRequirementDescription()!=null)
 				r.setRequirementDescription(requirement.getRequirementDescription());
+				if(requirement.getStatus()!=null)
 				r.setStatus(requirement.getStatus());
 			}
 		}
@@ -83,6 +99,7 @@ public class RequirementService {
 	 */
 
 	public void deleteReq(String requirementId, String projectId) throws ProjectNotFoundException {
+		try {
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
 		if (reqHolder == null) {
 			throw new ProjectNotFoundException("req not found");
@@ -98,6 +115,10 @@ public class RequirementService {
 		reqHolder.setRequirement(req);
 		mongotemplate.save(reqHolder);
 
+	}catch(Exception e) {
+		throw new ProjectNotFoundException("Project Not Found");
+
 	}
 
+}
 }

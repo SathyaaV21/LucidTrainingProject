@@ -1,15 +1,52 @@
-package com.example.demo.model;
+/**
+* 	@author Manju
+*/
+package com.example.model;
 
+import javax.validation.constraints.NotBlank;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "testcases")
 public class Testcase {
 	
+	@Id
 	private String testCaseId;
+	private String requirementId;
+	private String projectId;
+	
+	@NotBlank(message = "Testcase Name is mandatory")
 	private String testCaseName;
+	
+	@NotBlank(message = "Description is mandatory")
 	private String description;
+	
+	@NotBlank(message = "Expected Results is mandatory")
 	private String expectedResults;
+	
+	@NotBlank(message = "Actual Results is mandatory")
 	private String actualResults;
+	
+	@NotBlank(message = "Status is mandatory")
 	private String status;
 
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getRequirementId() {
+		return requirementId;
+	}
+
+	public void setRequirementId(String requirementId) {
+		this.requirementId = requirementId;
+	}
 
 	public String getTestCaseName() {
 		return testCaseName;

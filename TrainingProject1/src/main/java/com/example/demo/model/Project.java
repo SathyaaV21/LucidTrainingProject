@@ -1,6 +1,13 @@
-package com.example.demo.model;
+/**
+* 	@author Manju
+*/
+
+package com.example.model;
 
 import java.util.Date;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,17 +20,23 @@ public class Project {
 	@Id
 	private String projectId;
 
+	@NotBlank(message = "Project Name is mandatory")
 	private String projectName;
+
+	@NotBlank(message = "Project Description is mandatory")
 	private String projectDescription;
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@NotNull(message = "Start date is mandatory")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date startDate;
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@NotNull(message = "End date is mandatory")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date endDate;
 
+	@NotNull(message = "Targeted release is mandatory")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private String targetedReleaseDate;
+	private Date targetedReleaseDate;
 
 	public String getProjectId() {
 		return projectId;
@@ -65,11 +78,11 @@ public class Project {
 		this.endDate = endDate;
 	}
 
-	public String getTargetedReleaseDate() {
+	public Date getTargetedReleaseDate() {
 		return targetedReleaseDate;
 	}
 
-	public void setTargetedReleaseDate(String targetedReleaseDate) {
+	public void setTargetedReleaseDate(Date targetedReleaseDate) {
 		this.targetedReleaseDate = targetedReleaseDate;
 	}
 

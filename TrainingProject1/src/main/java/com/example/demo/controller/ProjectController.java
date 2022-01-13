@@ -1,7 +1,10 @@
-package com.example.demo.controller;
-
+/**
+* 	@author Manju
+*/
+package com.example.controller;
 import java.util.List;
-
+import java.util.Map;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,41 +27,40 @@ public class ProjectController {
 	private ProjectService projectservice;
 
 	/**
-	 * Method to create project
+	 * Method to create project.
 	 *
 	 * 
-	 * @param ProjectModel
-	 * @return Respective status of ProjectModel.
+	 * @param ProjectModel.
+	 * @return status of project.
 	 */
 
-	@PostMapping("/addproject")
+	@PostMapping("/project")
 
-	public String CreateProject(@RequestBody Project project) {
-		projectservice.addProject(project);
+	public String CreateProject(@Valid @RequestBody Project project) {
 		return ("Status Code : " + HttpStatus.OK + '\n' + "Status Message : Success " + '\n'
-				+ "Description : Project created successfully ");
+				+ "Description : Project created successfully "+ '\n' +projectservice.addProject(project));
 	}
 
 	/**
-	 * Method to Get all projects
+	 * Method to Fetch all projects.
 	 * 
-	 * @return List of Projects from the database.
+	 * @return List of all the Projects from the database.
 	 */
 
-	@GetMapping("/getproject")
+	@GetMapping("/project")
 	public List<Project> getProjects() throws ProjectNotFoundException {
 		return projectservice.viewProjects();
 	}
 
 	/**
-	 * Method to get specific project
+	 * Method to get a specific project
 	 * 
 	 * @param Project Id
 	 * @return Project model of the respective project Id is passed.
 	 */
-	@GetMapping("/getproject/{Id}")
-	public Project getprojectByID(@PathVariable("Id") String id) throws ProjectNotFoundException {
-		return projectservice.getByProjectId(id);
+	@GetMapping("/project/{Id}")
+	public Project getprojectByID(@PathVariable String Id) throws ProjectNotFoundException {
+		return projectservice.getByProjectId(Id);
 
 	}
 
@@ -69,9 +71,26 @@ public class ProjectController {
 	 * @param ProjectModel and project Id is passed
 	 * @return Respective status of ProjectModel Update.
 	 */
-	@PutMapping("updateproject/{Id}")
-	public String updateproject(@PathVariable String Id, @RequestBody Project project) throws ProjectNotFoundException {
-		return projectservice.updateproject(Id, project);
+	@PutMapping("project/{projectId}")
+	public void updateproject(@RequestBody Map<String,String> project,@PathVariable String projectId){
+		projectservice.updateproject(project,projectId);
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

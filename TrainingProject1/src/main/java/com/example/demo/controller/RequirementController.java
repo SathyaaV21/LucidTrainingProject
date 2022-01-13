@@ -1,6 +1,11 @@
-package com.example.demo.controller;
+/**
+* 	@author Manju
+*/
+package com.example.controller;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +37,7 @@ public class RequirementController {
 	 */
 
 	@PostMapping("requirement/{projectId}")
-	public void createRequirement(@PathVariable String projectId, @RequestBody Requirement requirement) {
+	public void createRequirement(@PathVariable String projectId,@Valid  @RequestBody Requirement requirement) {
 		reqservice.addRequirement(requirement, projectId);
 	}
 
@@ -46,23 +51,6 @@ public class RequirementController {
 	public List<ReqHolder> getReq() {
 		return reqservice.viewReq();
 	}
-
-	/**
-	 * Method to Delete Requirement
-	 *
-	 * 
-	 * @param Project Id,Requirement id
-	 * @return Respective status of deleted requirement.
-	 * @throws ProjectNotFoundException
-	 */
-
-	@DeleteMapping("testcase/{projectId}/{requirementId}")
-	public void deleteTestcase(@PathVariable String projectId, @PathVariable String requirementId)
-			throws ProjectNotFoundException {
-		reqservice.deleteReq(requirementId, projectId);
-
-	}
-
 	/**
 	 * Method to update Requirements
 	 *
@@ -75,5 +63,23 @@ public class RequirementController {
 			@RequestBody Requirement requirement) {
 		reqservice.updateReq(requirement, requirementId, projectId);
 	}
+
+	/**
+	 * Method to Delete Requirement
+	 *
+	 * 
+	 * @param Project Id,Requirement id
+	 * @return Respective status of deleted requirement.
+	 * @throws ProjectNotFoundException
+	 */
+
+	@DeleteMapping("requirement/{projectId}/{requirementId}")
+	public void deleteRequirement(@PathVariable String projectId, @PathVariable String requirementId)
+			throws ProjectNotFoundException {
+		reqservice.deleteReq(requirementId, projectId);
+
+	}
+
+	
 
 }

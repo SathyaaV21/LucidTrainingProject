@@ -1,4 +1,7 @@
-package com.example.demo.model;
+/**
+* 	@author Manju
+*/
+package com.example.model;
 
 import java.util.List;
 

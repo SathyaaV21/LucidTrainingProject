@@ -1,8 +1,14 @@
-package com.example.demo.service;
-
+/**
+* 	@author Manju
+*/
+package com.example.service;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import com.example.exception.ProjectNotFoundException;
 import com.example.model.Project;
@@ -19,27 +25,25 @@ public class ProjectService {
 	private MongoTemplate mongotemplate;
 
 	/**
-	 * Method to add Projects in the database
+	 * Method to add a Project in the database.
 	 *
-	 * @param ProjectModel which contains Project details
+	 * @param ProjectModel is passed.
 	 * @return Status of the Project Creation.
 	 * 
 	 */
 
 	public String addProject(Project project) {
-		String j = "Pro" + service.getCount(Sequence.getSequenceName());
+		String j = "Prj" + service.getCount(Sequence.getSequenceName());
 		project.setProjectId(j);
 		mongotemplate.save(project);
-		return "added";
+		return "Project added";
 	}
 
 	/**
-	 * Method to get every Projects from the database
+	 * Method to get every Projects from the database.
 	 * 
-	 * @return view all Projects from the Mongo Database.
-	 * @throws ProjectNotFoundException
-	 * @throws Handles                  Exception from Database .
-	 * 
+	 * @return Fetch all Projects from the Mongo Database.
+	 * @throws ProjectNotFoundException.	 
 	 */
 
 	public List<Project> viewProjects() throws ProjectNotFoundException {
@@ -55,12 +59,12 @@ public class ProjectService {
 	 * 
 	 * @param the Project id is passed.
 	 * @return Project Details of the project.
-	 * @throws Handles Exception from Database.
+	 * @throws ProjectNotFoundException.	
 	 * 
 	 */
 
-	public Project getByProjectId(String id) throws ProjectNotFoundException {
-		Project project = mongotemplate.findById(id, Project.class);
+	public Project getByProjectId(String Id) throws ProjectNotFoundException {
+		Project project = mongotemplate.findById(Id, Project.class);
 
 		if (project != null) {
 			return project;
@@ -78,22 +82,31 @@ public class ProjectService {
 	 * 
 	 */
 
-	public String updateproject(String Id, Project project) throws ProjectNotFoundException {
-		try {
 
-			Project project_ = mongotemplate.findById(Id, Project.class);
-			if (project_ == null) {
-				throw new ProjectNotFoundException("id not found");
-			}
-
-			project_.setTargetedReleaseDate(project.getTargetedReleaseDate());
-			mongotemplate.save(project_);
-
-			return "updated";
-
-		} catch (Exception e) {
-			throw new ProjectNotFoundException("Project Not Found");
+	public void updateproject(Map<String, String> project, String projectId){
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(projectId));
+		Update update = new Update();
+		for (Map.Entry test : project.entrySet()) {
+			update.set((String) test.getKey(), test.getValue());
 		}
-	}
+		mongotemplate.findAndModify(query, update, Project.class);
 
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
