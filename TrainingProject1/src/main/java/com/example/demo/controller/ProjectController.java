@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.exception.ProjectNotFoundException;
 import com.example.model.Project;
-import com.example.model.Requirement;
-import com.example.model.Testcase;
 import com.example.service.ProjectService;
 
 @RequestMapping("/api/v1")
@@ -26,6 +23,14 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectservice;
 
+	/**
+	 * Method to create project
+	 *
+	 * 
+	 * @param ProjectModel
+	 * @return Respective status of ProjectModel.
+	 */
+
 	@PostMapping("/addproject")
 
 	public String CreateProject(@RequestBody Project project) {
@@ -34,83 +39,39 @@ public class ProjectController {
 				+ "Description : Project created successfully ");
 	}
 
+	/**
+	 * Method to Get all projects
+	 * 
+	 * @return List of Projects from the database.
+	 */
+
 	@GetMapping("/getproject")
-	public List<Project> getProjects() {
+	public List<Project> getProjects() throws ProjectNotFoundException {
 		return projectservice.viewProjects();
 	}
 
+	/**
+	 * Method to get specific project
+	 * 
+	 * @param Project Id
+	 * @return Project model of the respective project Id is passed.
+	 */
 	@GetMapping("/getproject/{Id}")
 	public Project getprojectByID(@PathVariable("Id") String id) throws ProjectNotFoundException {
 		return projectservice.getByProjectId(id);
 
 	}
 
+	/**
+	 * Method to Update project
+	 *
+	 * 
+	 * @param ProjectModel and project Id is passed
+	 * @return Respective status of ProjectModel Update.
+	 */
 	@PutMapping("updateproject/{Id}")
-	public String updateproject(@PathVariable String Id , @RequestBody Project project) {
-		return projectservice.updateproject(Id,project);
+	public String updateproject(@PathVariable String Id, @RequestBody Project project) throws ProjectNotFoundException {
+		return projectservice.updateproject(Id, project);
 	}
 
-	@PostMapping("requirement/{projectId}")
-	public void createRequirement(@PathVariable String projectId,
-			@RequestBody Requirement requirement) {
-		 projectservice.addRequirement(requirement, projectId);
-	}
-
-	@PostMapping("testcase/{projectId}/{requirementId}")
-	public void createTestcase(@PathVariable String projectId,@PathVariable String requirementId,
-			@RequestBody Testcase testcase)  {
-		 projectservice.addTestcase(testcase, projectId , requirementId);
-	}
-
-	@DeleteMapping("testcase/{projectId}/{requirementId}")
-	public void deleteTestcase(@PathVariable String projectId,@PathVariable String requirementId) {
-		projectservice.deleteReq( requirementId, projectId);
-		
-	}
-	
-//	@PutMapping("requirement/{projectId}/{requirementId}")
-//	public void updateReq(@PathVariable String projectId,@PathVariable String requirementId,
-//			@RequestBody Requirement requirement)
-//	{
-//		projectservice.updateReq(requirement, requirementId, projectId);
-//	}
-	
-	@PutMapping("testcase/{projectId}/{testcaseId}")
-	public void updateTestcase(@PathVariable String projectId,@PathVariable String testcaseId,
-			@RequestBody Testcase testcase)
-	{
-		projectservice.updateTestcase(testcase, testcaseId, projectId);
-	}
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
