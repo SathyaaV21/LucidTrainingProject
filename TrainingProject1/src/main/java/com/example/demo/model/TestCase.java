@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "testcases")
-public class Testcase {
+public class TestCase {
 	
 	@Id
 	private String testCaseId;

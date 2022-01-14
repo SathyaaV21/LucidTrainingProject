@@ -12,14 +12,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class RTM {
 	@Id
 	private String requirement_Id;
-	private List<Testcase> testCase;
+	private List<TestCase> testCase;
 	
 	
 
-	public List<Testcase> getTestCase() {
+	public List<TestCase> getTestCase() {
 		return testCase;
 	}
-	public void setTestCase(List<Testcase> testCase) {
+	public void setTestCase(List<TestCase> testCase) {
 		this.testCase = testCase;
 	}
 	public String getRequirement_Id() {

@@ -1,7 +1,14 @@
+/**
+ * @author SATHYAA
+ *
+ */
 package com.example.demo.service;
 
 import java.util.List;
+//import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -10,12 +17,13 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.BadRequestException;
+
 import com.example.demo.model.Role;
-import com.example.demo.model.UserModel;
+
+import com.example.demo.model.User;
 import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
-import com.sun.org.slf4j.internal.Logger;
 
 
 //import com.example.demo.repository.RoleRepository;
@@ -75,7 +83,7 @@ public MessageResponse deleteRole(String roleid) {
 	Query query2 = Query.query(Criteria.where("id").exists(true));
 	Query query3 = Query.query(Criteria.where("$id").is(role.getId()));
 	Update update = new Update().pull("roles", query3);
-	mongoTemplate.updateMulti(query2, update, UserModel.class);
+	mongoTemplate.updateMulti(query2, update, User.class);
 	return new MessageResponse("Role is set inactive");
 }
 

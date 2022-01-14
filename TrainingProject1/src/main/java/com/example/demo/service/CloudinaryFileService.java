@@ -28,29 +28,26 @@ public class CloudinaryFileService {
 	}
 
 
-	public File addFile(File file) {
-
-		if (file.getFiledocument().isEmpty()) {
-			throw new FileNotFoundException("Could not read any file");
-		} else {
-
-			try {
-				Update update = new Update().addToSet(Constants.FILE_DOCUMENT,
-						file.getFiledocument().get(0));
-
-				Query q = new Query();
-				q.addCriteria(Criteria.where(Constants.DEFECT_ID).is(file.getDefect_id()));
-
-				return mongoOperations.findAndModify(q, update, options().returnNew(true).upsert(true),
-						File.class);
-			} catch (Exception e) {
-				throw new FileNotFoundException("File not found");
-
-			}
-
-		}
-	}
-
+	/*
+	 * public File addFile(File file) {
+	 * 
+	 * if (file.getFiledocument().isEmpty()) { throw new
+	 * FileNotFoundException("Could not read any file"); } else {
+	 * 
+	 * try { Update update = new Update().addToSet(Constants.FILE_DOCUMENT,
+	 * file.getFiledocument().get(0));
+	 * 
+	 * Query q = new Query();
+	 * q.addCriteria(Criteria.where(Constants.DEFECT_ID).is(file.getDefect_id()));
+	 * 
+	 * return mongoOperations.findAndModify(q, update,
+	 * options().returnNew(true).upsert(true), File.class); } catch (Exception e) {
+	 * throw new FileNotFoundException("File not found");
+	 * 
+	 * }
+	 * 
+	 * } }
+	 */
 	public List<File> getAllFiles() {
 
 		return mongoTemplate.findAll(File.class);

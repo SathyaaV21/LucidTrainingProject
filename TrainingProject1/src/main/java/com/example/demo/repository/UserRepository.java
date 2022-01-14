@@ -1,3 +1,7 @@
+/**
+ * @author Sathyaa
+ *
+ */
 package com.example.demo.repository;
 
 import java.util.Optional;
@@ -6,14 +10,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.example.demo.model.Role;
 
-import com.example.demo.model.UserModel;
+import com.example.demo.model.User;
 
-public interface UserRepository extends MongoRepository<UserModel,Integer>{
-	Optional<UserModel> findByUsername(String username);
+public interface UserRepository extends MongoRepository<User,Integer>{
+	Optional<User> findByUsername(String username);
 	Boolean existsByUsername(String username);
 	Boolean existsByEmail(String email);
 	
-	default Boolean existByRoles(Role role, UserModel user) {
+	default Boolean existByRoles(Role role, User user) {
 		for (Object object : user.getRoles()) {
 			if(object == role)
 				return true;

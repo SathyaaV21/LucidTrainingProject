@@ -18,8 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.model.File;
 import com.example.demo.service.Cloudinary;
 import com.example.demo.service.CloudinaryFileService;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -52,13 +52,17 @@ public class CloudinaryController {
 	 * @param Multipart file
 	 * @return FileModel with respective status and information.
 	 */
-	@PostMapping(value = "/uploadfile", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public File uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("defect_id") String defect_id)
-			throws IOException {
-
-		return cloudinaryfileservice.addFile(Cloudinary.uploadToCloudinary(file, defect_id));
-
-	}
+	/*
+	 * @PostMapping(value = "/uploadfile", consumes = {
+	 * MediaType.MULTIPART_FORM_DATA_VALUE }) public File
+	 * uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("defect_id")
+	 * String defect_id) throws IOException {
+	 * 
+	 * return cloudinaryfileservice.addFile(Cloudinary.uploadToCloudinary(file,
+	 * defect_id));
+	 * 
+	 * }
+	 */
 
 	/**
 	 * Method to get all files by defect_id

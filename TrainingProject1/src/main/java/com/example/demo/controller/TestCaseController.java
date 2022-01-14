@@ -17,16 +17,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exception.ProjectNotFoundException;
-import com.example.demo.model.Testcase;
-import com.example.demo.service.TestCaseService;
+import com.example.demo.model.TestCase;
+//import com.example.demo.model.Testcase;
+//import com.example.demo.service.TestCaseService;
+import com.example.demo.service.TestcaseService;
 
 @RequestMapping("/api/v1")
 @RestController
-public class TestCaseController {
+public class TestcaseController {
 	
 
 	@Autowired
-	private TestCaseService testservice;
+	private TestcaseService testservice;
 
 	/**
 	 * Method to Get all Testcases
@@ -35,7 +37,7 @@ public class TestCaseController {
 	 */
 
 	@GetMapping("/testcase")
-	public List<Testcase> getTestcases() {
+	public List<TestCase> getTestcases() {
 		return testservice.viewTestcases();
 	}
 	
@@ -50,7 +52,7 @@ public class TestCaseController {
 
 	@PostMapping("testcase/{projectId}/{requirementId}")
 	public void createTestcase(@PathVariable String projectId, @PathVariable String requirementId,
-			@Valid @RequestBody Testcase testcase) {
+			@Valid @RequestBody TestCase testcase) {
 		testservice.addTestcase(testcase, projectId, requirementId);
 	}
 	
