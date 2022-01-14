@@ -5,8 +5,6 @@ import static org.springframework.data.mongodb.core.FindAndModifyOptions.options
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -17,12 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.BadRequestException;
-
 import com.example.demo.model.Role;
-
 import com.example.demo.model.UserModel;
 import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.repository.UserRepository;
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 
 
 @Service

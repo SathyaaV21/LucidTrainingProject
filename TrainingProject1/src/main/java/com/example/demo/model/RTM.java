@@ -1,5 +1,6 @@
 package com.example.demo.model;
-import com.example.demo.model.TestCase;
+
+
 
 import java.util.List;
 
@@ -11,14 +12,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class RTM {
 	@Id
 	private String requirement_Id;
-	private List<TestCase> testCase;
+	private List<Testcase> testCase;
 	
 	
 
-	public List<TestCase> getTestCase() {
+	public List<Testcase> getTestCase() {
 		return testCase;
 	}
-	public void setTestCase(List<TestCase> testCase) {
+	public void setTestCase(List<Testcase> testCase) {
 		this.testCase = testCase;
 	}
 	public String getRequirement_Id() {

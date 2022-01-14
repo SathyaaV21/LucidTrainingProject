@@ -1,11 +1,13 @@
 /**
 * 	@author Manju
 */
-package com.example.model;
-
+package com.example.demo.model;
 import javax.validation.constraints.NotBlank;
 
 public class Requirement {
+
+
+
 	
 	private String requirementId;
 	
@@ -42,5 +44,4 @@ public class Requirement {
 	}
 
 
-	
 }

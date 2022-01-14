@@ -1,7 +1,7 @@
 /**
 * 	@author Manju
 */
-package com.example.model;
+package com.example.demo.model;
 
 import java.util.List;
 

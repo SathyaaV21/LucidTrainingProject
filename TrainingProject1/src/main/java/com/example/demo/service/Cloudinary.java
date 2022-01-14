@@ -1,23 +1,22 @@
 package com.example.demo.service;
 
 	import java.io.IOException;
-	import java.util.ArrayList;
-	import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
-	import org.springframework.http.HttpEntity;
-	import org.springframework.http.HttpHeaders;
-	import org.springframework.http.HttpMethod;
-	import org.springframework.http.MediaType;
-	import org.springframework.http.ResponseEntity;
-	import org.springframework.util.LinkedMultiValueMap;
-	import org.springframework.web.client.RestTemplate;
-	import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-	import com.example.demo.constants.Constants;
-	import com.example.demo.model.File;
-	import com.example.demo.model.FileDocument;
-	import com.fasterxml.jackson.databind.DeserializationFeature;
-	import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.demo.constants.Constants;
+import com.example.demo.model.File;
+import com.example.demo.model.FileDocument;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 public class Cloudinary {
 		
