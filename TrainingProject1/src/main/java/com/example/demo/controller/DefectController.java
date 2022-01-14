@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.defect.model.DefectModel;
-import com.example.defect.model.ResponseModel;
-import com.example.defect.model.Status;
-import com.example.defect.service.DefectService;
+import com.example.demo.model.DefectModel;
+import com.example.demo.model.ResponseModel;
+import com.example.demo.model.Status;
+import com.example.demo.service.DefectService;
 
 @RestController
 public class DefectController {

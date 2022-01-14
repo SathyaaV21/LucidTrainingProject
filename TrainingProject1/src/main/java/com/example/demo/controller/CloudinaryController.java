@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.File;
-import com.example.demo.service.CloudinaryFileService;
 import com.example.demo.service.Cloudinary;
-import com.mongodb.MongoCommandException;
-import com.mongodb.MongoQueryException;
+import com.example.demo.service.CloudinaryFileService;
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/v1")

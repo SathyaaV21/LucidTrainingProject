@@ -2,6 +2,7 @@
 * 	@author Manju
 */
 package com.example.demo.model;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.data.annotation.Id;
