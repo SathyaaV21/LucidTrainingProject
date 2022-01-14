@@ -51,7 +51,6 @@ public class TaskController {
 	@PostMapping("/{reqId}/addtask")
 	public String addTask(@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
 		reqtaskservice.addTask(reqId,taskmodel);
-		
 		return "Task is added";
 	}
 	

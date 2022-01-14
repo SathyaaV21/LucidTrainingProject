@@ -1,4 +1,4 @@
-/**
+ /**
  * @author Ramapriya
  */
 
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.TaskNotFoundException;
@@ -33,12 +32,13 @@ public class TaskService {
  	* Service to create to new task
  	* @param newtask
  	*/
-	public void saveTask(TaskModel newtask) {
+	public String saveTask(TaskModel newtask) {
 		newtask.setTaskId("task-"+service.getCount(DatabaseSequence.getSequenceName()));
 		newtask.setTaskStatus("New");
 		newtask.setRiskAnalysis("No risk analysed");
 		newtask.setTodo(newtask.getEffort());
 		mongotemplate.save(newtask);
+		return "Task added";
 	}
 
 	/**
