@@ -1,21 +1,29 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.example.demo.model.RTM;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
-import com.example.demo.model.Testcase;
+import com.example.demo.model.TestCase;
+import com.example.demo.model.TestCaseCount;
 import com.example.demo.model.Project;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.DashRequirements;
 import com.example.demo.model.DashTestcase;
+import com.example.demo.model.DefectCount;
 
 
 public class DashboardService {
-
+	
+	@Autowired
+	private MongoTemplate mongo;
+	
 	@Autowired
 	private TestCaseService testcaseService;
 	
@@ -30,11 +38,9 @@ public class DashboardService {
 	
 	public List<RTM> getRTM() throws ProjectNotFoundException{
 		List<Project> projects=projectService.viewProjects();
-		List<Testcase> testcases =testcaseService.viewTestcases();
+		List<TestCase> testcases =testcaseService.viewTestcases();
 		List<ReqHolder> requirements=requirementService.viewReq();
 		List<RTM> response = new ArrayList<RTM>();
-
-//		for (ProjectModel project : projects) 
 	for (int i = 0; i < 5; i++) {
 
 		RTM rtm = new RTM();
@@ -46,7 +52,7 @@ public class DashboardService {
 			List<Requirement> req_list=requirement.getRequirement();
 			if (requirement.getProjectId() != null && requirement.getProjectId().equals(projects.get(i).getProjectId())) {
 				DashRequirements reqModel = new DashRequirements();
-				for (Testcase test : testcases) {
+				for (TestCase test : testcases) {
 					if (test.getProjectId() != null)
 						for(Requirement req : req_list)
 							if(test.getRequirementId().equals(req.getRequirementId())
@@ -75,10 +81,36 @@ public class DashboardService {
 	}
 
 	return response;
-}
+	}
+	
+	public List<TestCaseCount> getTestCaseProgress(){
+		return mongo.findAll(TestCaseCount.class);
+		
+	}
+	public List<TestCaseCount> getTestCaseProgressbyProjId(String ProjectId) throws ProjectNotFoundException{
+		Query q = new Query();
+		q.addCriteria(Criteria.where("project_id").is(ProjectId));
+
+		List<TestCaseCount> reqEntity = mongo.find(q, TestCaseCount.class);
+		if (reqEntity != null) {
+			return reqEntity;
+		} else {
+			throw new ProjectNotFoundException("Invalid Project ID");
+		}
+	}
+	
+	public List<DefectCount> getDefectsProgress(){
+		return mongo.findAll(DefectCount.class);
+		
+	}
+	
+	public int getOpenTestCaseCountbyRequirementId(String RequirementId) {
+		return testcaseService.getRequirementTestcaseCount(RequirementId);
+	}
 		
 		
 		
+	
 		
 		
 		
