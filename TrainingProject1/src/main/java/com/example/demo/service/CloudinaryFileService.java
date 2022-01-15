@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.constants.Constants;
 import com.example.demo.exception.FileNotFoundException;
 import com.example.demo.model.File;
-
 @Service
 public class CloudinaryFileService {
 	private MongoTemplate mongoTemplate;
@@ -28,26 +29,24 @@ public class CloudinaryFileService {
 	}
 
 
-	/*
-	 * public File addFile(File file) {
-	 * 
-	 * if (file.getFiledocument().isEmpty()) { throw new
-	 * FileNotFoundException("Could not read any file"); } else {
-	 * 
-	 * try { Update update = new Update().addToSet(Constants.FILE_DOCUMENT,
-	 * file.getFiledocument().get(0));
-	 * 
-	 * Query q = new Query();
-	 * q.addCriteria(Criteria.where(Constants.DEFECT_ID).is(file.getDefect_id()));
-	 * 
-	 * return mongoOperations.findAndModify(q, update,
-	 * options().returnNew(true).upsert(true), File.class); } catch (Exception e) {
-	 * throw new FileNotFoundException("File not found");
-	 * 
-	 * }
-	 * 
-	 * } }
-	 */
+	 public File addFile(File file) {
+	  
+	  if (file.getFiledocument().isEmpty()) { throw new
+	  FileNotFoundException("Could not read any file"); } else {
+	  
+	  try { Update update = new Update().addToSet(Constants.FILE_DOCUMENT,
+	  file.getFiledocument().get(0));
+	  
+	  Query q = new Query();
+	  q.addCriteria(Criteria.where(Constants.DEFECT_ID).is(file.getDefect_id()));
+	  
+	  return mongoOperations.findAndModify(q, update, options().returnNew(true).upsert(true), File.class); } 
+	  catch (Exception e) {
+	  throw new FileNotFoundException("File not found");
+	  
+	  }
+	  
+	  } }
 	public List<File> getAllFiles() {
 
 		return mongoTemplate.findAll(File.class);

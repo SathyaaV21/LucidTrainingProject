@@ -12,7 +12,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
+=======
 
+>>>>>>> e7de00154097d4c75f1599047c38bb8f0d112c58
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.Project;
 import com.example.demo.model.Sequence;
