@@ -1,5 +1,4 @@
 package com.example.demo.model;
-import com.example.demo.model.TestCase;
 
 import java.util.List;
 
@@ -10,22 +9,35 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "RTM")
 public class RTM {
 	@Id
-	private String requirement_Id;
-	private List<TestCase> testCase;
+	private String ID;
+	private String name;
+	private List<DashRequirements> requirements;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
+	}
+	public List<DashRequirements> getRequirements() {
+		return requirements;
+	}
+	public void setRequirements(List<DashRequirements> requirements) {
+		this.requirements = requirements;
+	}
+	public RTM(String name, List<DashRequirements> requirements) {
+		super();
+		this.name = name;
+		this.requirements = requirements;
+	}
+	public RTM() {
+		super();	
+		}
 	
-	
-
-	public List<TestCase> getTestCase() {
-		return testCase;
-	}
-	public void setTestCase(List<TestCase> testCase) {
-		this.testCase = testCase;
-	}
-	public String getRequirement_Id() {
-		return requirement_Id;
-	}
-	public void setRequirement_Id(String requirement_Id) {
-		this.requirement_Id = requirement_Id;
-	}
 	
 }

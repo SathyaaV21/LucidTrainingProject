@@ -1,7 +1,7 @@
 /**
 * 	@author Manju
 */
-package com.example.service;
+package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import com.example.exception.ProjectNotFoundException;
-import com.example.model.Testcase;
+import com.example.demo.exception.ProjectNotFoundException;
+import com.example.demo.model.Testcase;
 
 @Service
 public class TestCaseService {

@@ -1,15 +1,15 @@
 /**
 * 	@author Manju
 */
-package com.example.service;
+package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import com.example.exception.ProjectNotFoundException;
-import com.example.model.ReqHolder;
-import com.example.model.Requirement;
+import com.example.demo.exception.ProjectNotFoundException;
+import com.example.demo.model.ReqHolder;
+import com.example.demo.model.Requirement;
 
 @Service
 
