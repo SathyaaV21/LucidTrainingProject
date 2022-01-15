@@ -1,3 +1,6 @@
+/**
+* 	@author RITIKA M
+*/
 package com.example.demo.model;
 
 public class DashTestcase {

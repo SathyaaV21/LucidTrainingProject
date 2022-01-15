@@ -1,4 +1,9 @@
+
+/**
+* 	@author RITIKA M
+*/
 package com.example.demo.controller;
+
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -52,17 +57,14 @@ public class CloudinaryController {
 	 * @param Multipart file
 	 * @return FileModel with respective status and information.
 	 */
-	/*
-	 * @PostMapping(value = "/uploadfile", consumes = {
-	 * MediaType.MULTIPART_FORM_DATA_VALUE }) public File
-	 * uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("defect_id")
-	 * String defect_id) throws IOException {
-	 * 
-	 * return cloudinaryfileservice.addFile(Cloudinary.uploadToCloudinary(file,
-	 * defect_id));
-	 * 
-	 * }
-	 */
+	  @PostMapping(value = "/uploadfile", consumes = {
+	  MediaType.MULTIPART_FORM_DATA_VALUE }) public File uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("defect_id")
+	  String defect_id) throws IOException {
+	  
+	  return cloudinaryfileservice.addFile(Cloudinary.uploadToCloudinary(file,
+	  defect_id));
+	  
+	  }
 
 	/**
 	 * Method to get all files by defect_id

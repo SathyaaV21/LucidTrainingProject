@@ -1,5 +1,9 @@
 package com.example.demo.constants;
 
+/**
+* 	@author RITIKA M
+*/
+
 public final class Constants {
 	public static final String CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/ritikam15/auto/upload";
     public static final String CLOUDINARY_UPLOAD_PRESET = "iezzs9yk";

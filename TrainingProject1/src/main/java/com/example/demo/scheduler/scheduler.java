@@ -1,3 +1,6 @@
+/**
+* 	@author RITIKA M
+*/
 package com.example.demo.scheduler;
 
 import java.util.List;
@@ -23,9 +26,6 @@ public class scheduler {
 	
 	@Autowired
 	private ProjectService projectService;
-	
-	@Autowired
-	private TestCaseCount testcaseCount;
 	
 	@Autowired 
 	private MongoTemplate mongo;
