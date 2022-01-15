@@ -18,7 +18,7 @@ import com.example.demo.model.TestCase;
 
 
 @Service
-public class TestcaseService {
+public class TestCaseService {
 
 	
 	@Autowired
