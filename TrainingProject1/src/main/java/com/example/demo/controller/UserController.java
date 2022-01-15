@@ -1,7 +1,11 @@
+/**
+ * @author Sathyaa
+ *
+ */
 package com.example.demo.controller;
 
 import java.util.HashMap;
-import java.util.List;
+
 //import java.util.Optional;
 
 import javax.validation.Valid;
@@ -9,20 +13,20 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+//import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import com.example.demo.model.UserModel;
-
+import com.example.demo.model.User;
+//import com.example.demo.security.services.UserDetailsImpl;
 //import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
@@ -32,86 +36,67 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
+	
 	/**
-	 * API to display the Logged in user's details.
-	 * 
-	 * @return ResponseEntity with the details of the currently logged in user
-	 */
-	/*
-	 * @GetMapping("/userinfo") public ResponseEntity<?> displayUserDetail() {
-	 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 * UserDetailsImpl user = (UserDetailsImpl) auth.getPrincipal(); return
-	 * ResponseEntity.ok(userService.displayUserDetail(user.getId())); }
-	 * 
-	 *//**
-		 * API to update the details of the currently logged in user.
-		 * 
-		 * @return ResponseEntity stating that the update operation is successful.
-		 *//*
-			 * @PutMapping("/updateuser") public ResponseEntity<?>
-			 * updateEmployee(@RequestBody UserModel user) { Authentication auth =
-			 * SecurityContextHolder.getContext().getAuthentication(); UserDetailsImpl userN
-			 * = (UserDetailsImpl) auth.getPrincipal(); String username =
-			 * userN.getUsername(); return
-			 * ResponseEntity.ok(userService.updateUserDetails(username, user)); }
-			 */
-	/**
-	 * API for registered users to request roles from the Administrator.
-	 * 
+	 * API specific for ADMIN to add new user.
+	 * @param User user.
 	 * @return ResponseEntity stating that the request has been successfully
 	 *         initiated.
 	 */
-	/*
-	 * @PreAuthorize("#pendingRequest.getUserid() == authentication.principal.id")
-	 * 
-	 * @PostMapping("/requestrole") public ResponseEntity<?>
-	 * requestRole(@Valid @RequestBody PendingRequest pendingRequest) { return
-	 * ResponseEntity .ok(userService.addRoletoUser(pendingRequest.getUserid(),
-	 * pendingRequest.getRequestedroleid())); }
-	 */
-
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
+	@PostMapping("/adduser")
+	public String addUser(@RequestBody User user) {
+		//empservice.setId(service.getSequenceNumber("1"));
+		
+		userService.saveUser(user);
+		
+		return "Added user details";
+	}
+	  
 	/**
-	 * API specific for Administrator to view all the users in the system.
-	 * 
+	 * API To view all the users in the system. 
 	 * @return ResponseEntity with information about all the users.
 	 */
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@GetMapping("/alluserinfo")
+			  
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@GetMapping("/alluser")
 	public ResponseEntity<?> displayAllUserDetail() {
+		System.out.println("displayAllUserDetail started");
 		return ResponseEntity.ok(userService.displayAllUserDetail());
 	}
 
 	/**
-	 * API specific for Administrator to delete an user from the system.
-	 * 
+	 * API specific to Administrator to delete a user from the database.
+	 * @param user Id
 	 * @return ResponseEntity stating that the particular user has been successfully
 	 *         deleted.
 	 */
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@DeleteMapping("/deleteuser")
-	public ResponseEntity<?> deleteUser(@Valid @RequestBody HashMap<String, String> dataHashMap) {
-		return ResponseEntity.ok(userService.deleteUser(dataHashMap.get("userid")));
+	@DeleteMapping("/user/{name}")
+	public ResponseEntity<?> deleteUser(@PathVariable String name) {
+		return ResponseEntity.ok(userService.deleteUser(name));
 	}
 
 	/**
 	 * API specific for Administrator to grant requested roles to the appropriate
 	 * user.
-	 * 
+	 * @param UserName
 	 * @return ResponseEntity contains the particular user detail appended with the
 	 *         requested role.
 	 */
-	/*
-	 * @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	 * 
-	 * @PostMapping("/addroletouser") public ResponseEntity<?>
-	 * addRoleToUser(@Valid @RequestBody HashMap<String, String> dataHashMap) {
-	 * return ResponseEntity.ok(userService.addRoleToUser(dataHashMap.get("id"),
-	 * dataHashMap.get("role"), dataHashMap.get("requestedroleid"))); }
-	 */
+	
+	  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	  
+	  @PostMapping("/addroletouser") public ResponseEntity<?>
+	  addRoleToUser(@Valid @RequestBody HashMap<String, String> dataHashMap) {
+	  return ResponseEntity.ok(userService.addRoleToUser(dataHashMap.get("id"),
+	  dataHashMap.get("rolename"))); }
+	 
 
 	/**
 	 * API specific for Administrator to remove a role from a particular user.
+	 * @param User Id, Role Id
 	 * @return ResponseEntity stating that the role is removed successfully from the particular user.
 	 */
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")

@@ -3,6 +3,7 @@
  */
 
 package com.example.demo.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,114 +24,126 @@ import com.example.demo.model.TaskHistory;
 import com.example.demo.model.TaskModel;
 import com.example.demo.service.ReqTaskService;
 import com.example.demo.service.TaskService;
+
 @RestController
 @RequestMapping("/api/v1")
 public class TaskController {
-	
+
 	@Autowired
 	private ReqTaskService reqtaskservice;
 	@Autowired
 	private TaskService taskservice;
-	
+
 	/**
 	 * Controller method to create requirement summarization
+	 * 
 	 * @param reqsummodel
 	 * @return
-	 */
-	@PostMapping("/createsum")
-	public String createreqSum(@RequestBody RequirementSummarizationModel reqsummodel) {
-		reqtaskservice.createreqSum(reqsummodel);
-		return "Requirement Summarization is created";
-	}
-	
+	 *//*
+		 * @PostMapping("/createsum") public String createreqSum(@RequestBody
+		 * RequirementSummarizationModel reqsummodel) {
+		 * reqtaskservice.createreqSum(reqsummodel); return
+		 * "Requirement Summarization is created"; }
+		 */
+
 	/**
 	 * Controller method to create task
+	 * 
 	 * @param newtask
 	 * @return String
 	 */
 	@PostMapping("/{reqId}/addtask")
 	public String addTask(@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
-		reqtaskservice.addTask(reqId,taskmodel);
+		reqtaskservice.addTask(reqId, taskmodel);
 		return "Task is added";
 	}
-	
+
 	/**
 	 * Controller method to update task
+	 * 
 	 * @param task
 	 * @param taskId
 	 * @return String and HTTP status update
 	 * @throws TaskNotFoundException
 	 */
 	@PutMapping("/updatetask/{taskId}")
-    public ResponseEntity<Object> updateTask(@RequestBody TaskModel task, @PathVariable String  taskId){
-        reqtaskservice.updatereqTask(task, taskId);
-        return new ResponseEntity<Object>("Task of task id "+taskId+" has been updated", HttpStatus.OK);
-    }
-	
+	public ResponseEntity<Object> updateTask(@RequestBody TaskModel task, @PathVariable String taskId) {
+		reqtaskservice.updatereqTask(task, taskId);
+		return new ResponseEntity<Object>("Task of task id " + taskId + " has been updated", HttpStatus.OK);
+	}
+
 	/**
 	 * Controller method to update todo
+	 * 
 	 * @param taskid
 	 * @return String and HTTP status update
 	 * @throws TaskNotFoundException
 	 */
 	@PutMapping("/{reqId}/updatetodo/{taskid}")
-	public ResponseEntity<Object> updateTodo(@PathVariable String reqId , @RequestBody TaskModel taskmodel,@PathVariable String taskid) {
-		taskservice.updateTodo(taskid,taskmodel);
-		reqtaskservice.updateSum(reqId,taskmodel);
-		
-		return new ResponseEntity<Object>("TODO of task "+taskid+" has been updated", HttpStatus.OK);
+	public ResponseEntity<Object> updateTodo(@PathVariable String reqId, @RequestBody TaskModel taskmodel,
+			@PathVariable String taskid) {
+		taskservice.updateTodo(taskid, taskmodel);
+		reqtaskservice.updateSum(reqId, taskmodel);
+
+		return new ResponseEntity<Object>("TODO of task " + taskid + " has been updated", HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Controller method to view all tasks in DB
+	 * 
 	 * @return Calls Service method getAllTasks
 	 */
 	@GetMapping("/{reqId}/getalltasks")
 	public List<TaskModel> getAllTasks(@PathVariable String reqId) {
 		return reqtaskservice.getallreqTasks(reqId);
-		
+
 	}
-	
+
 	/**
 	 * Controller method to get all the requirement summarizations
+	 * 
 	 * @return Requirement summarization model
 	 */
 	@GetMapping("/getallreqsum")
-	public List<RequirementSummarizationModel> getallreqSum(){
+	public List<RequirementSummarizationModel> getallreqSum() {
 		return reqtaskservice.getallreqSum();
 	}
+
 	/**
 	 * Controller method to get task by Id
+	 * 
 	 * @param taskid
 	 * @return TaskModel
 	 * @throws TaskNotFoundException
 	 */
 	@GetMapping("/gettask/{taskid}")
-	public TaskModel getTask(@PathVariable String taskid){
+	public TaskModel getTask(@PathVariable String taskid) {
 		return taskservice.getTask(taskid);
 	}
-	
+
 	/**
 	 * Controller method to get task history
+	 * 
 	 * @param taskid
 	 * @return
 	 */
 	@GetMapping("/gettaskhistory/{taskid}")
-	public List<TaskHistory> viewtaskHistory(@PathVariable String taskid){
+	public List<TaskHistory> viewtaskHistory(@PathVariable String taskid) {
 		return taskservice.gettaskHistory(taskid);
-		
+
 	}
-	
+
 	/**
 	 * Controller method to delete task by Id
+	 * 
 	 * @param taskid
 	 * @return String and HTTP Status update
 	 * @throws TaskNotFoundException
 	 */
 	@DeleteMapping("/delete/{taskid}")
-	public ResponseEntity<Object> deleteTask(@PathVariable String taskid){
+	public ResponseEntity<Object> deleteTask(@PathVariable String taskid) {
 		taskservice.deleteTask(taskid);
-		return new ResponseEntity<Object>("Deleted task of task"+taskid, HttpStatus.OK);
+		return new ResponseEntity<Object>("Deleted task of task" + taskid, HttpStatus.OK);
 	}
-	
+
 }

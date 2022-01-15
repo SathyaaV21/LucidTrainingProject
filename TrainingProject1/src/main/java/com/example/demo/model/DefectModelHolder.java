@@ -17,7 +17,7 @@ public class DefectModelHolder {
 
 	public DefectModelHolder() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public DefectModelHolder(String id, String description, String projectID, String assignedUser, String actualResult,

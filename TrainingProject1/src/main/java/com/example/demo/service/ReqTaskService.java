@@ -43,7 +43,6 @@ public class ReqTaskService {
 		reqsummodel.setNo_of_task_notcompleted(reqsummodel.getNo_of_task_notcompleted()+1);
 		reqsummodel.setReqTasks(reqtaskCollection);
 		mongotemplate.save(reqsummodel);
-		//reqtaskCollection.clear();
 	}
 	 public void updatereqTask(TaskModel task, String taskid) {
 		 taskservice.updateTask(taskid, task);

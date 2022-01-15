@@ -16,11 +16,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.example.defect.exception.BadRequestException;
-import com.example.defect.model.Comments;
-import com.example.defect.model.DefectModel;
-import com.example.defect.model.Sequence;
-import com.example.defect.model.Status;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.Comments;
+import com.example.demo.model.DefectModel;
+import com.example.demo.model.Sequence;
+import com.example.demo.model.Status;
 
 @Service
 public class DefectService {

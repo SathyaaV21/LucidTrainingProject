@@ -1,3 +1,7 @@
+/**
+ * @author SATHYAA
+ *
+ */
 package com.example.demo.service;
 
 import java.util.List;
@@ -16,7 +20,7 @@ import com.example.demo.exception.BadRequestException;
 
 import com.example.demo.model.Role;
 
-import com.example.demo.model.UserModel;
+import com.example.demo.model.User;
 import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
@@ -79,7 +83,7 @@ public MessageResponse deleteRole(String roleid) {
 	Query query2 = Query.query(Criteria.where("id").exists(true));
 	Query query3 = Query.query(Criteria.where("$id").is(role.getId()));
 	Update update = new Update().pull("roles", query3);
-	mongoTemplate.updateMulti(query2, update, UserModel.class);
+	mongoTemplate.updateMulti(query2, update, User.class);
 	return new MessageResponse("Role is set inactive");
 }
 

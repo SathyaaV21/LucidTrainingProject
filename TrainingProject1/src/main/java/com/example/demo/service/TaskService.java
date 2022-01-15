@@ -125,11 +125,7 @@ public class TaskService {
 			throw new TaskNotFoundException("Task ID " + taskId + " is not found");
 		}
 	}
-	/*public TaskModel getTask(int taskId) {
-		// TODO Auto-generated method stub
-		//TaskModel taskmodel = 
-		return mongotemplate.findById(taskId, TaskModel.class);
-	}*/
+	
 	/**
 	 * Service to delete a task
 	 * @param Id

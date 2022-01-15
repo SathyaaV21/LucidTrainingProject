@@ -3,7 +3,10 @@
 */
 
 package com.example.demo.model;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e7de00154097d4c75f1599047c38bb8f0d112c58
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;

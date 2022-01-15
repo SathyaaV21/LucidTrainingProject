@@ -4,17 +4,26 @@
 package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.Testcase;
+=======
+
+import com.example.demo.exception.ProjectNotFoundException;
+import com.example.demo.model.TestCase;
+//import com.example.demo.model.Testcase;
+
+>>>>>>> e7de00154097d4c75f1599047c38bb8f0d112c58
 
 @Service
-public class TestCaseService {
+public class TestcaseService {
 
 	
 	@Autowired
@@ -27,9 +36,9 @@ public class TestCaseService {
 	 */
 
 	
-	public List<Testcase> viewTestcases()  {
+	public List<TestCase> viewTestcases()  {
 		
-		return mongotemplate.findAll(Testcase.class);
+		return mongotemplate.findAll(TestCase.class);
 
 }
 	
@@ -40,13 +49,13 @@ public class TestCaseService {
 	 * @return status of the Added testcase .
 	 */
 
-	public void addTestcase(Testcase testcase, String projectId, String requirementId) {
+	public void addTestcase(TestCase testcase, String projectId, String requirementId) {
 
 			testcase.setProjectId(projectId); 
 			testcase.setRequirementId(requirementId);
-			List<Testcase> test=mongotemplate.findAll(Testcase.class);
+			List<TestCase> test=mongotemplate.findAll(TestCase.class);
 			int i=1; 
-			for(Testcase t:test) {
+			for(TestCase t:test) {
 				if(t.getRequirementId().equals(requirementId)){
 					i++;
 				}
@@ -72,7 +81,7 @@ public class TestCaseService {
 		for (Map.Entry test : testcase.entrySet()) {
 			update.set((String) test.getKey(), test.getValue());
 		} 
-		mongotemplate.findAndModify(query, update,Testcase.class); 
+		mongotemplate.findAndModify(query, update,TestCase.class); 
 		
 	}
 	
@@ -84,9 +93,9 @@ public class TestCaseService {
 	 */
 	
 	public int getOpenTestcaseCount(String projectId) {
-		List<Testcase> testcase=mongotemplate.findAll(Testcase.class);
+		List<TestCase> testcase=mongotemplate.findAll(TestCase.class);
 		int count=0;
-		for(Testcase test:testcase) {
+		for(TestCase test:testcase) {
 			if (test.getProjectId().equals(projectId))
 			{
 				if(!(test.getStatus().equals("Failed"))) {
@@ -104,9 +113,9 @@ public class TestCaseService {
 	 * @return status count of testcases of particular requirement.
 	 */
 	public int getRequirementTestcaseCount(String requirementId) {
-		List<Testcase> testcase=mongotemplate.findAll(Testcase.class);
+		List<TestCase> testcase=mongotemplate.findAll(TestCase.class);
 		int count=0;
-		for(Testcase test:testcase) {
+		for(TestCase test:testcase) {
 			if (test.getRequirementId().equals(requirementId))
 			{
 				if(!(test.getStatus().equals("Failed"))) {

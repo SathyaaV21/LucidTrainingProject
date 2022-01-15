@@ -1,3 +1,4 @@
+
 package com.example.demo.model;
 
 import java.util.List;
@@ -15,8 +16,6 @@ public class RequirementSummarizationModel {
 	private int no_of_task_notcompleted;
 	private float completionPercentage;
 	private List<TaskModel> reqTasks;
-	
-	
 	
 	public String getReq_Id() {
 		return req_Id;

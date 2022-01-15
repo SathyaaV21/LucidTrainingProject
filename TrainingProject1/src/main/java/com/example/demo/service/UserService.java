@@ -1,3 +1,8 @@
+
+/**
+ * @author Sathyaa
+ *
+ */
 package com.example.demo.service;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
@@ -20,7 +25,7 @@ import com.example.demo.exception.BadRequestException;
 
 import com.example.demo.model.Role;
 
-import com.example.demo.model.UserModel;
+import com.example.demo.model.User;
 import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.repository.UserRepository;
 
@@ -37,6 +42,22 @@ public class UserService {
 	UserRepository userRepository;
 	@Autowired
 	PasswordEncoder encoder;
+	
+	/**
+	 * Service to add information about the user
+	 * 
+	 * @param User newUser.
+	 * @return MessageResponse with the details of the user.
+	 */
+	
+	public MessageResponse saveUser(User newuser) {
+		
+		mongoTemplate.save(newuser);
+		
+		return new MessageResponse("User registered successfully!");
+	}
+	
+	
 	/**
 	 * Service to display the information of the user
 	 * 
@@ -44,10 +65,10 @@ public class UserService {
 	 * @return MessageResponse with the details of the user.
 	 */
 	
-	public List<UserModel> findByUsername(String username) {
+	public List<User> findByUsername(String username) {
 		Query query=Query.query(Criteria.where("username").is(username));
 		query.fields().exclude("password");
-		return mongoTemplate.find(query, UserModel.class);
+		return mongoTemplate.find(query, User.class);
 	}
 	
 	/**
@@ -58,7 +79,9 @@ public class UserService {
 	 * @return MessageResponse stating that the user has been successfully registered.
 	 */
 	
-	public MessageResponse saveUser(String username, String password, String email) {
+	 
+	
+	public MessageResponse registerUser(String username, String password, String email) {
 		
 		if (userRepository.existsByUsername(username)) {
 			return new MessageResponse("Error: Username is already in use!");
@@ -69,7 +92,7 @@ public class UserService {
 		}
 
 		// Create new user's account
-		UserModel user = new UserModel(username, encoder.encode(email), password);
+		User user = new User(username, encoder.encode(email), password);
 		
 		user.setIsuserStatusActive(true);
 		userRepository.save(user);
@@ -83,7 +106,7 @@ public class UserService {
 	public Object displayAllUserDetail(){
 		Query query = new Query();
 		query.fields().exclude("password");
-		List<UserModel> allUsers = mongoTemplate.find(query, UserModel.class);
+		List<User> allUsers = mongoTemplate.find(query, User.class);
 		if (allUsers == null)
 			return new MessageResponse("No user is available in the system");
 		return allUsers;
@@ -95,14 +118,14 @@ public class UserService {
 	 * @param user id
 	 * @return MessageResponse stating that the particular user has been successfully deleted.
 	 */
-	public MessageResponse deleteUser(String Id) {
+	public MessageResponse deleteUser(String name) {
 		try {
 			/*
 			 * if(!userRepository.existsById(Id)) return new MessageResponse(Id +
 			 * "does not exist!");
 			 */ 
-			mongoTemplate.findAndRemove(new Query().addCriteria(Criteria.where("id").is(Id)), UserModel.class);
-			return new MessageResponse(Id+ " has been successfully removed from the system.");
+			mongoTemplate.findAndRemove(new Query().addCriteria(Criteria.where("name").is(name)), User.class);
+			return new MessageResponse(name+ " has been successfully removed from the system.");
 		} catch(Exception e) {
 			LOGGER.warn(e.getMessage());
 			throw new BadRequestException("Request format is wrong!");
@@ -115,37 +138,37 @@ public class UserService {
 	 * @param user id.
 	 * @return MessageResponse with the details of the currently logged in user.
 	 */
-	public UserModel findUser(String userid) {
+	public User findUser(String userid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(userid));
 		query.fields().exclude("password");
-		return mongoTemplate.findOne(query, UserModel.class);
+		return mongoTemplate.findOne(query, User.class);
 	}
 	
 	/**
-	 * Service that allows administrator to add requested roles to a specific user.
+	 * Service to add requested roles to a specific user.
 	 * 
 	 * @param  user id and roleName.
 	 * @return UserModel object.
 	 */
 	
-	public UserModel addRoleToUser(String userid, String requestedrole) {
+	public User addRoleToUser(String userid, String rolename) {
 		try {
 			
 			Query query = new Query();
 			query.addCriteria(Criteria.where("id").is(userid));
-			Role role = mongoTemplate.findOne(new Query().addCriteria(Criteria.where("name").is(requestedrole)),
+			Role role = mongoTemplate.findOne(new Query().addCriteria(Criteria.where("name").is(rolename)),
 					Role.class);
 			Update update = new Update().addToSet("roles", role);
 			
-			return mongoOperations.findAndModify(query, update, options().returnNew(true).upsert(false), UserModel.class);
+			return mongoOperations.findAndModify(query, update, options().returnNew(true).upsert(false), User.class);
 		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
 			throw new BadRequestException("Request format is wrong!");
 		}
 	}
 	/**
-	 * Service that allows administrator to remove a role from a specific user.
+	 * Service to remove a role from a specific user.
 	 * 
 	 * @param user id and role id.
 	 * @return MessageResponse stating that the role is removed successfully from the particular user.
@@ -158,13 +181,16 @@ public class UserService {
 			Query query = Query.query(Criteria.where("id").is(userid));
 			Query query2 = Query.query(Criteria.where("$id").is(new ObjectId(roleid)));
 			Update update = new Update().pull("roles", query2);
-			mongoTemplate.updateMulti(query, update, UserModel.class);
+			mongoTemplate.updateMulti(query, update, User.class);
 			return new MessageResponse(role.getName() + " Role has been successful removed from the user " + userid);
 		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
 			throw new BadRequestException("Request format is wrong!");
 		}
 	}
+	
+	
+	
 	}
 
 

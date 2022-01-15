@@ -1,7 +1,7 @@
 /**
 * 	@author Manju
 */
-package com.example.controller;
+package com.example.demo.controller;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.exception.ProjectNotFoundException;
-import com.example.model.ReqHolder;
-import com.example.model.Requirement;
-import com.example.service.RequirementService;
+import com.example.demo.exception.ProjectNotFoundException;
+import com.example.demo.model.ReqHolder;
+import com.example.demo.model.Requirement;
+import com.example.demo.service.RequirementService;
 
 @RequestMapping("/api/v1")
 @RestController
