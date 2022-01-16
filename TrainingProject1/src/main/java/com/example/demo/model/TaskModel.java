@@ -1,19 +1,13 @@
 package com.example.demo.model;
 import java.util.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Document(collection = "TaskDetails")
 public class TaskModel {
-	
-    @Transient
-    public static final String SEQUENCE_NAME = "users_sequence";
-    
+
 	@Id 
 	private String taskId;
 	
@@ -103,7 +97,5 @@ public class TaskModel {
 	public void setTaskhistory(List<TaskHistory> taskhistory) {
 		this.taskhistory = taskhistory;
 	}
-	public static String getSequenceName() {
-		return SEQUENCE_NAME;
-	}
+
 }
