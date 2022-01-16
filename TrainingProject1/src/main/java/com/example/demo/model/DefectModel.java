@@ -32,7 +32,7 @@ public class DefectModel {
 	private List<Status> defectHistory;
 	private List<Comments> comments;
 	private List<String> attachment; 
-	@Range(min=1,max=3)
+
 	private int severity;
 
 	public DefectModel() {
