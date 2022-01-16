@@ -36,7 +36,7 @@ public class ProjectService {
 	 */
 
 	public String addProject(Project project) {
-		project.setProjectId("Prj" + service.getCount(Sequence.getSequenceName()));
+		project.setProjectId("Prj" + service.getCount(Sequence.getSequenceName2()));
 		mongotemplate.save(project);
 		return "Project added";
 	}
