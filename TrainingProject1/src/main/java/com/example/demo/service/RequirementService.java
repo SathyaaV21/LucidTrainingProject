@@ -8,17 +8,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
+
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
-=======
+
 
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
 import com.example.demo.model.RequirementSummarizationModel;
->>>>>>> e7de00154097d4c75f1599047c38bb8f0d112c58
+
 
 @Service
 

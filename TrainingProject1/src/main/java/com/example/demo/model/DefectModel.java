@@ -6,6 +6,10 @@ package com.example.demo.model;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,14 +17,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class DefectModel {
 	@Id
 	private String id;
+	@NotNull(message = "Defect description is mandatory") 
+	@Size(min=1,max=100,message="The descrption should not exceed 100 characters")
 	private String description;
 	private String projectID;
-	private String assignedUser;
+	private String assignedUser; 
+	@NotNull(message="Please specify actual result")
+	@Size(min=1,max=100,message="The message should not exceed 100 characters")
 	private String actualResult;
+	@NotNull(message="Please specify expected result")
+	@Size(min=1,max=100,message="The message should not exceed 100 characters")
 	private String expectedResult;
 	private String presentStatus;
 	private List<Status> defectHistory;
 	private List<Comments> comments;
+	private List<String> attachment; 
+	@Range(min=1,max=3)
 	private int severity;
 
 	public DefectModel() {
@@ -97,6 +109,14 @@ public class DefectModel {
 
 	public void setComments(List<Comments> comments) {
 		this.comments = comments;
+	}
+
+	public List<String> getAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(List<String> attachment) {
+		this.attachment = attachment;
 	}
 
 	public int getSeverity() {
