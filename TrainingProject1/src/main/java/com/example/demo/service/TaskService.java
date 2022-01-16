@@ -13,10 +13,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.exception.TaskNotFoundException;
 import com.example.demo.model.TaskModel;
-import com.example.demo.model.DatabaseSequence;
+import com.example.demo.model.Sequence;
 import com.example.demo.model.TaskHistory;
 
 @Service
@@ -33,7 +32,7 @@ public class TaskService {
  	* @param newtask
  	*/
 	public String saveTask(TaskModel newtask) {
-		newtask.setTaskId("task-"+service.getCount(DatabaseSequence.getSequenceName()));
+		newtask.setTaskId("task-"+service.getCount(Sequence.getSequenceName3()));
 		newtask.setTaskStatus("New");
 		newtask.setRiskAnalysis("No risk analysed");
 		newtask.setTodo(newtask.getEffort());
