@@ -36,7 +36,7 @@ public class DefectController {
 	 * @return The ID of the newly created Defect.
 	 */
 
-	@PostMapping("/add")
+	@PostMapping("/addDefect")
 	public ResponseEntity<?> addDefect(@RequestBody DefectModel defect) {
 		return ResponseEntity.ok(new ResponseModel(defectService.addDefect(defect)));
 	}
@@ -49,7 +49,7 @@ public class DefectController {
 	 * @return A string of acknowledgement
 	 */
 	
-	  @PutMapping("/update/{id}") 
+	  @PutMapping("/updateDefect/{id}") 
 	  public ResponseEntity<?> updateDefect(@RequestBody Map<String,String> defectModelHolder, @PathVariable String id) { 
 		  return ResponseEntity.ok(new ResponseModel(defectService.updateDefect(defectModelHolder, id))); 
 		  }
@@ -62,7 +62,7 @@ public class DefectController {
 	 * @param Project ID(String)
 	 * @return List of DefectModel Object
 	 */
-	@GetMapping("/getdetails/{projectID}")
+	@GetMapping("/getdetailsDefect/{projectID}")
 	public List<DefectModel> getProjectDefect(@PathVariable String projectID) {
 		return defectService.getProjectDefect(projectID);
 	}
@@ -74,7 +74,7 @@ public class DefectController {
 	 * 
 	 * @return A list of all the defects in the collection
 	 */
-	@GetMapping("/getall")
+	@GetMapping("/getallDefect")
 	public List<DefectModel> getAlldefects() {
 		return defectService.getAlldefects();
 	}
@@ -86,7 +86,7 @@ public class DefectController {
 	 * @param ID(String)
 	 * @return List of DefectModel Object
 	 */
-	@GetMapping("/getid/{id}")
+	@GetMapping("/getidDefect/{id}")
 	public DefectModel getDefect(@PathVariable String id) {
 		return defectService.getDefect(id);
 	}
@@ -98,7 +98,7 @@ public class DefectController {
 	 * @param ID(String)
 	 * @return A string of acknowledgement
 	 */
-	@DeleteMapping("/deleteid/{id}")
+	@DeleteMapping("/deleteidDefect/{id}")
 	public ResponseEntity<?> deleteDefect(@PathVariable String id) {
 		return ResponseEntity.ok(new ResponseModel(defectService.deleteDefect(id)));
 	} 
@@ -110,7 +110,7 @@ public class DefectController {
 	 * @param ID(String)
 	 * @return A list of Status.
 	 */
-	@GetMapping("/gethistory/{id}")
+	@GetMapping("/gethistoryDefect/{id}")
 	public List<Status> getHistoryByID(String id){
 		return defectService.getHistoryByID(id);
 	}
