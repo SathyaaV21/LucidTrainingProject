@@ -22,6 +22,8 @@ import com.example.demo.model.DefectModel;
 import com.example.demo.model.Sequence;
 import com.example.demo.model.Status;
 
+
+
 @Service
 public class DefectService {
 
