@@ -40,7 +40,7 @@ public class DefectService {
 	 */
 
 	public String addDefect(DefectModel defect) {
-		defect.setId("Def" + service.getCount(Sequence.getSequenceName()));
+		defect.setId("Def" + service.getCount(Sequence.getSequenceName1()));
 		List<Comments> commentList = new ArrayList<>();
 		commentList.add(new Comments(defect.getAssignedUser(), "The defect has been stored", LocalDateTime.now()));
 		List<Status> statusList = new ArrayList<>();

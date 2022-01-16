@@ -6,7 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Counter")
 public class Sequence {
-	private static final String SEQUENCE_NAME = "Counter_Sequence";
+	private static final String SEQUENCE_NAME = "Counter_Sequence"; 
+	private static final String SEQUENCE_NAME1=  "Defect_Sequence";
 
 	@Id
 	private String id;
@@ -42,5 +43,7 @@ public class Sequence {
 	public static String getSequenceName() {
 		return SEQUENCE_NAME;
 	}
-
+	public static String getSequenceName1() {
+		return SEQUENCE_NAME1;
+	}
 }
