@@ -5,6 +5,8 @@ package com.example.demo.scheduler;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -37,6 +39,7 @@ public class scheduler {
 	private TestCaseCount testcaseCounts;
 	private DefectCount defectCounts;
 	
+	@PostConstruct
 	public void onstart() throws ProjectNotFoundException {
 		projects=projectService.viewProjects();
 		
