@@ -44,7 +44,7 @@ public class TestCaseService {
 	 * @return status of the Added testcase .
 	 */
 
-	public void addTestcase(TestCase testcase, String projectId, String requirementId) {
+	public String addTestcase(TestCase testcase, String projectId, String requirementId) {
 
 			testcase.setProjectId(projectId); 
 			testcase.setRequirementId(requirementId);
@@ -57,6 +57,7 @@ public class TestCaseService {
 			}
 			testcase.setTestCaseId(requirementId+"Tc"+Integer.toString(i));
 			mongotemplate.insert(testcase);
+			return "Testcase added";
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class TestCaseService {
 	 * @throws Handles Exception.
 	 * 
 	 */
-	public void updateTestcase(Map<String,String> testcase, String testcaseId) throws ProjectNotFoundException {
+	public String updateTestcase(Map<String,String> testcase, String testcaseId) throws ProjectNotFoundException {
 
 		Query query=new Query();
 		query.addCriteria(Criteria.where("_id").is(testcaseId)); 
@@ -76,7 +77,8 @@ public class TestCaseService {
 		for (Map.Entry test : testcase.entrySet()) {
 			update.set((String) test.getKey(), test.getValue());
 		} 
-		mongotemplate.findAndModify(query, update,TestCase.class); 
+		mongotemplate.findAndModify(query, update,TestCase.class);
+		return "Testcase updated"; 
 		
 	}
 	

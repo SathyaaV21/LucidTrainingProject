@@ -37,7 +37,7 @@ public class RequirementService {
 	 * @return status of the Added Requirement .
 	 */
 
-	public void addRequirement(Requirement requirement, String projectId) {
+	public String addRequirement(Requirement requirement, String projectId) {
 
 		ReqHolder req = new ReqHolder();
 		req.setProjectId(projectId);
@@ -62,6 +62,7 @@ public class RequirementService {
 		RequirementSummarizationModel reqsummodel=new RequirementSummarizationModel();
 		reqsummodel.setReq_Id(requirement.getRequirementId());
 		reqtaskservice.createreqSum(reqsummodel);
+		return "Requirement added successfully";
 	}
 	
 	/**
@@ -84,7 +85,7 @@ public class RequirementService {
 	 * @return status of the updated Requirement .
 	 */
 
-	public void updateReq(Requirement requirement, String requirementId, String projectId) {
+	public String updateReq(Requirement requirement, String requirementId, String projectId) {
 
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
 		List<Requirement> req = reqHolder.getRequirement();
@@ -100,6 +101,7 @@ public class RequirementService {
 		reqHolder.setRequirement(req);
 
 		mongotemplate.save(reqHolder);
+		return "Requirement updated";
 	}
 
 	/**
@@ -110,7 +112,7 @@ public class RequirementService {
 	 * @throws ProjectNotFoundException
 	 */
 
-	public void deleteReq(String requirementId, String projectId) throws ProjectNotFoundException {
+	public String deleteReq(String requirementId, String projectId) throws ProjectNotFoundException {
 		try {
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
 		if (reqHolder == null) {
@@ -131,6 +133,7 @@ public class RequirementService {
 		throw new ProjectNotFoundException("Project Not Found");
 
 	}
+		return "Requirement deleted";
 
 }
 }

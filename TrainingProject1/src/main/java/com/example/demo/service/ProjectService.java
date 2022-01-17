@@ -85,7 +85,7 @@ public class ProjectService {
 	 */
 
 
-	public void updateproject(Map<String, String> project, String projectId){
+	public String updateproject(Map<String, String> project, String projectId){
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(projectId));
 		Update update = new Update();
@@ -93,6 +93,7 @@ public class ProjectService {
 			update.set((String) test.getKey(), test.getValue());
 		}
 		mongotemplate.findAndModify(query, update, Project.class);
+		return "project Updated";
 
 	}
 }
