@@ -44,7 +44,7 @@ public class TaskController {
 	 */
 	@PostMapping("/{reqId}/addtask")
 	public String addTask(@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
-		reqtaskservice.addTask(reqId, taskmodel);
+		taskservice.saveTask(taskmodel, reqId);
 		return "Task is added";
 	}
 
@@ -70,11 +70,9 @@ public class TaskController {
 	 * @throws TaskNotFoundException
 	 */
 	@PutMapping("/{reqId}/updatetodo/{taskid}")
-	public ResponseEntity<Object> updateTodo(@PathVariable String reqId, @RequestBody TaskModel taskmodel,
-			@PathVariable String taskid) {
-		taskservice.updateTodo(taskid, taskmodel);
-		reqtaskservice.updateSum(reqId, taskmodel);
-
+	public ResponseEntity<Object> updateTodo(@PathVariable String reqId, @RequestBody TaskModel taskmodel,@PathVariable String taskid) {
+		taskservice.updateTodo(reqId,taskid, taskmodel);
+		
 		return new ResponseEntity<Object>("TODO of task " + taskid + " has been updated", HttpStatus.OK);
 	}
 

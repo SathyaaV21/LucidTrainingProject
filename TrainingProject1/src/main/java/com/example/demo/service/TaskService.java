@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.TaskNotFoundException;
+import com.example.demo.model.RequirementSummarizationModel;
 import com.example.demo.model.Sequence;
 import com.example.demo.model.TaskHistory;
 import com.example.demo.model.TaskModel;
@@ -30,13 +31,16 @@ public class TaskService {
     private SequenceGenService service;
 	
 	@Autowired
+	private ReqTaskService reqtaskservice;
+	
+	@Autowired
 	private MongoTemplate mongotemplate;
-		
+	List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
 	/**
  	* Service to create to new task
  	* @param newtask
  	*/
-	public String saveTask(TaskModel newtask) {
+	public String saveTask(TaskModel newtask, String reqId) {
 		newtask.setTaskId("task-"+service.getCount(Sequence.getSequenceName3()));
 		newtask.setTaskStatus("New");
 		newtask.setRiskAnalysis("No risk analysed");
@@ -49,6 +53,15 @@ public class TaskService {
 			throw new BadRequestException("Task type is invalid");
 		} 
 		mongotemplate.save(newtask);
+		RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId, RequirementSummarizationModel.class);
+		if (reqsummodel.getReqTasks() != null) {
+			reqtaskCollection = reqsummodel.getReqTasks();
+		}
+		reqtaskCollection.add(newtask);
+		reqsummodel.setNo_of_tasks(reqsummodel.getNo_of_tasks()+1);
+		reqsummodel.setNo_of_task_notcompleted(reqsummodel.getNo_of_task_notcompleted()+1);
+		reqsummodel.setReqTasks(reqtaskCollection);
+		mongotemplate.save(reqsummodel);
 		return "Task added";
 	}
 
@@ -57,22 +70,21 @@ public class TaskService {
 	 * @param taskid
 	 * @throws TaskNotFoundException
 	 */
-	public TaskModel updateTodo(String taskid, TaskModel taskmodel) {
+	public void updateTodo(String reqId,String taskid, TaskModel taskmodel) {
 		TaskModel task = mongotemplate.findById(taskid,TaskModel.class);
 		if (task != null) {
 			List<TaskHistory> taskhistoryCollection=new ArrayList<TaskHistory>();
 			TaskHistory taskhistory=new TaskHistory();
 			taskhistory.setTodoBefore(task.getTodo());
-			task.setTodo(task.getEffort()-taskmodel.getTodo());
+			task.setTodo(task.getTodo()-taskmodel.getTodo());
 			mongotemplate.save(task);
 			TaskModel newtask = mongotemplate.findById(taskid,TaskModel.class);
-			int curtodo=taskmodel.getTodo();
-			taskhistory.setTodoNow(task.getEffort()-taskmodel.getTodo());
+			int curtodo=newtask.getTodo();
+			taskhistory.setTodoNow(task.getTodo());
 			Date curDate=new Date();
 			taskhistory.setDateandTime(curDate);
 			newtask.setTaskStatus("In Progress");
-			newtask.setRiskAnalysis("Task is on schedule");
-			if (curtodo==newtask.getEffort()) {
+			if (curtodo<=0) {
 				newtask.setTaskStatus("Completed");
 			}
 			if(task.getTaskhistory()!=null) {
@@ -81,9 +93,10 @@ public class TaskService {
 			taskhistoryCollection.add(taskhistory);
 			newtask.setTaskhistory(taskhistoryCollection);
 			mongotemplate.save(newtask);
-			newtask.setRiskAnalysis(this.riskNotification(taskhistory, newtask));
+			newtask.setRiskAnalysis(this.riskNotification(taskhistory, newtask,taskmodel));
 			mongotemplate.save(newtask);
-			return newtask;
+			reqtaskservice.updateSum(reqId, newtask);
+			//return newtask;
 			
 		} else {
 			throw new TaskNotFoundException("Task ID " + taskid + " is not found");
@@ -91,14 +104,15 @@ public class TaskService {
 	
 	}
 	
-	public String riskNotification(TaskHistory taskhistory,TaskModel newtask) {
+	public String riskNotification(TaskHistory taskhistory,TaskModel newtask, TaskModel taskmodel) {
 		long difference=newtask.getStartDate().getTime()-newtask.getEndDate().getTime();
 		float daysBetween=(difference/(1000*60*60*24));
 		float efficiency=newtask.getEffort()/daysBetween;
-		if(newtask.getTodo()-taskhistory.getTodoBefore()==efficiency) {
+		if(taskmodel.getTodo()<efficiency) {
 			return "Task is delayed";
 		}
-		return null;
+		else
+			return "Task is on schedule";
 	}
 	
 	/**

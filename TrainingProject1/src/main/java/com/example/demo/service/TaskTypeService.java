@@ -22,7 +22,6 @@ public class TaskTypeService {
 	}
 	
 	public void deletetaskType(int id) {
-		/*Optional<TaskTypeModel>tasktypemodel=tasktyperepo.findById(id);*/
 		tasktyperepo.deleteById(id);
 	}
 }
