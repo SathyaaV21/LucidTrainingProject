@@ -65,4 +65,9 @@ public class ReqTaskService {
     public List<RequirementSummarizationModel> getallreqSum(){
     	return mongotemplate.findAll(RequirementSummarizationModel.class);
     }
+
+	public RequirementSummarizationModel getreqSum(String reqId) {
+		// TODO Auto-generated method stub
+		return mongotemplate.findById(reqId, RequirementSummarizationModel.class);
+	}
 }

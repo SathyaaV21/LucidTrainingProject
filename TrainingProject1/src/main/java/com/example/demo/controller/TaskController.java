@@ -34,17 +34,6 @@ public class TaskController {
 	@Autowired
 	private TaskService taskservice;
 
-	/**
-	 * Controller method to create requirement summarization
-	 * 
-	 * @param reqsummodel
-	 * @return
-	 *//*
-		 * @PostMapping("/createsum") public String createreqSum(@RequestBody
-		 * RequirementSummarizationModel reqsummodel) {
-		 * reqtaskservice.createreqSum(reqsummodel); return
-		 * "Requirement Summarization is created"; }
-		 */
 
 	/**
 	 * Controller method to create task
@@ -108,7 +97,17 @@ public class TaskController {
 	public List<RequirementSummarizationModel> getallreqSum() {
 		return reqtaskservice.getallreqSum();
 	}
-
+	
+	/**
+	 * Controller method to get requirement summarization of specific requirement
+	 * @param reqId
+	 * @return Requirement summarization model
+	 */
+	@GetMapping("/{reqId}/getsum")
+	public RequirementSummarizationModel getreqSum(@PathVariable String reqId) {
+		return reqtaskservice.getreqSum(reqId);
+	}
+	
 	/**
 	 * Controller method to get task by Id
 	 * 

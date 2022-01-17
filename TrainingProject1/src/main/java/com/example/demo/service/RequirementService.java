@@ -51,9 +51,6 @@ public class RequirementService {
 			reqArr.add(requirement);
 			req_.setRequirement(reqArr);
 			mongotemplate.save(req_);
-			RequirementSummarizationModel reqsummodel=new RequirementSummarizationModel();
-			reqsummodel.setReq_Id(requirement.getRequirementId());
-			reqtaskservice.createreqSum(reqsummodel);
 
 		} else {
 			List<Requirement> r = reqHolder.getRequirement();
@@ -61,9 +58,10 @@ public class RequirementService {
 			r.add(requirement);
 			req.setRequirement(r);
 			mongotemplate.save(req);
-
 		}
-
+		RequirementSummarizationModel reqsummodel=new RequirementSummarizationModel();
+		reqsummodel.setReq_Id(requirement.getRequirementId());
+		reqtaskservice.createreqSum(reqsummodel);
 	}
 	
 	/**
