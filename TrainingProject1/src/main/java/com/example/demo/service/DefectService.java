@@ -103,6 +103,7 @@ public class DefectService {
 								|| defect.getValue().equals("Fixed") || defect.getValue().equals("Retest")
 								|| defect.getValue().equals("Cancelled")) {
 							if (!(defect.getValue().equals(oldStatus.get((oldStatus.size()) - 1).getCurrentStatus()))) {
+								update.set("presentStatus", defect.getValue());
 								Status status = new Status();
 								if (defectModelHolder.get("assignedUser") != null) {
 									status.setAssignedUser(defectModelHolder.get("assignedUser"));
@@ -125,7 +126,7 @@ public class DefectService {
 				}
 
 				update.set("Comments", oldComments);
-				update.set("defectHistory", oldStatus);
+				update.set("defectHistory", oldStatus); 
 				mongotemplate.findAndModify(query, update, DefectModel.class);
 			}
 
@@ -166,7 +167,8 @@ public class DefectService {
 			comment.setTimestamp(LocalDateTime.now());
 			oldComments.add(comment);
 			oldDefect.setComments(oldComments);
-			oldDefect.setDefectHistory(oldStatus);
+			oldDefect.setDefectHistory(oldStatus); 
+			oldDefect.setPresentStatus("Cancelled");
 			mongotemplate.save(oldDefect);
 		} else {
 			throw new BadRequestException("The defect ID cannot be deleted");
@@ -187,8 +189,7 @@ public class DefectService {
 		DefectModel defect = mongotemplate.findById(id, DefectModel.class); 
 		if(defect==null)
 			throw new BadRequestException("The ID is unavailable");
-		List<Status> status = defect.getDefectHistory();
-		if (status.get((status.size()) - 1).getCurrentStatus().equals("Cancelled")) {
+		if (defect.getPresentStatus().equals("Cancelled")) {
 			throw new BadRequestException("The specified Defect ID is cancelled...Cannot be displayed");
 		}
 		return defect;
