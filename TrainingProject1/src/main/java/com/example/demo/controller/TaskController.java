@@ -5,6 +5,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,8 +57,8 @@ public class TaskController {
 	 * @throws TaskNotFoundException
 	 */
 	@PutMapping("/updatetask/{taskId}")
-	public ResponseEntity<Object> updateTask(@RequestBody TaskModel task, @PathVariable String taskId) {
-		reqtaskservice.updatereqTask(task, taskId);
+	public ResponseEntity<Object> updateTask(@RequestBody Map<String,String> task, @PathVariable String taskId) {
+		taskservice.updateTask(task, taskId);
 		return new ResponseEntity<Object>("Task of task id " + taskId + " has been updated", HttpStatus.OK);
 	}
 

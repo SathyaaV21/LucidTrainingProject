@@ -7,16 +7,21 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.TaskNotFoundException;
-import com.example.demo.model.TaskModel;
 import com.example.demo.model.Sequence;
 import com.example.demo.model.TaskHistory;
+import com.example.demo.model.TaskModel;
+import com.example.demo.model.TaskTypeModel;
 
 @Service
 public class TaskService {
@@ -35,7 +40,14 @@ public class TaskService {
 		newtask.setTaskId("task-"+service.getCount(Sequence.getSequenceName3()));
 		newtask.setTaskStatus("New");
 		newtask.setRiskAnalysis("No risk analysed");
-		newtask.setTodo(newtask.getEffort());
+		newtask.setTodo(newtask.getEffort()); 
+		List<TaskTypeModel> typeList=mongotemplate.findAll(TaskTypeModel.class); 
+		List<String> a=new ArrayList<>();
+		for(TaskTypeModel task:typeList)
+			a.add(task.getTasktypeName());
+		if (!(a.contains(newtask.getTaskType()))) {
+			throw new BadRequestException("Task type is invalid");
+		} 
 		mongotemplate.save(newtask);
 		return "Task added";
 	}
@@ -96,15 +108,23 @@ public class TaskService {
 	 * @return oldtask
 	 * @throws TaskNotFoundException
 	 */
-	public TaskModel updateTask(String taskId, TaskModel oldtask) {
-		TaskModel taskmodel = mongotemplate.findById(taskId, TaskModel.class);
-		if (taskmodel != null) {
-			mongotemplate.save(oldtask);
-			return oldtask;
-		} else {
-			throw new TaskNotFoundException("Task ID " + taskId + " is not found");
-		}
-	}
+	public void updateTask( Map<String,String> oldtask,String taskId) {
+		TaskModel taskmodel = mongotemplate.findById(taskId, TaskModel.class);   
+		if(taskmodel==null) {
+			throw new BadRequestException("Task ID " + taskId + " is not found");} 
+		  Query query = new Query();
+	        query.addCriteria(Criteria.where("taskId").is(taskmodel.getTaskId()));
+	        Update update = new Update();  
+	        for (Map.Entry task : oldtask.entrySet()) {
+	        	if(task.getKey().equals("taskName")||task.getKey().equals("taskDescription")||task.getKey().equals("assignedTo")) {
+	        		update.set((String)task.getKey(),task.getValue());
+	        	}
+	        	else {
+	        		throw new BadRequestException("Please provide the correct fields to update");
+	        	}
+	        }
+	         mongotemplate.findAndModify(query, update, TaskModel.class);
+}
 	
 
 	/**

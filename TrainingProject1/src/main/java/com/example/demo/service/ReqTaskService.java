@@ -44,9 +44,7 @@ public class ReqTaskService {
 		reqsummodel.setReqTasks(reqtaskCollection);
 		mongotemplate.save(reqsummodel);
 	}
-	 public void updatereqTask(TaskModel task, String taskid) {
-		 taskservice.updateTask(taskid, task);
-	 }
+	
 	
 	public void updateSum(String reqId, TaskModel taskmodel) {
 		RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId, RequirementSummarizationModel.class);

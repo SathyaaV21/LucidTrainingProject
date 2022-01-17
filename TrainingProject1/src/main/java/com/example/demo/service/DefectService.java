@@ -125,7 +125,7 @@ public class DefectService {
 				}
 
 				update.set("Comments", oldComments);
-				update.set("Status", oldStatus);
+				update.set("defectHistory", oldStatus);
 				mongotemplate.findAndModify(query, update, DefectModel.class);
 			}
 
