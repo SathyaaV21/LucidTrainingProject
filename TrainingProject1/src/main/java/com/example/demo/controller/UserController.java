@@ -43,7 +43,7 @@ public class UserController {
 	 * @return ResponseEntity stating that the request has been successfully
 	 *         initiated.
 	 */
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@PostMapping("/adduser")
 	public String addUser(@RequestBody User user) {
 		//empservice.setId(service.getSequenceNumber("1"));
@@ -51,6 +51,25 @@ public class UserController {
 		userService.saveUser(user);
 		
 		return "Added user details";
+	}
+	
+	
+	
+	/**
+	 * API specific for ADMIN to add new user.
+	 * @param User user.
+	 * @return ResponseEntity stating that the request has been successfully
+	 *         initiated.
+	 */
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
+	@PostMapping("/adduserbymanager")
+	public String addUserByMangaer(@RequestBody HashMap<String, String> dataHashMap) {
+		//empservice.setId(service.getSequenceNumber("1"));
+		
+		userService.registerUser(dataHashMap.get("userName"),
+				  dataHashMap.get("password"),dataHashMap.get("email"));
+		
+		return "Added user details by manager";
 	}
 	  
 	/**
@@ -65,7 +84,7 @@ public class UserController {
 		System.out.println("displayAllUserDetail started");
 		return ResponseEntity.ok(userService.displayAllUserDetail());
 	}
-
+	
 	/**
 	 * API specific to Administrator to delete a user from the database.
 	 * @param user Id
@@ -73,10 +92,37 @@ public class UserController {
 	 *         deleted.
 	 */
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@DeleteMapping("/user/{name}")
+	@GetMapping("/user/{name}")
+	public ResponseEntity<?> findUserByName(@PathVariable String name) {
+		return ResponseEntity.ok(userService.findByUsername(name));
+	}
+	
+
+	/**
+	 * API specific to Administrator to find a user using ID from the database.
+	 * @param user Id
+	 * @return ResponseEntity stating that the particular user has been successfully
+	 *         deleted.
+	 */
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
+	@DeleteMapping("/finduserbyid/{Id}")
+	public ResponseEntity<?> findUserById(@PathVariable String Id) {
+		return ResponseEntity.ok(userService.findUser(Id));
+	}
+	
+	
+	/**
+	 * API specific to Administrator to find a user using username from the database.
+	 * @param user Id
+	 * @return ResponseEntity stating that the particular user has been successfully
+	 *         deleted.
+	 */
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
+	@DeleteMapping("/deleteuser/{name}")
 	public ResponseEntity<?> deleteUser(@PathVariable String name) {
 		return ResponseEntity.ok(userService.deleteUser(name));
 	}
+	
 
 	/**
 	 * API specific for Administrator to grant requested roles to the appropriate

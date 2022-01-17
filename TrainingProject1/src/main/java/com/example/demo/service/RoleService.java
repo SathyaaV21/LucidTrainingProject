@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.exception.BadRequestException;
 
 import com.example.demo.model.Role;
-
+import com.example.demo.model.Sequence;
 import com.example.demo.model.User;
 import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.repository.RoleRepository;
@@ -37,6 +37,9 @@ MongoTemplate mongoTemplate;
 RoleRepository roleRepository;
 @Autowired
 UserRepository userRepository;
+
+@Autowired
+private SequenceGenService service;
 	
 
 private static final Logger LOGGER = LoggerFactory.getLogger(RoleService.class);
@@ -57,6 +60,7 @@ public MessageResponse addNewRole(String rolename) {
 		Role role = new Role("ROLE_" + rolename.toUpperCase());
 		//setRoleID
 		role.setIsRolestatusactive(true);
+		role.setId("ROLE" + service.getCount(Sequence.getSequenceName()));
 		mongoTemplate.save(role);
 		return new MessageResponse("Role added successfully");
 	} catch (Exception e) {

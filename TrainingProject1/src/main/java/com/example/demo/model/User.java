@@ -92,6 +92,13 @@ public class User {
 		this.roles = roles;
 	}
 
+	public User(String id, @NotBlank String username, @NotBlank @Size(min = 2) String password, @Email String email) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
 	public String getPhonenumber() {
 		return phonenumber;
 	}

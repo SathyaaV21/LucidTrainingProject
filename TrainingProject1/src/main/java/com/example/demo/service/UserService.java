@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.exception.BadRequestException;
 
 import com.example.demo.model.Role;
-
+import com.example.demo.model.Sequence;
 import com.example.demo.model.User;
 import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.repository.UserRepository;
@@ -42,6 +42,8 @@ public class UserService {
 	UserRepository userRepository;
 	@Autowired
 	PasswordEncoder encoder;
+	@Autowired
+	private SequenceGenService service;
 	
 	/**
 	 * Service to add information about the user
@@ -52,6 +54,15 @@ public class UserService {
 	
 	public MessageResponse saveUser(User newuser) {
 		
+		if (userRepository.existsByUsername(newuser.getUsername())) {
+			return new MessageResponse("Error: Username is already in use!");
+		}
+
+		if (userRepository.existsByEmail(newuser.getEmail())) {
+			return new MessageResponse("Error: Email is already in use!");
+		}
+		newuser.setId("USR" + service.getCount(Sequence.getSequenceName()));
+		newuser.setIsuserStatusActive(true);
 		mongoTemplate.save(newuser);
 		
 		return new MessageResponse("User registered successfully!");
@@ -91,9 +102,9 @@ public class UserService {
 			return new MessageResponse("Error: Email is already in use!");
 		}
 
-		// Create new user's account
-		User user = new User(username, encoder.encode(email), password);
 		
+		User user = new User(username, encoder.encode(email), password);
+		user.setId("USR" + service.getCount(Sequence.getSequenceName()));
 		user.setIsuserStatusActive(true);
 		userRepository.save(user);
 		return new MessageResponse("User registered successfully!");
@@ -120,10 +131,12 @@ public class UserService {
 	 */
 	public MessageResponse deleteUser(String name) {
 		try {
-			/*
-			 * if(!userRepository.existsById(Id)) return new MessageResponse(Id +
-			 * "does not exist!");
-			 */ 
+			
+			  if(!userRepository.existsByUsername(name)) return new MessageResponse(name +
+			  "does not exist!");
+			
+			 
+			  
 			mongoTemplate.findAndRemove(new Query().addCriteria(Criteria.where("name").is(name)), User.class);
 			return new MessageResponse(name+ " has been successfully removed from the system.");
 		} catch(Exception e) {

@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.ERole;
 import com.example.demo.model.Role;
+import com.example.demo.model.Sequence;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
@@ -39,6 +40,7 @@ import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.filter.JwtUtils;
 import com.example.demo.security.services.UserDetailsImpl;
+import com.example.demo.service.SequenceGenService;
 import com.example.demo.service.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -58,6 +60,9 @@ public class AuthController {
 	UserService userService;
 	@Autowired
 	PasswordEncoder encoder;
+	
+	@Autowired
+	private SequenceGenService service;
 
 	@Autowired
 	JwtUtils jwtUtils;
@@ -99,10 +104,11 @@ public class AuthController {
 		}
 
 		// Create new user's account
+		
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()));
-
+		user.setId("USR" + service.getCount(Sequence.getSequenceName()));
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
 
@@ -151,11 +157,14 @@ public class AuthController {
 		}
 
 		user.setRoles(roles);
+		user.setIsuserStatusActive(true);
+		
 		/*
 		 * System.out.println("printing user:"); System.out.println(user.getEmail());
 		 * System.out.println(user.getPassword()); System.out.println(user.toString());
-		 * userService.saveUser(user);
 		 */
+		  userService.saveUser(user);
+		 
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
