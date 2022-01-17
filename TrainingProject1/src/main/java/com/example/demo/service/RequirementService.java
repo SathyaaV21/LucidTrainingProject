@@ -12,11 +12,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
-
-
-import com.example.demo.exception.ProjectNotFoundException;
-import com.example.demo.model.ReqHolder;
-import com.example.demo.model.Requirement;
 import com.example.demo.model.RequirementSummarizationModel;
 
 
@@ -83,12 +78,17 @@ public class RequirementService {
 	 * 
 	 * @param the Requirement id and project id is passed.
 	 * @return status of the updated Requirement .
+	 * @throws ProjectNotFoundException 
 	 */
 
-	public String updateReq(Requirement requirement, String requirementId, String projectId) {
+	public String updateReq(Requirement requirement, String requirementId, String projectId) throws ProjectNotFoundException {
 
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
+		if (reqHolder==null) {
+			throw new ProjectNotFoundException("Reqholder is null");
+		}
 		List<Requirement> req = reqHolder.getRequirement();
+		
 
 		for (Requirement r : req) {
 			if (r.getRequirementId().equals(requirementId)) {

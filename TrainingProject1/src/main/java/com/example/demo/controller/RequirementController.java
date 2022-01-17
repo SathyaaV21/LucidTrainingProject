@@ -57,10 +57,11 @@ public class RequirementController {
 	 * 
 	 * @param Requirement Id,Project Id and Requirement Model
 	 * @return Respective status of Requirement updated.
+	 * @throws ProjectNotFoundException 
 	 */
 	@PutMapping("requirement/{projectId}/{requirementId}")
 	public void updateReq(@PathVariable String projectId, @PathVariable String requirementId,
-			@RequestBody Requirement requirement) {
+			@RequestBody Requirement requirement) throws ProjectNotFoundException {
 		reqservice.updateReq(requirement, requirementId, projectId);
 	}
 
