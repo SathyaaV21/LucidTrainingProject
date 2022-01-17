@@ -106,21 +106,12 @@ class DefectServiceTest {
 	}
 	
 	
+//It can be included finally
+//	@Test
+//	public void deleteDefecttest() {
+//		assertTrue(defect.deleteDefect("Def1") instanceof String);
+//	}
 	
-	@Test
-	public void deleteDefecttest() {
-//		DefectModel def=new DefectModel();  
-//		def.setId("Def1");
-//		def.setDescription("Memory Exceeded");
-//		def.setActualResult("Time Limit Exceeded"); 
-//		def.setPresentStatus("New");
-//		def.setProjectID("P11");
-//		def.setAssignedUser("U1");
-//		def.setSeverity(2);
-//		when(mongotemplate.findById("Def1", DefectModel.class)).thenReturn(def); 
-//		assertEquals(def,defectService.deleteDefect("Def1"));
-		assertTrue(defect.deleteDefect("Def1") instanceof String);
-	}
 	@Test
 	public void  getCloseddefectsTest() {
 		assertTrue(defect.getCloseddefects().get(0) instanceof DefectModel);
