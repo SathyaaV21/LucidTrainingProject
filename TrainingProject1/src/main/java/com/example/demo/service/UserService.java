@@ -61,7 +61,7 @@ public class UserService {
 		if (userRepository.existsByEmail(newuser.getEmail())) {
 			return new MessageResponse("Error: Email is already in use!");
 		}
-		newuser.setId("USR" + service.getCount(Sequence.getSequenceName()));
+		newuser.setId("USR" + service.getCount(Sequence.getSequenceName5()));
 		newuser.setIsuserStatusActive(true);
 		mongoTemplate.save(newuser);
 		
@@ -104,7 +104,7 @@ public class UserService {
 
 		
 		User user = new User(username, encoder.encode(email), password);
-		user.setId("USR" + service.getCount(Sequence.getSequenceName()));
+		user.setId("USR" + service.getCount(Sequence.getSequenceName5()));
 		user.setIsuserStatusActive(true);
 		userRepository.save(user);
 		return new MessageResponse("User registered successfully!");

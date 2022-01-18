@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.ResponseEntity;
 
 import com.example.demo.controller.AuthController;
 import com.example.demo.model.Role;
@@ -42,7 +43,7 @@ public class UserManagerTest {
 		AuthController authController;
 	
 		@Autowired
-		UserService userServices;
+		UserService userService;
 
 		@MockBean
 		private UserRepository userRepository;
@@ -55,30 +56,29 @@ public class UserManagerTest {
 		MongoTemplate mongoTemplate;
 		
 		
-//		@Test
-//		public void signUpTest() throws IOException {
-//			SignupRequest user = new SignupRequest();
-//			user.setUsername("Sathyaa");
-//			user.setEmail("sathyaa@gmail.com");
-//			user.setPassword("pass");
-//			User usr = new User(user.getUsername(), 
-//					 user.getEmail(),
-//					user.getPassword());
-//			Mockito.when(mongoTemplate.save(user)).thenReturn(user);
-//			assertTrue(authController.registerUser(SignupRequest user) instanceof MessageResponse);
-//		}
-//		
-//		@Test
-//		public void signInTest() throws IOException {
-//			LoginRequest user = new LoginRequest();
-//			user.setUsername("Sathyaa");
-//			
-//			user.setPassword("pass");
-//			User usr = new User
-//					(user.getUsername(), user.getPassword());
-//			Mockito.when(mongoTemplate.save(user)).thenReturn(user);
-//			assertTrue(authController.authenticateUser(LoginRequest user) instanceof JwtResponse );
-//		}
+		@Test
+		public void signUpTest() throws IOException {
+			SignupRequest user = new SignupRequest();
+			user.setUsername("Sathyaa");
+			user.setEmail("sathyaa@gmail.com");
+			user.setPassword("pass");
+			User usr = new User(user.getUsername(), 
+					 user.getEmail(),
+					user.getPassword());
+			Mockito.when(userService.saveUser(usr)).thenReturn(null);
+			assertTrue(authController.registerUser(user) instanceof ResponseEntity<?>);
+		}
+		
+		@Test
+		public void signInTest() throws IOException {
+			LoginRequest user = new LoginRequest();
+			user.setUsername("Sathyaa");
+			
+			user.setPassword("pass");
+			
+		
+			assertTrue(authController.authenticateUser(user) instanceof ResponseEntity<?> );
+		}
 		
 		
 		
@@ -86,13 +86,13 @@ public class UserManagerTest {
 		public void saveUserTest() throws IOException {
 			User user = new User("Sathyaa","qwerty","sathyaa@gmail.com");
 			Mockito.when(mongoTemplate.save(user)).thenReturn(new User("Sathyaa","qwerty","sathyaa@gmail.com"));
-			assertTrue(userServices.saveUser(user) instanceof MessageResponse);
+			assertTrue(userService.saveUser(user) instanceof MessageResponse);
 		}
 		
 		@Test
 		public void registerUserTest() throws IOException {
 			User user = new User("Sathyaa", "qwerty", "sathyaa@gmail.com");
-			assertTrue(userServices.registerUser(user.getUsername(), user.getPassword(), user.getEmail()) instanceof MessageResponse);
+			assertTrue(userService.registerUser(user.getUsername(), user.getPassword(), user.getEmail()) instanceof MessageResponse);
 		}
 		
 		
@@ -104,7 +104,7 @@ public class UserManagerTest {
 			Mockito.when(mongoTemplate.find(query, User.class)).thenReturn(
 					Stream.of(new User("Sathyaa", "qwerty", "sathyaa@gmail.com")).collect(Collectors.toList()));
 
-			assertEquals(1, userServices.findByUsername(user.getUsername()).size());
+			assertEquals(1, userService.findByUsername(user.getUsername()).size());
 		}
 		
 		
@@ -117,7 +117,7 @@ public class UserManagerTest {
 			Mockito.when( mongoTemplate.findOne(query, User.class)).thenReturn(
 				user);
 
-			assertEquals(user, userServices.findUser("USR_1"));
+			assertEquals(user, userService.findUser("USR_1"));
 		}
 		
 		@Test

@@ -111,7 +111,7 @@ public class DefectController {
 	 * @return A list of Status.
 	 */
 	@GetMapping("/gethistorydefect/{id}")
-	public List<Status> getHistoryByID(String id){
+	public List<Status> getHistoryByID(@PathVariable String id){
 		return defectService.getHistoryByID(id);
 	}
 	

@@ -10,6 +10,8 @@ public class Sequence {
 	private static final String SEQUENCE_NAME1=  "Defect_Sequence";
 	private static final String SEQUENCE_NAME2=  "Project_Sequence";
 	private static final String SEQUENCE_NAME3 = "user_sequence";
+	private static final String SEQUENCE_NAME4 = "Role_sequence";
+	private static final String SEQUENCE_NAME5 = "USER_sequence";
 
 	@Id
 	private String id;
@@ -54,4 +56,11 @@ public class Sequence {
 	public static String getSequenceName3() {
 		return SEQUENCE_NAME3;
 	}
+	public static String getSequenceName4() {
+		return SEQUENCE_NAME4;
+	}
+	public static String getSequenceName5() {
+		return SEQUENCE_NAME5;
+	}
+	
 }

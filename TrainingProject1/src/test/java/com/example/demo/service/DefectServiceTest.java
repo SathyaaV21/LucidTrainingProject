@@ -122,7 +122,7 @@ class DefectServiceTest {
 
 	@Test
 	public void getHistoryByIDtest() {
-		assertTrue(defect.getHistoryByID("Def1").get(0) instanceof Status);
+		assertTrue(defect.getHistoryByID("Def2").get(0) instanceof Status);
 	}
 
 }
