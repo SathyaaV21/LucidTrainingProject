@@ -11,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.RequirementSummarizationModel;
 import com.example.demo.model.TaskHistory;
 import com.example.demo.model.TaskModel;
 
 @Service
 public class ReqTaskService {
-//Checking source tree
+	
 	@Autowired
 	private MongoTemplate mongotemplate;
 
@@ -55,6 +56,8 @@ public class ReqTaskService {
 
 	public List<TaskModel> getallreqTasks(String reqId) {
 		RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId, RequirementSummarizationModel.class);
+		//if(reqsummodel==null)
+			//throw new BadRequestException("Requirement is not found");
 		reqtaskCollection = reqsummodel.getReqTasks();
 		return reqtaskCollection;
 	}
@@ -64,7 +67,6 @@ public class ReqTaskService {
 	}
 
 	public RequirementSummarizationModel getreqSum(String reqId) {
-		// TODO Auto-generated method stub
 		return mongotemplate.findById(reqId, RequirementSummarizationModel.class);
 	}
 }

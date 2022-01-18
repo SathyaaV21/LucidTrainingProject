@@ -29,15 +29,10 @@ import com.example.demo.model.TaskTypeModel;
 public class TaskService {
 	
 	@Autowired
-    private SequenceGenService service;
-	
-	@Autowired
 	private ReqTaskService reqtaskservice;
 	
 	@Autowired
 	private MongoTemplate mongotemplate;
-	
-	
 	
 	/**
  	* Service to create to new task
@@ -114,10 +109,9 @@ public class TaskService {
 			mongotemplate.save(newtask);
 			reqtaskservice.updateSum(reqId, newtask);
 			return "Todo has been updated";
-			//return newtask;
 			
 		} else {
-			throw new TaskNotFoundException("Task ID " + taskid + " is not found");
+			throw new BadRequestException("Task ID " + taskid + " is not found");
 		}
 	
 	}
@@ -174,7 +168,7 @@ public class TaskService {
 		return taskmodel;
 	}
 		else {
-			throw new TaskNotFoundException("Task ID " + taskId + " is not found");
+			throw new BadRequestException("Task ID " + taskId + " is not found");
 		}
 	}
 	
@@ -191,7 +185,7 @@ public class TaskService {
 			mongotemplate.remove(query, TaskModel.class);
 
 		} else {
-			throw new TaskNotFoundException("Task ID " + taskid + " is not found");
+			throw new BadRequestException("Task ID " + taskid + " is not found");
 		}
 
 	}
@@ -202,7 +196,7 @@ public class TaskService {
 			return taskmodel.getTaskhistory();
 		}
 		else {
-			throw new TaskNotFoundException("Task ID " + taskid + " is not found");
+			throw new BadRequestException("Task ID " + taskid + " is not found");
 		}
 		
 	}
