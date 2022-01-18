@@ -70,7 +70,7 @@ public class TaskService {
 	 * @param taskid
 	 * @throws TaskNotFoundException
 	 */
-	public void updateTodo(String reqId,String taskid, TaskModel taskmodel) {
+	public String updateTodo(String reqId,String taskid, TaskModel taskmodel) {
 		TaskModel task = mongotemplate.findById(taskid,TaskModel.class);
 		if (task != null) {
 			List<TaskHistory> taskhistoryCollection=new ArrayList<TaskHistory>();
@@ -96,6 +96,7 @@ public class TaskService {
 			newtask.setRiskAnalysis(this.riskNotification(taskhistory, newtask,taskmodel));
 			mongotemplate.save(newtask);
 			reqtaskservice.updateSum(reqId, newtask);
+			return "Todo has been updated";
 			//return newtask;
 			
 		} else {
@@ -122,7 +123,7 @@ public class TaskService {
 	 * @return oldtask
 	 * @throws TaskNotFoundException
 	 */
-	public void updateTask( Map<String,String> oldtask,String taskId) {
+	public String updateTask( Map<String,String> oldtask,String taskId) {
 		TaskModel taskmodel = mongotemplate.findById(taskId, TaskModel.class);   
 		if(taskmodel==null) {
 			throw new BadRequestException("Task ID " + taskId + " is not found");} 
@@ -138,6 +139,7 @@ public class TaskService {
 	        	}
 	        }
 	         mongotemplate.findAndModify(query, update, TaskModel.class);
+	         return "Task updated";
 }
 	
 

@@ -20,17 +20,16 @@ public class ReqTaskService {
 //Checking source tree
 	@Autowired
 	private MongoTemplate mongotemplate;
-	/*
-	 * @Autowired private TaskService taskservice;
-	 */
+
 	List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
 
-	public void createreqSum(RequirementSummarizationModel reqsummodel) {
+	public String createreqSum(RequirementSummarizationModel reqsummodel) {
 		reqsummodel.setCompletionPercentage(0);
 		reqsummodel.setNo_of_task_completed(0);
 		reqsummodel.setNo_of_task_notcompleted(0);
 		reqsummodel.setNo_of_tasks(0);
 		mongotemplate.save(reqsummodel);
+		return "Summarization created";
 	}
 
 	public void updateSum(String reqId, TaskModel taskmodel) {
@@ -50,8 +49,8 @@ public class ReqTaskService {
 			reqsummodel.setNo_of_task_completed(reqsummodel.getNo_of_task_completed() + 1);
 			reqsummodel.setNo_of_task_notcompleted(reqsummodel.getNo_of_task_notcompleted() - 1);
 		}
-		//reqsummodel.setCompletionPercentage(0);
-		reqsummodel.setCompletionPercentage((100*reqsummodel.getNo_of_task_completed()) / reqsummodel.getNo_of_tasks());
+		//reqsummodel.setCompletionPercentage(100.00);
+		reqsummodel.setCompletionPercentage((float)(reqsummodel.getNo_of_task_completed() / reqsummodel.getNo_of_tasks())*(float)100);
 		mongotemplate.save(reqsummodel);
 	}
 

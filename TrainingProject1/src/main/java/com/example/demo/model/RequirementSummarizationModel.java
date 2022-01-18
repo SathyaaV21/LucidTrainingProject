@@ -14,7 +14,7 @@ public class RequirementSummarizationModel {
 	private int no_of_tasks;
 	private int no_of_task_completed;
 	private int no_of_task_notcompleted;
-	private double completionPercentage;
+	private float completionPercentage;
 	private List<TaskModel> reqTasks;
 	
 	public String getReq_Id() {
@@ -41,10 +41,10 @@ public class RequirementSummarizationModel {
 	public void setNo_of_task_notcompleted(int no_of_task_notcompleted) {
 		this.no_of_task_notcompleted = no_of_task_notcompleted;
 	}
-	public double getCompletionPercentage() {
+	public float getCompletionPercentage() {
 		return completionPercentage;
 	}
-	public void setCompletionPercentage(double completionPercentage) {
+	public void setCompletionPercentage(float completionPercentage) {
 		this.completionPercentage = completionPercentage;
 	}
 	public List<TaskModel> getReqTasks() {

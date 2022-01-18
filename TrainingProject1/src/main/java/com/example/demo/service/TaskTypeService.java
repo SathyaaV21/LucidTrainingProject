@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +12,17 @@ public class TaskTypeService {
 
 	@Autowired
 	private TaskTypeRepository tasktyperepo;
-	public void savetaskType(TaskTypeModel newtype) {
+	public String savetaskType(TaskTypeModel newtype) {
 		tasktyperepo.save(newtype);
+		return "New Task type saved";
 	}
 	
 	public List<TaskTypeModel> viewtaskType(){
 		return tasktyperepo.findAll();
 	}
 	
-	public void deletetaskType(int id) {
+	public String deletetaskType(int id) {
 		tasktyperepo.deleteById(id);
+		return "Delete task type";
 	}
 }
