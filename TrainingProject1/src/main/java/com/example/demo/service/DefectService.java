@@ -70,7 +70,7 @@ public class DefectService {
 		}
 		List<Status> oldStatus = oldDefect.getDefectHistory();
 		List<Comments> oldComments = oldDefect.getComments();
-		if (oldStatus.get((oldStatus.size()) - 1).getCurrentStatus().equals("Cancelled")) {
+		if (oldDefect.getPresentStatus().equals("Cancelled")) {
 			throw new BadRequestException("The specified Defect ID cannot be updated");
 		}
 
@@ -86,7 +86,8 @@ public class DefectService {
 						if (defectModelHolder.get("presentStatus") == null) {
 							update.set("presentStatus", defectModelHolder.get("status"));
 						}
-					} else if (defect.getKey().equals("comment")) {
+					} 
+					else if (defect.getKey().equals("comment")) {
 						Comments comment = new Comments();
 						if (defectModelHolder.get("assignedUser") != null) {
 							comment.setAssignedUser(defectModelHolder.get("assignedUser"));
@@ -98,11 +99,11 @@ public class DefectService {
 						oldComments.add(comment);
 
 					}
-					if (defect.getKey().equals("status")) {
+					else if (defect.getKey().equals("status")) {
 						if (defect.getValue().equals("New") || defect.getValue().equals("Open")
 								|| defect.getValue().equals("Fixed") || defect.getValue().equals("Retest")
 								|| defect.getValue().equals("Cancelled")) {
-							if (!(defect.getValue().equals(oldStatus.get((oldStatus.size()) - 1).getCurrentStatus()))) {
+							if (!(defect.getValue().equals(oldDefect.getPresentStatus()))) {
 								update.set("presentStatus", defect.getValue());
 								Status status = new Status();
 								if (defectModelHolder.get("assignedUser") != null) {
@@ -110,23 +111,24 @@ public class DefectService {
 								} else {
 									status.setAssignedUser(oldDefect.getAssignedUser());
 								}
-								status.setStatusBefore(oldStatus.get((oldStatus.size()) - 1).getCurrentStatus());
+								status.setStatusBefore(oldDefect.getPresentStatus());
 								status.setCurrentStatus((String) defect.getValue());
 								status.setComment(defectModelHolder.get("comment"));
 								status.setTimestamp(LocalDateTime.now());
 								oldStatus.add(status);
-							} else {
+							}else {
 								continue;
 							}
 						} else {
 							throw new BadRequestException("The specified Status is invalid!!");
 						}
 					}
-
 				}
 
 				update.set("Comments", oldComments);
-				update.set("defectHistory", oldStatus); 
+				update.set("defectHistory", oldStatus);  
+			if (!(defectModelHolder.containsKey("status")))
+					update.set("presentStatus", oldDefect.getPresentStatus());
 				mongotemplate.findAndModify(query, update, DefectModel.class);
 			}
 
@@ -322,10 +324,9 @@ public class DefectService {
 	 * @throws BadRequestException for invalid defect ID.
 	 */
 	public List<Status> getHistoryByID(String id) {
-		DefectModel defect=this.getDefect(id);
-		if(defect==null) {
-			throw new BadRequestException("ID Not present");
-		}
+		DefectModel defect = mongotemplate.findById(id, DefectModel.class); 
+		if(defect==null)
+			throw new BadRequestException("The ID is unavailable");
 		return defect.getDefectHistory();
 	}
 	
