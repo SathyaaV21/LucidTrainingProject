@@ -4,25 +4,20 @@
 package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.Project;
-import com.example.demo.model.Sequence;
 
 @Service
 
 public class ProjectService {
 
-	@Autowired
-	private SequenceGenService service;
+	
 
 	@Autowired
 	private MongoTemplate mongotemplate;
@@ -35,11 +30,17 @@ public class ProjectService {
 	 * 
 	 */
 
-	public String addProject(Project project) {
-		project.setProjectId("Prj" + service.getCount(Sequence.getSequenceName2()));
-		mongotemplate.save(project);
+	public String addProject(Project pro) {
+
+		List<Project> proList=mongotemplate.findAll(Project.class);
+		int i=1; 
+		for(Project p:proList) {
+				i++;
+			}
+		pro.setProjectId("Prj"+Integer.toString(i));
+		mongotemplate.insert(pro);
 		return "Project added";
-	}
+		}
 
 	/**
 	 * Method to get every Projects from the database.
