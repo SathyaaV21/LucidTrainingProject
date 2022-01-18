@@ -108,7 +108,7 @@ public class AuthController {
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()));
-		user.setId("USR" + service.getCount(Sequence.getSequenceName()));
+		user.setId("USR" + service.getCount(Sequence.getSequenceName5()));
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
 
@@ -163,6 +163,7 @@ public class AuthController {
 		 * System.out.println("printing user:"); System.out.println(user.getEmail());
 		 * System.out.println(user.getPassword()); System.out.println(user.toString());
 		 */
+		
 		  userService.saveUser(user);
 		 
 

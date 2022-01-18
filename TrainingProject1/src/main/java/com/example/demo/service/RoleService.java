@@ -60,7 +60,7 @@ public MessageResponse addNewRole(String rolename) {
 		Role role = new Role("ROLE_" + rolename.toUpperCase());
 		//setRoleID
 		role.setIsRolestatusactive(true);
-		role.setId("ROLE" + service.getCount(Sequence.getSequenceName()));
+		role.setId("ROLE" + service.getCount(Sequence.getSequenceName4()));
 		mongoTemplate.save(role);
 		return new MessageResponse("Role added successfully");
 	} catch (Exception e) {
