@@ -2,6 +2,7 @@
 * 	@author Manju
 */
 package com.example.demo.service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +14,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.ProjectNotFoundException;
-
-import com.example.demo.exception.ProjectNotFoundException;
+import com.example.demo.model.ReqHolder;
+import com.example.demo.model.Requirement;
 import com.example.demo.model.TestCase;
 //import com.example.demo.model.Testcase;
 @Service
@@ -45,17 +46,32 @@ public class TestCaseService {
 	 */
 
 	public String addTestcase(TestCase testcase, String projectId, String requirementId) {
-
 			testcase.setProjectId(projectId); 
 			testcase.setRequirementId(requirementId);
-			List<TestCase> test=mongotemplate.findAll(TestCase.class);
-			int i=1; 
-			for(TestCase t:test) {
-				if(t.getRequirementId().equals(requirementId)){
-					i++;
+			
+			ReqHolder req=mongotemplate.findById(projectId,ReqHolder.class);
+			List<Requirement> reqList=req.getRequirement();
+			List<Requirement> req_=new ArrayList<Requirement>();
+			for(Requirement i:reqList) {
+				if(i.getRequirementId().equals(requirementId)) {
+					testcase.setTestCaseId(requirementId+"tc"+Integer.toString(i.getTestCount()));
+					i.setTestCount(i.getTestCount()+1);
+					req_.add(i);
 				}
+				else
+					req_.add(i);
 			}
-			testcase.setTestCaseId(requirementId+"Tc"+Integer.toString(i));
+			req.setRequirement(req_);
+			mongotemplate.save(req);
+			
+//			List<TestCase> test=mongotemplate.findAll(TestCase.class);
+//			int i=1; 
+//			for(TestCase t:test) {
+//				if(t.getRequirementId().equals(requirementId)){
+//					i++;
+//				}
+//			}
+//			testcase.setTestCaseId(requirementId+"Tc"+Integer.toString(i));
 			mongotemplate.insert(testcase);
 			return "Testcase added";
 	}
