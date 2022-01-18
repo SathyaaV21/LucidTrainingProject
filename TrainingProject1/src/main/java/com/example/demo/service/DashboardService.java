@@ -66,6 +66,7 @@ public class DashboardService {
 						testModel.setName(test.getTestCaseName());
 						testModel.setStatus(test.getStatus());
 						testModel.setTestCaseID(test.getTestCaseId());
+						testModel.setDescription(test.getDescription());
 						tempTests.add(testModel);
 						reqModel.setRequirementID(req.getRequirementId());
 						reqModel.setDescription(req.getRequirementDescription());
