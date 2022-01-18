@@ -49,8 +49,7 @@ public class ReqTaskService {
 			reqsummodel.setNo_of_task_completed(reqsummodel.getNo_of_task_completed() + 1);
 			reqsummodel.setNo_of_task_notcompleted(reqsummodel.getNo_of_task_notcompleted() - 1);
 		}
-		//reqsummodel.setCompletionPercentage(100.00);
-		reqsummodel.setCompletionPercentage((float)(reqsummodel.getNo_of_task_completed() / reqsummodel.getNo_of_tasks())*(float)100);
+		reqsummodel.setCompletionPercentage((100*reqsummodel.getNo_of_task_completed() )/ reqsummodel.getNo_of_tasks());
 		mongotemplate.save(reqsummodel);
 	}
 

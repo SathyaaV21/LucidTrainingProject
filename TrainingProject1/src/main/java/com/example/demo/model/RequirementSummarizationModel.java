@@ -11,12 +11,19 @@ public class RequirementSummarizationModel {
 
 	@Id
 	private String req_Id;
+	private String prg_Id;
 	private int no_of_tasks;
 	private int no_of_task_completed;
 	private int no_of_task_notcompleted;
-	private float completionPercentage;
+	private double completionPercentage;
 	private List<TaskModel> reqTasks;
 	
+	public String getPrg_Id() {
+		return prg_Id;
+	}
+	public void setPrg_Id(String prg_Id) {
+		this.prg_Id = prg_Id;
+	}
 	public String getReq_Id() {
 		return req_Id;
 	}
@@ -41,10 +48,10 @@ public class RequirementSummarizationModel {
 	public void setNo_of_task_notcompleted(int no_of_task_notcompleted) {
 		this.no_of_task_notcompleted = no_of_task_notcompleted;
 	}
-	public float getCompletionPercentage() {
+	public double getCompletionPercentage() {
 		return completionPercentage;
 	}
-	public void setCompletionPercentage(float completionPercentage) {
+	public void setCompletionPercentage(double completionPercentage) {
 		this.completionPercentage = completionPercentage;
 	}
 	public List<TaskModel> getReqTasks() {

@@ -36,12 +36,14 @@ public class RequirementService {
 
 		ReqHolder req = new ReqHolder();
 		req.setProjectId(projectId);
-
+	
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
 		if (reqHolder == null) {
 			ReqHolder req_ = new ReqHolder();
 			req_.setProjectId(projectId);
 			requirement.setRequirementId(projectId + "Req" + Integer.toString(1));
+			requirement.setTestCount(1);
+			requirement.setTaskCount(1);
 			List<Requirement> reqArr = new ArrayList<>();
 			reqArr.add(requirement);
 			req_.setRequirement(reqArr);
@@ -50,12 +52,16 @@ public class RequirementService {
 		} else {
 			List<Requirement> r = reqHolder.getRequirement();
 			requirement.setRequirementId(projectId + "Req" + Integer.toString((r.size() + 1)));
+			requirement.setTestCount(1);
+			requirement.setTaskCount(1);
 			r.add(requirement);
 			req.setRequirement(r);
 			mongotemplate.save(req);
 		}
+		
 		RequirementSummarizationModel reqsummodel=new RequirementSummarizationModel();
 		reqsummodel.setReq_Id(requirement.getRequirementId());
+		reqsummodel.setPrg_Id(projectId);
 		reqtaskservice.createreqSum(reqsummodel);
 		return "Requirement added successfully";
 	}

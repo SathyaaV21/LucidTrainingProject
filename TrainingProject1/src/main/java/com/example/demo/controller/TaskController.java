@@ -42,10 +42,10 @@ public class TaskController {
 	 * @param newtask
 	 * @return String
 	 */
-	@PostMapping("/{reqId}/addtask")
-	public String addTask(@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
-		taskservice.saveTask(taskmodel, reqId);
-		return "Task is added";
+	@PostMapping("/{prgId}/{reqId}/addtask")
+	public String addTask(@PathVariable String prgId,@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
+		return taskservice.saveTask(taskmodel, reqId, prgId);
+		//return "Task is added";
 	}
 
 	/**

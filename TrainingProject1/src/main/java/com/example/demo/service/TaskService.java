@@ -18,8 +18,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.TaskNotFoundException;
+import com.example.demo.model.ReqHolder;
+import com.example.demo.model.Requirement;
 import com.example.demo.model.RequirementSummarizationModel;
-import com.example.demo.model.Sequence;
 import com.example.demo.model.TaskHistory;
 import com.example.demo.model.TaskModel;
 import com.example.demo.model.TaskTypeModel;
@@ -35,13 +36,29 @@ public class TaskService {
 	
 	@Autowired
 	private MongoTemplate mongotemplate;
-	List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
+	
+	
+	
 	/**
  	* Service to create to new task
  	* @param newtask
  	*/
-	public String saveTask(TaskModel newtask, String reqId) {
-		newtask.setTaskId("task-"+service.getCount(Sequence.getSequenceName3()));
+	public String saveTask(TaskModel newtask, String reqId, String prjId) {
+		List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
+		ReqHolder req=mongotemplate.findById(prjId,ReqHolder.class);
+		List<Requirement> requir=req.getRequirement();
+		List<Requirement> empty=new ArrayList<Requirement>();
+		for(Requirement i:requir) {
+			if(i.getRequirementId().equals(reqId)) {
+				newtask.setTaskId(reqId+"tsk"+Integer.toString(i.getTaskCount()));
+				i.setTaskCount(i.getTaskCount()+1);
+				empty.add(i);
+			}
+			else
+				empty.add(i);
+		}
+		req.setRequirement(empty);
+		mongotemplate.save(req);
 		newtask.setTaskStatus("New");
 		newtask.setRiskAnalysis("No risk analysed");
 		newtask.setTodo(newtask.getEffort()); 
@@ -72,7 +89,7 @@ public class TaskService {
 	 */
 	public String updateTodo(String reqId,String taskid, TaskModel taskmodel) {
 		TaskModel task = mongotemplate.findById(taskid,TaskModel.class);
-		if (task != null) {
+		if (task != null && !(task.getTaskStatus().equals("Completed"))) {
 			List<TaskHistory> taskhistoryCollection=new ArrayList<TaskHistory>();
 			TaskHistory taskhistory=new TaskHistory();
 			taskhistory.setTodoBefore(task.getTodo());

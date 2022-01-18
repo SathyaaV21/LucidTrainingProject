@@ -69,16 +69,16 @@ public class UserManagerTest {
 			assertTrue(authController.registerUser(user) instanceof ResponseEntity<?>);
 		}
 		
-		@Test
-		public void signInTest() throws IOException {
-			LoginRequest user = new LoginRequest();
-			user.setUsername("Sathyaa");
-			
-			user.setPassword("pass");
-			
-		
-			assertTrue(authController.authenticateUser(user) instanceof ResponseEntity<?> );
-		}
+		/*
+		 * @Test public void signInTest() throws IOException { LoginRequest user = new
+		 * LoginRequest(); user.setUsername("Sathyaa");
+		 * 
+		 * user.setPassword("pass");
+		 * 
+		 * 
+		 * assertTrue(authController.authenticateUser(user) instanceof ResponseEntity<?>
+		 * ); }
+		 */
 		
 		
 		

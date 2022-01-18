@@ -6,9 +6,6 @@ package com.example.demo.model;
 import javax.validation.constraints.NotBlank;
 
 public class Requirement {
-
-
-
 	
 	private String requirementId;
 	
@@ -17,8 +14,26 @@ public class Requirement {
 	
 	@NotBlank(message = "Status is mandatory")
 	private String status;
-
 	
+	private int testCount;
+	private int taskCount;
+	
+
+	public int getTestCount() {
+		return testCount;
+	}
+
+	public void setTestCount(int testCount) {
+		this.testCount = testCount;
+	}
+
+	public int getTaskCount() {
+		return taskCount;
+	}
+
+	public void setTaskCount(int taskCount) {
+		this.taskCount = taskCount;
+	}
 
 	public String getRequirementId() {
 		return requirementId;

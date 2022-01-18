@@ -24,7 +24,7 @@ class ReqTaskServiceTest {
 
 	@Test
 	void getallreqTasks() {
-		assertTrue(reqservice.getallreqTasks("Prj5Req13").get(0) instanceof TaskModel);
+		assertTrue(reqservice.getallreqTasks("Prj5Req4").get(0) instanceof TaskModel);
 	}
 	
 	@Test
