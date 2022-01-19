@@ -62,6 +62,7 @@ public class UserService {
 			return new MessageResponse("Error: Email is already in use!");
 		}
 		newuser.setId("USR" + service.getCount(Sequence.getSequenceName5()));
+		encoder.encode(newuser.getPassword());
 		newuser.setIsuserStatusActive(true);
 		mongoTemplate.save(newuser);
 		
@@ -103,10 +104,12 @@ public class UserService {
 		}
 
 		
-		User user = new User(username, encoder.encode(email), password);
+		User user = new User(username, email, encoder.encode(password));
 		user.setId("USR" + service.getCount(Sequence.getSequenceName5()));
+		
 		user.setIsuserStatusActive(true);
-		userRepository.save(user);
+		mongoTemplate.save(user);
+		
 		return new MessageResponse("User registered successfully!");
 	}
 		
