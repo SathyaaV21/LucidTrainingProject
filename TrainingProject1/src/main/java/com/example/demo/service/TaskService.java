@@ -85,8 +85,16 @@ public class TaskService {
 	 */
 	public String updateTodo(String reqId, String taskid, TaskModel taskmodel) {
 		TaskModel task = mongotemplate.findById(taskid, TaskModel.class);
+		long difference = task.getEndDate().getTime() - task.getStartDate().getTime();
+		float daysBetween = (difference / (1000 * 60 * 60 * 24));
+		int size;
 		if (task != null) {
-			if (!(task.getTaskStatus().equals("Completed"))) {
+			if(task.getTaskhistory()==null) {
+				size=0;
+			}
+			else
+				size=task.getTaskhistory().size();
+			if (!(task.getTaskStatus().equals("Completed")) && (size<=(int)daysBetween)) {
 				List<TaskHistory> taskhistoryCollection = new ArrayList<TaskHistory>();
 				TaskHistory taskhistory = new TaskHistory();
 				taskhistory.setTodoBefore(task.getTodo());
@@ -114,7 +122,7 @@ public class TaskService {
 			} else {
 				throw new BadRequestException("Task cannot be updated");
 			}
-		} 
+		}
 		else {
 			throw new BadRequestException("Task ID " + taskid + " is not found");
 		}
