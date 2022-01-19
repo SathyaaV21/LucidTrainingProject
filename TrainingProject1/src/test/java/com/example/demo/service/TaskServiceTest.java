@@ -36,7 +36,7 @@ class TaskServiceTest {
 		taskmap.put("taskName","Testing");
 		taskmap.put("taskDescription","Testing the module" );
 		taskmap.put("assignedTo", "Ramapriya");
-		assertTrue(taskservice.updateTask(taskmap, "task-45") instanceof String);
+		assertTrue(taskservice.updateTask(taskmap, "Prj5Req1","task-45") instanceof String);
 	}
 	
 	@Test
