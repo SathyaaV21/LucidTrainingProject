@@ -8,12 +8,15 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.controller.DashboardController;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.DefectCount;
 import com.example.demo.model.Project;
@@ -37,6 +40,8 @@ public class SchedulerTest {
 	@Autowired
 	private DefectService defectService;
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerTest.class);
+	
 	private List<Project> projects;
 	private List<TestCaseCount> testcaseCounts=new ArrayList<TestCaseCount>();
 	private DefectCount defectCounts;
@@ -49,6 +54,7 @@ public class SchedulerTest {
 
 	@Scheduled(cron="0 0 14 * * *")
 	public void setStartCount() throws ProjectNotFoundException {
+		LOGGER.info("Scheduler started to set start count of day");
 		defectCounts=new DefectCount();
 		for(int i = 0; i < 5; i++) {
 			TestCaseCount testcaseCount=new TestCaseCount();
@@ -65,6 +71,7 @@ public class SchedulerTest {
 	}
 	@Scheduled(cron="0 05 14 * * *")
 	public void setEndCount() {
+		LOGGER.info("Scheduler started to set end count of day");
 		for(int i = 0; i < 5; i++) {
 			String projId = projects.get(i).getProjectId();
 			int endCount=testcaseService.getOpenTestcaseCount(projId);

@@ -31,6 +31,15 @@ public class CloudinaryFileService {
 
 	}
 
+	
+	/**
+	 * Method to add File into database
+	 * 
+	 * @param File which contains the file details.
+	 * @return File with respective status and information.
+	 * @throws FileNotFoundException handles Exception.
+	 * 
+	 */
 
 	 public File addFile(File file) {
 	  
@@ -50,10 +59,28 @@ public class CloudinaryFileService {
 	  }
 	  
 	  } }
+	 
+		/**
+		 * Method to get all Files from database
+		 * 
+		 * @return List<File> with respective status and information.
+		 * @throws FileNotFoundException handles Exception.
+		 */
+	 
+	 
 	public List<File> getAllFiles() {
 
 		return mongoTemplate.findAll(File.class);
 	}
+	
+	
+	
+	/**
+	 * Method to get all Files for a defect_id from database
+	 * @param defect ID of the file
+	 * @return File with respective status and information.
+	 * @throws FileNotFoundException handles Exception.
+	 */
 	public File getFileById(String defect_id) {
 
 		Query q = new Query();
@@ -66,7 +93,15 @@ public class CloudinaryFileService {
 			throw new FileNotFoundException("File not found");
 		}
 	}
+	
 
+	/**
+	 * Method to delete all files with defect_id and unique asset_id.
+	 * 
+	 * @param defect ID of the file
+	 * @return String with respective status and information.
+	 * @throws BadRequestException handles Exception.
+	 */
 
 	public String deleteAllFiles(String defect_id) {
 

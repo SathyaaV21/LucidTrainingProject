@@ -55,7 +55,7 @@ public class CloudinaryController {
 	 *
 	 * @param defect_id as HashMap.
 	 * @param Multipart file
-	 * @return FileModel with respective status and information.
+	 * @return File with respective status and information.
 	 */
 	  @PostMapping(value = "/uploadfile", consumes = {
 	  MediaType.MULTIPART_FORM_DATA_VALUE }) public File uploadFile(@RequestPart("file") MultipartFile file, @RequestPart("defect_id")
@@ -69,7 +69,7 @@ public class CloudinaryController {
 	/**
 	 * Method to get all files by defect_id
 	 * @param defect_id as HashMap.
-	 * @return FileModel with respective status and information.
+	 * @return File with respective status and information.
 	 */
 	
 	@GetMapping("/getfilebyid")

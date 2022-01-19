@@ -41,6 +41,14 @@ public class DashboardService {
 	@Autowired
 	private RequirementService requirementService;
 	
+	
+	/**
+	 * Method to get Requirements traceability matrix (RTM) of all the projects
+	 * 
+	 * @return List<RTM> with respective status and information.
+	 * @throws ProjectNotFoundException handles Exception
+	 */
+
 	public List<RTM> getRTM() throws ProjectNotFoundException{
 		List<Project> projects=projectService.viewProjects();
 		List<TestCase> testcases =testcaseService.viewTestcases();
@@ -102,10 +110,26 @@ public class DashboardService {
 	return response;
 	}
 	
+	
+	/**
+	 * Method to get Test case Trend (Start count and End count of open testcases)
+	 * 
+	 * @return List<TestCaseCount> with respective start count and end count.
+	 * @throws ProjectNotFoundException handles Exception
+	 */
 	public List<TestCaseCount> getTestCaseProgress(){
 		return mongo.findAll(TestCaseCount.class);
 		
 	}
+	
+	
+	/**
+	 * Method to get Test case Trend (Start count and End count of open testcases)
+	 * 
+	 * @param Project Id
+	 * @return List<TestCaseCount> with respective counts related to that project ID.
+	 *@throws ProjectNotFoundException handles Exception
+	 */
 	public List<TestCaseCount> getTestCaseProgressbyProjId(String ProjectId) throws ProjectNotFoundException{
 		Query q = new Query();
 		q.addCriteria(Criteria.where("project_id").is(ProjectId));
@@ -118,11 +142,22 @@ public class DashboardService {
 		}
 	}
 	
+	/**
+	 * Method to get Defects Trend (Start count and End count of open Defects)
+	 * 
+	 * @return List<DefectCount> with respective start count and end count.
+	 */
 	public List<DefectCount> getDefectsProgress(){
 		return mongo.findAll(DefectCount.class);
 		
 	}
 	
+	/**
+	 * Method to get open Testcases count with Requirement ID
+	 * 
+	 * @param RequirementID
+	 * @return int Count of open testcases
+	 */
 	public int getOpenTestCaseCountbyRequirementId(String RequirementId) {
 		return testcaseService.getRequirementTestcaseCount(RequirementId);
 	}
