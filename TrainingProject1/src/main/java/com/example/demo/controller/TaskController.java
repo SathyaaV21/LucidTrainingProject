@@ -55,9 +55,9 @@ public class TaskController {
 	 * @return String and HTTP status update
 	 * @throws TaskNotFoundException
 	 */
-	@PutMapping("/updatetask/{taskId}")
-	public ResponseEntity<Object> updateTask(@RequestBody Map<String,String> task, @PathVariable String taskId) {
-		taskservice.updateTask(task, taskId);
+	@PutMapping("/{reqId}/updatetask/{taskId}")
+	public ResponseEntity<Object> updateTask(@PathVariable String reqId, @RequestBody Map<String,String> task, @PathVariable String taskId) {
+		taskservice.updateTask(task, reqId, taskId);
 		return new ResponseEntity<Object>("Task of task id " + taskId + " has been updated", HttpStatus.OK);
 	}
 
@@ -137,9 +137,9 @@ public class TaskController {
 	 * @return String and HTTP Status update
 	 * @throws TaskNotFoundException
 	 */
-	@DeleteMapping("/delete/{taskid}")
-	public ResponseEntity<Object> deleteTask(@PathVariable String taskid) {
-		taskservice.deleteTask(taskid);
+	@DeleteMapping("/delete/{reqId}/{taskid}")
+	public ResponseEntity<Object> deleteTask(@PathVariable String reqId,@PathVariable String taskid) {
+		taskservice.deleteTask(reqId,taskid);
 		return new ResponseEntity<Object>("Deleted task of task" + taskid, HttpStatus.OK);
 	}
 

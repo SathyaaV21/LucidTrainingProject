@@ -56,8 +56,6 @@ public class ReqTaskService {
 
 	public List<TaskModel> getallreqTasks(String reqId) {
 		RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId, RequirementSummarizationModel.class);
-		//if(reqsummodel==null)
-			//throw new BadRequestException("Requirement is not found");
 		reqtaskCollection = reqsummodel.getReqTasks();
 		return reqtaskCollection;
 	}
