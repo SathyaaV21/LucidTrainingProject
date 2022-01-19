@@ -9,8 +9,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
+
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.DefectCount;
@@ -20,8 +21,8 @@ import com.example.demo.service.DefectService;
 import com.example.demo.service.ProjectService;
 import com.example.demo.service.TestCaseService;
 
-@EnableScheduling
-public class scheduler {
+@Component
+public class SchedulerTest {
 	
 	@Autowired
 	private TestCaseService testcaseService;
@@ -45,7 +46,7 @@ public class scheduler {
 		
 	}
 
-	@Scheduled(cron="0 6 * * *")
+	@Scheduled(cron="0 0 14 * * *")
 	public void setStartCount() throws ProjectNotFoundException {
 		testcaseCounts=new TestCaseCount();
 		defectCounts=new DefectCount();
@@ -59,7 +60,7 @@ public class scheduler {
 		defectCounts.setStartCount(defectStartCount);
 		
 	}
-	@Scheduled(cron="0 18 * * *")
+	@Scheduled(cron="0 0 18 * * *")
 	public void setEndCount() {
 		for(int i = 0; i < 5; i++) {
 			String projId = projects.get(i).getProjectId();
@@ -71,6 +72,4 @@ public class scheduler {
 		defectCounts.setEndCount(defectEndCount);
 		mongo.save(defectCounts);
 		
-}
-
-}
+}}
