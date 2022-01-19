@@ -50,8 +50,8 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/opentestcase/{reqId}")
-	public int openTestcasesCount(@PathVariable String reqId) {
-		return dashboardService.getOpenTestCaseCountbyRequirementId(reqId);
+	public String openTestcasesCount(@PathVariable String reqId) {
+		return "Open Testcases Count for  "+reqId +": " + dashboardService.getOpenTestCaseCountbyRequirementId(reqId);
 	}
 	
 	

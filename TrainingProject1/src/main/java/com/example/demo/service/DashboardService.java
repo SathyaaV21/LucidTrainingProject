@@ -46,34 +46,47 @@ public class DashboardService {
 		List<TestCase> testcases =testcaseService.viewTestcases();
 		List<ReqHolder> requirements=requirementService.viewReq();
 		List<RTM> response = new ArrayList<RTM>();
+		List<Requirement> requirements_list=new ArrayList<Requirement>();
+		List<String> ProjID=new ArrayList<String>();
+		for(ReqHolder requirement : requirements) {
+			List<Requirement> req=requirement.getRequirement();
+			String ID=requirement.getProjectId();
+			for(Requirement requirement1:req) {
+				requirements_list.add(requirement1);
+				ProjID.add(ID);
+				
+			}
+			
+		}
+		
+		
 	for (int i = 0; i < 5; i++) {
 
 		RTM rtm = new RTM();
 		List<DashRequirements> tempRequirements = new ArrayList<DashRequirements>();
 
-		for(ReqHolder requirement : requirements) {
-
+		for(Requirement individual_requirement : requirements_list) {
+			int index=requirements_list.indexOf(individual_requirement);
 			List<DashTestcase> tempTests = new ArrayList<DashTestcase>();
-			List<Requirement> req_list=requirement.getRequirement();
-			if (requirement.getProjectId() != null && requirement.getProjectId().equals(projects.get(i).getProjectId())) {
+			if (ProjID.get(index)!= null && ProjID.get(index).equals(projects.get(i).getProjectId())) {
 				DashRequirements reqModel = new DashRequirements();
-				for (TestCase test : testcases) {
-					if (test.getProjectId() != null)
-						for(Requirement req : req_list)
-							if(test.getRequirementId().equals(req.getRequirementId())
-							&& test.getProjectId().equals(projects.get(i).getProjectId())) {
+				for (TestCase test : testcases){
+					if (test.getProjectId() != null
+							&& test.getRequirementId().equals(individual_requirement.getRequirementId())
+							&& test.getProjectId().equals(projects.get(i).getProjectId()))
+					{
 						DashTestcase testModel = new DashTestcase();
 						testModel.setName(test.getTestCaseName());
 						testModel.setStatus(test.getStatus());
 						testModel.setTestCaseID(test.getTestCaseId());
 						testModel.setDescription(test.getDescription());
 						tempTests.add(testModel);
-						reqModel.setRequirementID(req.getRequirementId());
-						reqModel.setDescription(req.getRequirementDescription());
 
 					}
 
 				}
+				reqModel.setRequirementID(individual_requirement.getRequirementId());
+				reqModel.setDescription(individual_requirement.getRequirementDescription());
 				reqModel.setTestcases(tempTests);
 				tempRequirements.add(reqModel);
 			}

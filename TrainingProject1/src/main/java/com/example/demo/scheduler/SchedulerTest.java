@@ -3,6 +3,7 @@
 */
 package com.example.demo.scheduler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +38,7 @@ public class SchedulerTest {
 	private DefectService defectService;
 	
 	private List<Project> projects;
-	private TestCaseCount testcaseCounts;
+	private List<TestCaseCount> testcaseCounts=new ArrayList<TestCaseCount>();
 	private DefectCount defectCounts;
 	
 	@PostConstruct
@@ -48,25 +49,30 @@ public class SchedulerTest {
 
 	@Scheduled(cron="0 0 14 * * *")
 	public void setStartCount() throws ProjectNotFoundException {
-		testcaseCounts=new TestCaseCount();
 		defectCounts=new DefectCount();
 		for(int i = 0; i < 5; i++) {
+			TestCaseCount testcaseCount=new TestCaseCount();
 			String projId = projects.get(i).getProjectId();
 			int startCount=testcaseService.getOpenTestcaseCount(projId);
-			testcaseCounts.setProject_id(projId);
-			testcaseCounts.setStartCount(startCount);
+			testcaseCount.setProject_id(projId);
+			testcaseCount.setStartCount(startCount);
+			testcaseCount.setEndCount(0);
+			testcaseCounts.add(testcaseCount);
 		}
 		int defectStartCount=defectService.openDefectsCount();
 		defectCounts.setStartCount(defectStartCount);
 		
 	}
-	@Scheduled(cron="0 0 18 * * *")
+	@Scheduled(cron="0 05 14 * * *")
 	public void setEndCount() {
 		for(int i = 0; i < 5; i++) {
 			String projId = projects.get(i).getProjectId();
 			int endCount=testcaseService.getOpenTestcaseCount(projId);
-			testcaseCounts.setEndCount(endCount);
-			mongo.save(testcaseCounts);
+			testcaseCounts.get(i).setEndCount(endCount);
+		}
+		for(TestCaseCount t: testcaseCounts) {
+			mongo.save(t);
+			
 		}
 		int defectEndCount=defectService.openDefectsCount();
 		defectCounts.setEndCount(defectEndCount);
