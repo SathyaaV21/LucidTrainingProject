@@ -92,6 +92,7 @@ public class UserManagerTest {
 		@Test
 		public void registerUserTest() throws IOException {
 			User user = new User("Sathyaa", "qwerty", "sathyaa@gmail.com");
+			Mockito.when(mongoTemplate.save(user)).thenReturn(new User("Sathyaa","qwerty","sathyaa@gmail.com"));
 			assertTrue(userService.registerUser(user.getUsername(), user.getPassword(), user.getEmail()) instanceof MessageResponse);
 		}
 		
