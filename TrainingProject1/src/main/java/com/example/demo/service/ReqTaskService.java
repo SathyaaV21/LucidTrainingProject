@@ -63,16 +63,30 @@ public class ReqTaskService {
 		mongotemplate.save(reqsummodel);
 	}
 
+	/**
+	 * Service to get all tasks of the specific requirement
+	 * @param reqId
+	 * @return All the tasks of that requirement
+	 */
 	public List<TaskModel> getallreqTasks(String reqId) {
 		RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId, RequirementSummarizationModel.class);
 		reqtaskCollection = reqsummodel.getReqTasks();
 		return reqtaskCollection;
 	}
 
+	/**
+	 * Service to get requirement summarization of all the available requirements 
+	 * @return All the summarizations of the requirements
+	 */
 	public List<RequirementSummarizationModel> getallreqSum() {
 		return mongotemplate.findAll(RequirementSummarizationModel.class);
 	}
 
+	/**
+	 * Service to view the specific requirement summarization
+	 * @param reqId
+	 * @return 
+	 */
 	public RequirementSummarizationModel getreqSum(String reqId) {
 		return mongotemplate.findById(reqId, RequirementSummarizationModel.class);
 	}

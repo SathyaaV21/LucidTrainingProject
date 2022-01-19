@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,7 +19,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.TaskNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
 import com.example.demo.model.RequirementSummarizationModel;
@@ -33,6 +34,8 @@ public class TaskService {
 
 	@Autowired
 	private MongoTemplate mongotemplate;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(TaskService.class);
 
 	/**
 	 * Service to create to new task
@@ -44,6 +47,7 @@ public class TaskService {
 	 * @throws BadRequestException
 	 */
 	public String saveTask(TaskModel newtask, String reqId, String prjId) {
+		LOGGER.info("Creating a new task");
 		List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
 		ReqHolder req = mongotemplate.findById(prjId, ReqHolder.class);
 		List<Requirement> requir = req.getRequirement();
@@ -91,6 +95,7 @@ public class TaskService {
 	 * @throws BadRequestException
 	 */
 	public String updateTodo(String reqId, String taskid, TaskModel taskmodel) {
+		LOGGER.info("Updating todo");
 		TaskModel task = mongotemplate.findById(taskid, TaskModel.class);
 		long difference = task.getEndDate().getTime() - task.getStartDate().getTime();
 		float daysBetween = (difference / (1000 * 60 * 60 * 24));
@@ -141,6 +146,7 @@ public class TaskService {
 	 * @return String
 	 */
 	public String riskNotification(TaskHistory taskhistory, TaskModel newtask, TaskModel taskmodel) {
+		LOGGER.info("Analysing the risk");
 		long difference = newtask.getEndDate().getTime() - newtask.getStartDate().getTime();
 		float daysBetween = (difference / (1000 * 60 * 60 * 24));
 		float efficiency = newtask.getEffort() / daysBetween;
@@ -160,10 +166,11 @@ public class TaskService {
 	 * @throws BadRequestException
 	 */
 	public String updateTask(Map<String, String> oldtask, String reqId, String taskId) {
+		
 		TaskModel taskmodel = mongotemplate.findById(taskId, TaskModel.class);
-		if (taskmodel == null) {
+		if (taskmodel == null) 
 			throw new BadRequestException("Task ID " + taskId + " is not found");
-		}
+		LOGGER.info("Updating the task");
 		Query query = new Query();
 		query.addCriteria(Criteria.where("taskId").is(taskmodel.getTaskId()));
 		Update update = new Update();
@@ -201,6 +208,7 @@ public class TaskService {
 	 * @return Available tasks in DB
 	 */
 	public List<TaskModel> viewTasks() {
+		LOGGER.info("Getting all the tasks");
 		return mongotemplate.findAll(TaskModel.class);
 	}
 
@@ -213,6 +221,7 @@ public class TaskService {
 	public TaskModel getTask(String taskId) {
 		TaskModel taskmodel = mongotemplate.findById(taskId, TaskModel.class);
 		if (taskmodel != null) {
+			LOGGER.info("Getting the task");
 			return taskmodel;
 		} else {
 			throw new BadRequestException("Task ID " + taskId + " is not found");
@@ -230,6 +239,7 @@ public class TaskService {
 	public void deleteTask(String reqId, String taskid) {
 		TaskModel taskmodel = mongotemplate.findById(taskid, TaskModel.class);
 		if (taskmodel != null) {
+			LOGGER.info("Deleting the task");
 			mongotemplate.remove(taskmodel);
 			RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId,
 					RequirementSummarizationModel.class);
@@ -264,6 +274,7 @@ public class TaskService {
 	public List<TaskHistory> gettaskHistory(String taskid) {
 		TaskModel taskmodel = mongotemplate.findById(taskid, TaskModel.class);
 		if (taskmodel != null) {
+			LOGGER.info("Getting task history");
 			return taskmodel.getTaskhistory();
 		} else {
 			throw new BadRequestException("Task ID " + taskid + " is not found");
