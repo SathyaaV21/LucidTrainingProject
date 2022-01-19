@@ -85,38 +85,43 @@ public class TaskService {
 	 */
 	public String updateTodo(String reqId, String taskid, TaskModel taskmodel) {
 		TaskModel task = mongotemplate.findById(taskid, TaskModel.class);
-		if (task != null && !(task.getTaskStatus().equals("Completed"))) {
-			List<TaskHistory> taskhistoryCollection = new ArrayList<TaskHistory>();
-			TaskHistory taskhistory = new TaskHistory();
-			taskhistory.setTodoBefore(task.getTodo());
-			task.setTodo(task.getTodo() - taskmodel.getTodo());
-			mongotemplate.save(task);
-			TaskModel newtask = mongotemplate.findById(taskid, TaskModel.class);
-			int curtodo = newtask.getTodo();
-			taskhistory.setTodoNow(task.getTodo());
-			Date curDate = new Date();
-			taskhistory.setDateandTime(curDate);
-			newtask.setTaskStatus("In Progress");
-			if (curtodo <= 0) {
-				newtask.setTaskStatus("Completed");
+		if (task != null) {
+			if (!(task.getTaskStatus().equals("Completed"))) {
+				List<TaskHistory> taskhistoryCollection = new ArrayList<TaskHistory>();
+				TaskHistory taskhistory = new TaskHistory();
+				taskhistory.setTodoBefore(task.getTodo());
+				task.setTodo(task.getTodo() - taskmodel.getTodo());
+				mongotemplate.save(task);
+				TaskModel newtask = mongotemplate.findById(taskid, TaskModel.class);
+				int curtodo = newtask.getTodo();
+				taskhistory.setTodoNow(task.getTodo());
+				Date curDate = new Date();
+				taskhistory.setDateandTime(curDate);
+				newtask.setTaskStatus("In Progress");
+				if (curtodo <= 0) {
+					newtask.setTaskStatus("Completed");
+				}
+				if (task.getTaskhistory() != null) {
+					taskhistoryCollection = task.getTaskhistory();
+				}
+				taskhistoryCollection.add(taskhistory);
+				newtask.setTaskhistory(taskhistoryCollection);
+				mongotemplate.save(newtask);
+				newtask.setRiskAnalysis(this.riskNotification(taskhistory, newtask, taskmodel));
+				mongotemplate.save(newtask);
+				reqtaskservice.updateSum(reqId, newtask);
+				return "Todo has been updated";
+			} else {
+				throw new BadRequestException("Task cannot be updated");
 			}
-			if (task.getTaskhistory() != null) {
-				taskhistoryCollection = task.getTaskhistory();
-			}
-			taskhistoryCollection.add(taskhistory);
-			newtask.setTaskhistory(taskhistoryCollection);
-			mongotemplate.save(newtask);
-			newtask.setRiskAnalysis(this.riskNotification(taskhistory, newtask, taskmodel));
-			mongotemplate.save(newtask);
-			reqtaskservice.updateSum(reqId, newtask);
-			return "Todo has been updated";
-		} else {
+		} 
+		else {
 			throw new BadRequestException("Task ID " + taskid + " is not found");
 		}
 	}
 
 	public String riskNotification(TaskHistory taskhistory, TaskModel newtask, TaskModel taskmodel) {
-		long difference = newtask.getEndDate().getTime()-newtask.getStartDate().getTime();
+		long difference = newtask.getEndDate().getTime() - newtask.getStartDate().getTime();
 		float daysBetween = (difference / (1000 * 60 * 60 * 24));
 		float efficiency = newtask.getEffort() / daysBetween;
 		if (taskmodel.getTodo() < efficiency) {
@@ -205,7 +210,8 @@ public class TaskService {
 			else
 				reqsummodel.setNo_of_task_notcompleted(reqsummodel.getNo_of_task_notcompleted() - 1);
 			reqsummodel.setNo_of_tasks(reqsummodel.getNo_of_tasks() - 1);
-			reqsummodel.setCompletionPercentage((100*reqsummodel.getNo_of_task_completed() )/ reqsummodel.getNo_of_tasks());
+			reqsummodel.setCompletionPercentage(
+					(100 * reqsummodel.getNo_of_task_completed()) / reqsummodel.getNo_of_tasks());
 			List<TaskModel> tasklist = reqsummodel.getReqTasks();
 			List<TaskModel> empty = new ArrayList<TaskModel>();
 			for (TaskModel i : tasklist) {
