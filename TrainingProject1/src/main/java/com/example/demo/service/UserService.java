@@ -173,7 +173,7 @@ public class UserService {
 			
 			Query query = new Query();
 			query.addCriteria(Criteria.where("id").is(userid));
-			Role role = mongoTemplate.findOne(new Query().addCriteria(Criteria.where("name").is(rolename)),
+			Role role = mongoTemplate.findOne(new Query().addCriteria(Criteria.where("name").is("ROLE_" + rolename.toUpperCase())),
 					Role.class);
 			Update update = new Update().addToSet("roles", role);
 			
@@ -195,7 +195,7 @@ public class UserService {
 					new Query().addCriteria(Criteria.where("id").is(roleid)),
 					Role.class);
 			Query query = Query.query(Criteria.where("id").is(userid));
-			Query query2 = Query.query(Criteria.where("$id").is(new ObjectId(roleid)));
+			Query query2 = Query.query(Criteria.where("$id").is( roleid));
 			Update update = new Update().pull("roles", query2);
 			mongoTemplate.updateMulti(query, update, User.class);
 			return new MessageResponse(role.getName() + " Role has been successful removed from the user " + userid);
