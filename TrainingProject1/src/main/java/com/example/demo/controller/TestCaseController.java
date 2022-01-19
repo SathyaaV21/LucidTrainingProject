@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +28,8 @@ import com.example.demo.service.TestCaseService;
 @RequestMapping("/api/v1")
 @RestController
 public class TestCaseController {
-	
+	private static final Logger logger = LoggerFactory.getLogger(TestCaseController.class);
+
 
 	@Autowired
 	private TestCaseService testservice;
@@ -39,6 +42,7 @@ public class TestCaseController {
 
 	@GetMapping("/testcase")
 	public List<TestCase> getTestcases() {
+		logger.info("request sent to fetch testcases");
 		return testservice.viewTestcases();
 	}
 	
@@ -54,6 +58,7 @@ public class TestCaseController {
 	@PostMapping("testcase/{projectId}/{requirementId}")
 	public void createTestcase(@PathVariable String projectId, @PathVariable String requirementId,
 			@Valid @RequestBody TestCase testcase) {
+		logger.info("In creating testcase");
 		testservice.addTestcase(testcase, projectId, requirementId);
 	}
 	
@@ -70,6 +75,7 @@ public class TestCaseController {
 	@PutMapping("testcase/{testcaseId}")
 	public void updateTestcase(@RequestBody Map<String,String> testcase,@PathVariable String testcaseId)
 			throws ProjectNotFoundException {
+		logger.info("In updating testcase");
 		testservice.updateTestcase( testcase, testcaseId);
 	}
 	

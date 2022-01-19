@@ -4,7 +4,6 @@
 package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
-import com.example.demo.controller.ProjectController;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.Project;
 
@@ -62,6 +59,7 @@ public class ProjectService {
 			logger.info("Projects retreived");
 			return mongotemplate.findAll(Project.class);
 		} catch (Exception e) {
+			logger.warn("Projects not retrieved");
 			throw new ProjectNotFoundException("Projects Not Found");
 		}
 	}
@@ -82,6 +80,7 @@ public class ProjectService {
 			logger.info("project retreived by id");
 			return project;
 		} else {
+			logger.warn("Project id not found or incorrect");
 			throw new ProjectNotFoundException("Project not found");
 		}
 	}

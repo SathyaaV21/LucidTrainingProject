@@ -5,10 +5,13 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.controller.RequirementController;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
@@ -18,6 +21,9 @@ import com.example.demo.model.RequirementSummarizationModel;
 @Service
 
 public class RequirementService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(RequirementService.class);
+
 
 	@Autowired
 	private MongoTemplate mongotemplate;
@@ -62,6 +68,7 @@ public class RequirementService {
 		reqsummodel.setReq_Id(requirement.getRequirementId());
 		reqsummodel.setPrg_Id(projectId);
 		reqtaskservice.createreqSum(reqsummodel);
+		logger.info("requirement created");
 		return "Requirement added successfully";
 	}
 	
@@ -73,7 +80,7 @@ public class RequirementService {
 	 */
 
 	public List<ReqHolder> viewReq() {
-
+		logger.info("requirements fetched from db successfully");
 		return mongotemplate.findAll(ReqHolder.class);
 
 	}
@@ -106,6 +113,7 @@ public class RequirementService {
 		reqHolder.setRequirement(req);
 
 		mongotemplate.save(reqHolder);
+		logger.info("requirement updated success");
 		return "Requirement updated";
 	}
 
@@ -132,9 +140,11 @@ public class RequirementService {
 			}
 		}
 		reqHolder.setRequirement(req);
+		logger.info("the requested id is deleted");
 		mongotemplate.save(reqHolder);
 
 	}catch(Exception e) {
+		logger.warn("req id not found");
 		throw new ProjectNotFoundException("Project Not Found");
 
 	}

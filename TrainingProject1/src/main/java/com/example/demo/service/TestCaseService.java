@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -13,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.controller.RequirementController;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
@@ -20,6 +23,7 @@ import com.example.demo.model.TestCase;
 //import com.example.demo.model.Testcase;
 @Service
 public class TestCaseService {
+	private static final Logger logger = LoggerFactory.getLogger(TestCaseService.class);
 
 	
 	@Autowired
@@ -33,7 +37,7 @@ public class TestCaseService {
 
 	
 	public List<TestCase> viewTestcases()  {
-		
+		logger.info("Testcases fetched and returned");
 		return mongotemplate.findAll(TestCase.class);
 
 }
@@ -73,6 +77,7 @@ public class TestCaseService {
 //			}
 //			testcase.setTestCaseId(requirementId+"Tc"+Integer.toString(i));
 			mongotemplate.insert(testcase);
+			logger.info("testcase added successfully");
 			return "Testcase added";
 	}
 
@@ -94,6 +99,7 @@ public class TestCaseService {
 			update.set((String) test.getKey(), test.getValue());
 		} 
 		mongotemplate.findAndModify(query, update,TestCase.class);
+		logger.info("testcase updated successfully");
 		return "Testcase updated"; 
 		
 	}
@@ -116,6 +122,7 @@ public class TestCaseService {
 				}
 			}
 		}
+		logger.info("returned count of open testcases with respect to project Id");
 		return count;
 	}
 	
@@ -136,6 +143,7 @@ public class TestCaseService {
 				}
 			}
 		}
+		logger.info("returned count of open testcases with respect to requirement Id");
 		return count;
 	}
 }

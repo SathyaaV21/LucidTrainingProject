@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,8 @@ import com.example.demo.service.RequirementService;
 @RequestMapping("/api/v1")
 @RestController
 public class RequirementController {
+	private static final Logger logger = LoggerFactory.getLogger(RequirementController.class);
+
 
 	@Autowired
 	private RequirementService reqservice;
@@ -38,6 +42,7 @@ public class RequirementController {
 
 	@PostMapping("requirement/{projectId}")
 	public void createRequirement(@PathVariable String projectId,@Valid  @RequestBody Requirement requirement) {
+		logger.info("In creating requirement");
 		reqservice.addRequirement(requirement, projectId);
 	}
 
@@ -49,6 +54,7 @@ public class RequirementController {
 
 	@GetMapping("/requirement")
 	public List<ReqHolder> getReq() {
+		logger.info("request to view all requirements");
 		return reqservice.viewReq();
 	}
 	/**
@@ -62,6 +68,7 @@ public class RequirementController {
 	@PutMapping("requirement/{projectId}/{requirementId}")
 	public void updateReq(@PathVariable String projectId, @PathVariable String requirementId,
 			@RequestBody Requirement requirement) throws ProjectNotFoundException {
+		logger.info("request to update requirement");
 		reqservice.updateReq(requirement, requirementId, projectId);
 	}
 
@@ -77,6 +84,7 @@ public class RequirementController {
 	@DeleteMapping("requirement/{projectId}/{requirementId}")
 	public void deleteRequirement(@PathVariable String projectId, @PathVariable String requirementId)
 			throws ProjectNotFoundException {
+		logger.info("In deleting requirement");
 		reqservice.deleteReq(requirementId, projectId);
 
 	}
