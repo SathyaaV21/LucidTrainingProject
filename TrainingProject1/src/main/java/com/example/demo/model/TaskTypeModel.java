@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,6 +11,7 @@ public class TaskTypeModel {
 
 @Id
 private int tasktypeId;
+@NotNull(message = "Task type name is mandatory")
 private String tasktypeName;
 private String tasktypeDescription;
 

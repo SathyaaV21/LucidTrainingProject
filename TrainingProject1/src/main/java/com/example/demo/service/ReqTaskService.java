@@ -24,6 +24,11 @@ public class ReqTaskService {
 
 	List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
 
+	/**
+	 * Service to create requirement summarization
+	 * @param reqsummodel
+	 * @return String
+	 */
 	public String createreqSum(RequirementSummarizationModel reqsummodel) {
 		reqsummodel.setCompletionPercentage(0);
 		reqsummodel.setNo_of_task_completed(0);
@@ -33,8 +38,12 @@ public class ReqTaskService {
 		return "Summarization created";
 	}
 
+	/**
+	 * Service to update summarization
+	 * @param reqId
+	 * @param taskmodel
+	 */
 	public void updateSum(String reqId, TaskModel taskmodel) {
-
 		RequirementSummarizationModel reqsummodel = this.getreqSum(reqId);
 		List<TaskModel> tasks = this.getallreqTasks(reqId);
 		List<TaskModel> empty = new ArrayList<TaskModel>();

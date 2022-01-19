@@ -1,6 +1,9 @@
 package com.example.demo.model;
 import java.util.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.data.annotation.Id;
 
 
@@ -12,7 +15,10 @@ public class TaskModel {
 	private String taskId;
 	
 	private String taskName;
+	@NotNull(message = "Task description is mandatory") 
+	@Size(min=1,max=100,message="The descrption should not exceed 100 characters")
 	private String taskDescription;
+	@NotNull(message = "Task type is mandatory") 
 	private String taskType;
 	private String taskStatus;
 	private String assignedTo;
@@ -20,6 +26,7 @@ public class TaskModel {
 	private Date startDate;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
 	private Date endDate;
+	@NotNull(message = "Effort is mandatory")
 	private int effort;
 	private int todo;
 	private String riskAnalysis;

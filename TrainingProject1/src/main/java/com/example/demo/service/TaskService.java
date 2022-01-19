@@ -38,6 +38,10 @@ public class TaskService {
 	 * Service to create to new task
 	 * 
 	 * @param newtask
+	 * @param reqId
+	 * @param prjId
+	 * @return String
+	 * @throws BadRequestException
 	 */
 	public String saveTask(TaskModel newtask, String reqId, String prjId) {
 		List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
@@ -80,8 +84,11 @@ public class TaskService {
 	/**
 	 * Service to update todo in task
 	 * 
+	 * @param reqId
 	 * @param taskid
-	 * @throws TaskNotFoundException
+	 * @param taskmodel
+	 * @return String
+	 * @throws BadRequestException
 	 */
 	public String updateTodo(String reqId, String taskid, TaskModel taskmodel) {
 		TaskModel task = mongotemplate.findById(taskid, TaskModel.class);
@@ -122,12 +129,17 @@ public class TaskService {
 			} else {
 				throw new BadRequestException("Task cannot be updated");
 			}
-		}
-		else {
+		} else
 			throw new BadRequestException("Task ID " + taskid + " is not found");
-		}
 	}
 
+	/**
+	 * Service to provide risk notification
+	 * @param taskhistory
+	 * @param newtask
+	 * @param taskmodel
+	 * @return String
+	 */
 	public String riskNotification(TaskHistory taskhistory, TaskModel newtask, TaskModel taskmodel) {
 		long difference = newtask.getEndDate().getTime() - newtask.getStartDate().getTime();
 		float daysBetween = (difference / (1000 * 60 * 60 * 24));
@@ -141,10 +153,11 @@ public class TaskService {
 	/**
 	 * Service to update task
 	 * 
-	 * @param taskId
 	 * @param oldtask
-	 * @return oldtask
-	 * @throws TaskNotFoundException
+	 * @param reqId
+	 * @param taskId
+	 * @return String
+	 * @throws BadRequestException
 	 */
 	public String updateTask(Map<String, String> oldtask, String reqId, String taskId) {
 		TaskModel taskmodel = mongotemplate.findById(taskId, TaskModel.class);
@@ -185,12 +198,18 @@ public class TaskService {
 	/**
 	 * Service to view all the tasks in the DB
 	 * 
-	 * @return tasks in DB
+	 * @return Available tasks in DB
 	 */
 	public List<TaskModel> viewTasks() {
 		return mongotemplate.findAll(TaskModel.class);
 	}
 
+	/**
+	 * Service to get the specific task by taskid
+	 * @param taskId
+	 * @return String
+	 * @throws BadRequestException
+	 */
 	public TaskModel getTask(String taskId) {
 		TaskModel taskmodel = mongotemplate.findById(taskId, TaskModel.class);
 		if (taskmodel != null) {
@@ -203,8 +222,10 @@ public class TaskService {
 	/**
 	 * Service to delete a task
 	 * 
-	 * @param Id
-	 * @throws TaskNotFoundException
+	 * @param reqId
+	 * @param taskid
+	 * @return String
+	 * @throws BadRequestException
 	 */
 	public void deleteTask(String reqId, String taskid) {
 		TaskModel taskmodel = mongotemplate.findById(taskid, TaskModel.class);
@@ -234,7 +255,12 @@ public class TaskService {
 			throw new BadRequestException("Task ID " + taskid + " is not found");
 		}
 	}
-
+	/**
+	 * Service to get task history of particular id
+	 * @param taskid
+	 * @return
+	 * @throws BadRequestException
+	 */
 	public List<TaskHistory> gettaskHistory(String taskid) {
 		TaskModel taskmodel = mongotemplate.findById(taskid, TaskModel.class);
 		if (taskmodel != null) {

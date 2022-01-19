@@ -24,7 +24,7 @@ class ReqTaskServiceTest {
 
 	@Test
 	void getallreqTasks() {
-		assertTrue(reqservice.getallreqTasks("Prj5Req4").get(0) instanceof TaskModel);
+		assertTrue(reqservice.getallreqTasks("Prj6Req1").get(0) instanceof TaskModel);
 	}
 	
 	@Test
@@ -34,6 +34,6 @@ class ReqTaskServiceTest {
 	
 	@Test
 	void getreqSumTest() {
-		assertTrue(reqservice.getreqSum("Prj5Req13") instanceof RequirementSummarizationModel);
+		assertTrue(reqservice.getreqSum("Prj6Req1tsk13") instanceof RequirementSummarizationModel);
 	}
 }

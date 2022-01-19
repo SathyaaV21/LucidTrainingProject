@@ -36,14 +36,14 @@ class TaskServiceTest {
 		taskmap.put("taskName","Testing");
 		taskmap.put("taskDescription","Testing the module" );
 		taskmap.put("assignedTo", "Ramapriya");
-		assertTrue(taskservice.updateTask(taskmap, "Prj5Req1","task-45") instanceof String);
+		assertTrue(taskservice.updateTask(taskmap, "Prj6Req1","Prj6Req1tsk13") instanceof String);
 	}
 	
 	@Test
 	void updateTodoTest() {
 		TaskModel task=new TaskModel();
-		task.setTodo(10);
-		assertTrue(taskservice.updateTodo("Prj5Req13", "task-45", task) instanceof String);
+		task.setTodo(1);
+		assertTrue(taskservice.updateTodo("Prj6Req1", "Prj6Req1tsk13", task) instanceof String);
 	}
 	
 	@Test
@@ -53,12 +53,12 @@ class TaskServiceTest {
 
 	@Test
 	void getTaskTest() {
-		assertTrue(taskservice.getTask("task-45") instanceof TaskModel);
+		assertTrue(taskservice.getTask("Prj6Req1tsk13") instanceof TaskModel);
 	}
 	
 	@Test
 	void gettaskHistoryTest() {
-		assertTrue(taskservice.gettaskHistory("task-45").get(0) instanceof TaskHistory);
+		assertTrue(taskservice.gettaskHistory("Prj6Req1tsk13").get(0) instanceof TaskHistory);
 	}
 	
 	/*
