@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 //import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,34 +44,22 @@ public class UserController {
 	 * @return ResponseEntity stating that the request has been successfully
 	 *         initiated.
 	 */
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@PostMapping("/adduser")
-	public String addUser(@RequestBody User user) {
-		//empservice.setId(service.getSequenceNumber("1"));
-		
-		userService.saveUser(user);
-		
-		return "Added user details";
-	}
+	
+	  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	  
+	  @PostMapping("/user")
+	  public String addUser(@RequestBody User user) {
+	  
+	  
+	  userService.saveUser(user);
+	  
+	  return "Added user details";
+	  }
+	 
+	
+	//add a proper registration service.
 	
 	
-	
-	/**
-	 * API specific for ADMIN to add new user.
-	 * @param User user.
-	 * @return ResponseEntity stating that the request has been successfully
-	 *         initiated.
-	 */
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
-	@PostMapping("/adduserbymanager")
-	public String addUserByMangaer(@RequestBody HashMap<String, String> dataHashMap) {
-		//empservice.setId(service.getSequenceNumber("1"));
-		
-		userService.registerUser(dataHashMap.get("userName"),
-				  dataHashMap.get("password"),dataHashMap.get("email"));
-		
-		return "Added user details by manager";
-	}
 	  
 	/**
 	 * API To view all the users in the system. 
@@ -79,23 +68,12 @@ public class UserController {
 			  
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
 	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@GetMapping("/alluser")
+	@GetMapping("/users")
 	public ResponseEntity<?> displayAllUserDetail() {
 		System.out.println("displayAllUserDetail started");
 		return ResponseEntity.ok(userService.displayAllUserDetail());
 	}
 	
-	/**
-	 * API specific to Administrator to delete a user from the database.
-	 * @param user Id
-	 * @return ResponseEntity stating that the particular user has been successfully
-	 *         deleted.
-	 */
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@GetMapping("/user/{name}")
-	public ResponseEntity<?> findUserByName(@PathVariable String name) {
-		return ResponseEntity.ok(userService.findByUsername(name));
-	}
 	
 
 	/**
@@ -105,7 +83,7 @@ public class UserController {
 	 *         deleted.
 	 */
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
-	@DeleteMapping("/finduserbyid/{Id}")
+	@GetMapping("/user/{Id}")
 	public ResponseEntity<?> findUserById(@PathVariable String Id) {
 		return ResponseEntity.ok(userService.findUser(Id));
 	}
@@ -117,10 +95,13 @@ public class UserController {
 	 * @return ResponseEntity stating that the particular user has been successfully
 	 *         deleted.
 	 */
+	
+	///set user status to false.and make changes in signin also.
+	
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
-	@DeleteMapping("/deleteuser/{name}")
-	public ResponseEntity<?> deleteUser(@PathVariable String name) {
-		return ResponseEntity.ok(userService.deleteUser(name));
+	@DeleteMapping("/user/{Id}")
+	public ResponseEntity<?> deleteUser(@PathVariable String Id) {
+		return ResponseEntity.ok(userService.deleteUser(Id));
 	}
 	
 
@@ -132,12 +113,16 @@ public class UserController {
 	 *         requested role.
 	 */
 	
+	
+
+	
+	
 	  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	  
-	  @PostMapping("/addroletouser") public ResponseEntity<?>
-	  addRoleToUser(@Valid @RequestBody HashMap<String, String> dataHashMap) {
-	  return ResponseEntity.ok(userService.addRoleToUser(dataHashMap.get("id"),
-	  dataHashMap.get("rolename"))); }
+	  @PostMapping("/addroletouser/{userId}/{roleId}") 
+	  public ResponseEntity<?>addRoleToUser(@Valid @PathVariable String userId,@PathVariable String roleId) {
+		  
+		  return ResponseEntity.ok(userService.addRoleToUser(userId,roleId)); }
 	 
 
 	/**
@@ -146,8 +131,9 @@ public class UserController {
 	 * @return ResponseEntity stating that the role is removed successfully from the particular user.
 	 */
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@PostMapping("/deleterolefromuser")
-	public ResponseEntity<?> deleteRoleFromUser(@Valid @RequestBody HashMap<String, String> dataHashMap) {
+	@DeleteMapping("/deleterolefromuser/{userId}/{roleId}")
+	public ResponseEntity<?> deleteRoleFromUser(@Valid @PathVariable String userId,@PathVariable String roleId) {
 		return ResponseEntity
-				.ok(userService.deleteRoleFromUser(dataHashMap.get("userid"), dataHashMap.get("roleid")));
-	}}
+				.ok(userService.deleteRoleFromUser(userId,roleId));
+	}
+	}

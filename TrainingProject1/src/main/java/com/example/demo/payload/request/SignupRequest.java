@@ -25,7 +25,18 @@ public class SignupRequest {
     @Size(min = 6, max = 40)
     private String password;
   
-    public String getUsername() {
+    @Size(min = 10, max = 10)
+	private String phonenumber;
+    
+    public String getPhonenumber() {
+		return phonenumber;
+	}
+
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
+	}
+
+	public String getUsername() {
         return username;
     }
  

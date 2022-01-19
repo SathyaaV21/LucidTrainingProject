@@ -12,7 +12,7 @@ import com.example.demo.model.Role;
 
 import com.example.demo.model.User;
 
-public interface UserRepository extends MongoRepository<User,Integer>{
+public interface UserRepository extends MongoRepository<User,String>{
 	Optional<User> findByUsername(String username);
 	Boolean existsByUsername(String username);
 	Boolean existsByEmail(String email);

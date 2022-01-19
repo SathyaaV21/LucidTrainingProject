@@ -177,19 +177,43 @@ public class UserManagerTest {
 			assertEquals(3, roleServices.displayAllRoleDetail().size());
 		}
 		
-//		@Test
-//		public void addRoleToUserTest() throws IOException {
-//			User user = new User("USR_1","Sathyaa", "qwerty", "sathyaa@gmail.com");
-//			Role role= new Role("ROLE_1", "Admin", true);
-//			
-//			Query query = new Query();
-//			query.addCriteria(Criteria.where("id").is("USR_1"));
-//			
-//			Update update = new Update().addToSet("roles", role);
-//			
-//			Mockito.when(mongoTemplate.findAndModify(query, update, options().returnNew(true).upsert(false), User.class).thenReturn(user));
-//		
-//			assertTrue(userServices.saveUser(user) instanceof MessageResponse);
-//		}
+		@Test
+		public void addRoleToUserTest() throws IOException {
+			User user = new User("USR_1","Sathyaa", "qwerty", "sathyaa@gmail.com");
+			Role role= new Role("ROLE_1", "Admin", true);
+			
+			Query query = new Query();
+			query.addCriteria(Criteria.where("id").is("USR_1"));
+			
+			Update update = new Update().addToSet("roles", role);
+			
+			Mockito.when(mongoTemplate.findAndModify(query, update, User.class)).thenReturn(user);
+		
+			assertEquals(user,userService.addRoleToUser("USR_1","Admin"));
+		}
+		
+		/*
+		 * @Test public void deleteRoleFromUserTest() throws IOException { User user =
+		 * new User("USR_1","Sathyaa", "qwerty", "sathyaa@gmail.com"); Role role= new
+		 * Role("ROLE_1", "Admin", true);
+		 * 
+		 * Query query = new Query();
+		 * query.addCriteria(Criteria.where("id").is("USR_1")); Query query2 =
+		 * Query.query(Criteria.where("$id").is("ROLE_1")); Update update = new
+		 * Update().addToSet("roles", query2);
+		 * 
+		 * 
+		 * 
+		 * 
+		 * mongoTemplate.updateMulti(query, update, User.class);
+		 * 
+		 * 
+		 * 
+		 * Mockito.when(mongoTemplate.updateMulti(query, update,
+		 * User.class)).thenReturn(wasAcknowledged);
+		 * 
+		 * assertTrue(userService.deleteRoleFromUser("USR_1","ROLE_1") instanceof
+		 * MessageResponse); }
+		 */
 		
 }

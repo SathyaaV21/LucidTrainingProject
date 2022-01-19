@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 
@@ -40,6 +43,7 @@ import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.filter.JwtUtils;
 import com.example.demo.security.services.UserDetailsImpl;
+import com.example.demo.service.RoleService;
 import com.example.demo.service.SequenceGenService;
 import com.example.demo.service.UserService;
 
@@ -59,7 +63,11 @@ public class AuthController {
 	@Autowired
 	UserService userService;
 	@Autowired
+	RoleService roleService;
+	@Autowired
 	PasswordEncoder encoder;
+	@Autowired
+	MongoTemplate mongoTemplate;
 	
 	@Autowired
 	private SequenceGenService service;
@@ -69,7 +77,14 @@ public class AuthController {
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+		
+		if (userRepository.existsByUsername(loginRequest.getUsername())){
+		Query query = Query.query(Criteria.where("username").is(loginRequest.getUsername()));
+		User userObj = mongoTemplate.findOne(query, User.class);
+		
+		if (userObj.getIsUserStatusActive()) {
+		
+		
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -87,87 +102,23 @@ public class AuthController {
 												 userDetails.getEmail(), 
 												 roles));
 	}
+		else {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is not Active"));
+		}}
+		else {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is not Available"));
+		}
+	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
-		}
-		System.out.println("registerUser started");
+		User user=new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+				signUpRequest.getPassword());
+		return ResponseEntity.ok(userService.saveUser(user));
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Email is already in use!"));
-		}
-
-		// Create new user's account
-		
-		User user = new User(signUpRequest.getUsername(), 
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
-		user.setId("USR" + service.getCount(Sequence.getSequenceName5()));
-		Set<String> strRoles = signUpRequest.getRoles();
-		Set<Role> roles = new HashSet<>();
-
-		if (strRoles == null) {
-			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(userRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-				case "admin":
-					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(adminRole);
-
-					break;
-				case "manager":
-					Role managerRole = roleRepository.findByName(ERole.ROLE_MANAGER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(managerRole);
-
-					break;
-				case "developer":
-					Role developerRole = roleRepository.findByName(ERole.ROLE_DEVELOPER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(developerRole);
-
-					break;
-				case "tester":
-					Role testerRole = roleRepository.findByName(ERole.ROLE_TESTER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(testerRole);
-					break;
-				case "analyst":
-					Role analystRole = roleRepository.findByName(ERole.ROLE_ANALYST)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(analystRole);
-
-					break;	
-					
-				default:
-					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(userRole);
-				}
-			});
-		}
-
-		user.setRoles(roles);
-		user.setIsuserStatusActive(true);
-		
-		/*
-		 * System.out.println("printing user:"); System.out.println(user.getEmail());
-		 * System.out.println(user.getPassword()); System.out.println(user.toString());
-		 */
-		
-		  userService.saveUser(user);
-		 
-
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }

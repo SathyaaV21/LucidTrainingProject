@@ -12,12 +12,11 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +45,7 @@ private RoleService roleService;
  * @return ResponseEntity stating the the new role has been add to the Role collection.
  */
 @PreAuthorize("hasAuthority('ROLE_ADMIN') ")
-@PostMapping("/addnewrole")
+@PostMapping("/role")
 public ResponseEntity<?> addNewRole(@Valid @RequestBody HashMap<String, String> dataHashMap) {
 	return ResponseEntity.ok(roleService.addNewRole(dataHashMap.get("rolename")));
 }
@@ -55,8 +54,8 @@ public ResponseEntity<?> addNewRole(@Valid @RequestBody HashMap<String, String> 
  * API To view all the roles in the system.
  * @return ResponseEntity with information about all the roles.
  */
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-@GetMapping("/allroles")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER')")
+@GetMapping("/roles")
 public ResponseEntity<?> displayAllRoleDetail() {
 	return ResponseEntity.ok(roleService.displayAllRoleDetail());
 }
@@ -65,8 +64,9 @@ public ResponseEntity<?> displayAllRoleDetail() {
  * API To view all active roles in the system.
  * @return ResponseEntity with information about all the active roles.
  */
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-@GetMapping("/allactiveroles")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER')")
+
+@GetMapping("/activeroles")
 public ResponseEntity<?> displayAllActiveRoleDetail() {
 	return ResponseEntity.ok(roleService.displayAllActiveRoleDetail());
 }
@@ -75,10 +75,11 @@ public ResponseEntity<?> displayAllActiveRoleDetail() {
  * API To delete a role to the application.
  * @return ResponseEntity stating that the role is successfully set inactive.
  */
+//when deleted here, delete roles from users aswell!
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-@PostMapping("/deleterole")
-public ResponseEntity<?> deleteRole(@Valid @RequestBody HashMap<String, String> dataHashMap) {
-	return ResponseEntity.ok(roleService.deleteRole(dataHashMap.get("roleid")));
+@DeleteMapping("/role/{Id}")
+public ResponseEntity<?> deleteRole(@Valid @PathVariable String Id) {
+	return ResponseEntity.ok(roleService.deleteRole(Id));
 }
 
 /**
@@ -86,10 +87,12 @@ public ResponseEntity<?> deleteRole(@Valid @RequestBody HashMap<String, String> 
  * @param "roleId":"","roleName":"","roleStatus":""
  * @return ResponseEntity stating that the role has been updated successfully.
  */
+
+//when name is update, update name in users aswell.
 @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER')")
-@PostMapping("/updaterole")
-public ResponseEntity<?> updateRole(@Valid @RequestBody HashMap<String, String> dataHashMap) {
-	return ResponseEntity.ok(roleService.updateRole(dataHashMap.get("roleId"), dataHashMap.get("roleName"),
-			Boolean.valueOf(dataHashMap.get("roleStatus"))));
+@PutMapping("/role/{Id}")
+public ResponseEntity<?> updateRole(@Valid @PathVariable String Id,@RequestBody HashMap<String, String> dataHashMap) {
+	String name=dataHashMap.get("roleName");
+	return ResponseEntity.ok(roleService.updateRole(Id, name));
 }
 }

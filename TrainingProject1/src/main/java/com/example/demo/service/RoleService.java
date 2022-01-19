@@ -4,6 +4,7 @@
  */
 package com.example.demo.service;
 
+import java.util.HashMap;
 import java.util.List;
 //import java.util.Optional;
 
@@ -59,7 +60,8 @@ public MessageResponse addNewRole(String rolename) {
 		}
 		Role role = new Role("ROLE_" + rolename.toUpperCase());
 		//setRoleID
-		role.setIsRolestatusactive(true);
+		
+		//role.setIsRolestatusactive(true);
 		role.setId("ROLE" + service.getCount(Sequence.getSequenceName4()));
 		mongoTemplate.save(role);
 		return new MessageResponse("Role added successfully");
@@ -71,7 +73,7 @@ public MessageResponse addNewRole(String rolename) {
 
 /**
  * Service that allows administrator to delete role from the application.
- * 
+ * This Deletes the role from the user also.
  * @param role id.
  * @return MessageResponse stating that the role is successfully set inactive.
  */
@@ -93,18 +95,30 @@ public MessageResponse deleteRole(String roleid) {
 
 /**
  * Service that allows administrator to update a role in the application.
- * 
+ * This updates the role name in the user as well.
  * @param role id, role name and role status.
  * @return MessageResponse stating that the role has been updated successfully.
  */
-public MessageResponse updateRole(String roleid, String rolename, Boolean rolestatus) {
-	if (!roleRepository.existsById(roleid)) {
+public MessageResponse updateRole(String roleId, String roleName) {
+	if (!roleRepository.existsById(roleId)) {
 		return new MessageResponse("Error: Role is not available");
 	}
-	rolename = "ROLE_" + rolename.toUpperCase();
-	Query query = new Query().addCriteria(Criteria.where("_id").is(roleid));
-	Update update = new Update().set("name", rolename).set("isrolestatusactive", rolestatus);
+	roleName = "ROLE_" + roleName.toUpperCase();
+	Query query = new Query().addCriteria(Criteria.where("_id").is(roleId));
+	if (roleRepository.existsByName("ROLE_" + roleName.toUpperCase())) {
+		return new MessageResponse("Error: Role is already in use!");}
+	Update update = new Update().set("name", roleName);
 	mongoTemplate.findAndModify(query, update, Role.class);
+	
+	Query query1 = Query.query(Criteria.where("id").is(roleId));
+	Role role = mongoTemplate.findOne(query1, Role.class);
+	Query query2 = Query.query(Criteria.where("id").exists(true));
+	Query query3 = Query.query(Criteria.where("$id").is(role.getId()));
+	Update update2 = new Update().pull("roles", query3);
+	Update update3 = new Update().push("roles", roleName);
+	
+	mongoTemplate.updateMulti(query2, update2, User.class);
+	mongoTemplate.updateMulti(query2, update3, User.class);
 	return new MessageResponse("Role has been updated");
 }
 
@@ -134,5 +148,15 @@ public List<Role> displayAllActiveRoleDetail() {
 		throw new BadRequestException("Request format is wrong!");
 	}
 }
-}
+
+public Role findByName(String roleName) {
+	Query query = Query.query(Criteria.where("name").is(roleName));
+	
+	Role role = mongoTemplate.findOne(query, Role.class);
+	if (role.getName()!=null){
+	return role;
+}else{
+	Role userRole = new Role("ROLE_0","JUSTUSER",false);
+return userRole;
+}}}
 
