@@ -4,12 +4,17 @@
 package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.controller.ProjectController;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.Project;
 
@@ -17,7 +22,8 @@ import com.example.demo.model.Project;
 
 public class ProjectService {
 
-	
+	private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
+
 
 	@Autowired
 	private MongoTemplate mongotemplate;
@@ -31,6 +37,7 @@ public class ProjectService {
 	 */
 
 	public String addProject(Project pro) {
+		
 
 		List<Project> proList=mongotemplate.findAll(Project.class);
 		int i=1; 
@@ -39,6 +46,7 @@ public class ProjectService {
 			}
 		pro.setProjectId("Prj"+Integer.toString(i));
 		mongotemplate.insert(pro);
+		logger.info("Project created");
 		return "Project added";
 		}
 
@@ -51,6 +59,7 @@ public class ProjectService {
 
 	public List<Project> viewProjects() throws ProjectNotFoundException {
 		try {
+			logger.info("Projects retreived");
 			return mongotemplate.findAll(Project.class);
 		} catch (Exception e) {
 			throw new ProjectNotFoundException("Projects Not Found");
@@ -70,6 +79,7 @@ public class ProjectService {
 		Project project = mongotemplate.findById(Id, Project.class);
 
 		if (project != null) {
+			logger.info("project retreived by id");
 			return project;
 		} else {
 			throw new ProjectNotFoundException("Project not found");
@@ -94,6 +104,7 @@ public class ProjectService {
 			update.set((String) test.getKey(), test.getValue());
 		}
 		mongotemplate.findAndModify(query, update, Project.class);
+		logger.info("Project updated for the specific id");
 		return "project Updated";
 
 	}
