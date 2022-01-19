@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ import com.example.demo.service.ProjectService;
 @RequestMapping("/api/v1")
 @RestController
 public class ProjectController {
+	private static final Logger logger = LoggerFactory.getLogger(ProjectController.class);
 
 	
 		@Autowired
@@ -42,6 +45,7 @@ public class ProjectController {
 		@PostMapping("/project")
 
 		public String CreateProject(@Valid @RequestBody Project project) {
+			logger.info("Creating a new project");
 			return ("Status Code : " + HttpStatus.OK + '\n' + "Status Message : Success " + '\n'
 					+ "Description : Project created successfully "+ '\n' +projectservice.addProject(project));
 		}
@@ -54,6 +58,7 @@ public class ProjectController {
 
 		@GetMapping("/project")
 		public List<Project> getProjects() throws ProjectNotFoundException {
+			logger.info("Request sent to view all projects");
 			return projectservice.viewProjects();
 		}
 
@@ -65,6 +70,7 @@ public class ProjectController {
 		 */
 		@GetMapping("/project/{Id}")
 		public Project getprojectByID(@PathVariable String Id) throws ProjectNotFoundException {
+			logger.info("Request sent to view a particular project by Id");
 			return projectservice.getByProjectId(Id);
 
 		}
@@ -78,10 +84,29 @@ public class ProjectController {
 		 */
 		@PutMapping("project/{projectId}")
 		public void updateproject(@RequestBody Map<String,String> project,@PathVariable String projectId){
+			logger.info("Request sent to update a project");
 			projectservice.updateproject(project,projectId);
 		}
 
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
