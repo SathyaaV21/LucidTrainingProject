@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -24,6 +26,8 @@ import com.example.demo.model.Status;
 
 @Service
 public class DefectService {
+
+	private static final Logger logger = LoggerFactory.getLogger(DefectService.class);
 
 	@Autowired
 	private MongoTemplate mongotemplate;
@@ -50,6 +54,7 @@ public class DefectService {
 		defect.setComments(commentList);
 		defect.setPresentStatus("New");
 		mongotemplate.save(defect);
+		logger.info("Defect is created successfully");
 		return "Added successfully in the database with defectID " + defect.getId();
 	}
 
@@ -64,13 +69,15 @@ public class DefectService {
 	 */
 
 	public String updateDefect(Map<String, String> defectModelHolder, String id) {
-		DefectModel oldDefect = mongotemplate.findById(id, DefectModel.class); 
-		if(oldDefect==null) {
+		DefectModel oldDefect = mongotemplate.findById(id, DefectModel.class);
+		if (oldDefect == null) {
+			logger.warn("The document is present in database");
 			throw new BadRequestException("ID not present");
 		}
 		List<Status> oldStatus = oldDefect.getDefectHistory();
 		List<Comments> oldComments = oldDefect.getComments();
 		if (oldDefect.getPresentStatus().equals("Cancelled")) {
+			logger.warn("The defect is in cancelled status");
 			throw new BadRequestException("The specified Defect ID cannot be updated");
 		}
 
@@ -86,8 +93,7 @@ public class DefectService {
 						if (defectModelHolder.get("presentStatus") == null) {
 							update.set("presentStatus", defectModelHolder.get("status"));
 						}
-					} 
-					else if (defect.getKey().equals("comment")) {
+					} else if (defect.getKey().equals("comment")) {
 						Comments comment = new Comments();
 						if (defectModelHolder.get("assignedUser") != null) {
 							comment.setAssignedUser(defectModelHolder.get("assignedUser"));
@@ -97,9 +103,9 @@ public class DefectService {
 						comment.setComment((String) defect.getValue());
 						comment.setTimestamp(LocalDateTime.now());
 						oldComments.add(comment);
+						logger.info("Comments collection have been updated");
 
-					}
-					else if (defect.getKey().equals("status")) {
+					} else if (defect.getKey().equals("status")) {
 						if (defect.getValue().equals("New") || defect.getValue().equals("Open")
 								|| defect.getValue().equals("Fixed") || defect.getValue().equals("Retest")
 								|| defect.getValue().equals("Cancelled")) {
@@ -116,26 +122,30 @@ public class DefectService {
 								status.setComment(defectModelHolder.get("comment"));
 								status.setTimestamp(LocalDateTime.now());
 								oldStatus.add(status);
-							}else {
+								logger.info("Defect History collection have been updated successfully");
+							} else {
 								continue;
 							}
 						} else {
+							logger.warn("The status is not valid");
 							throw new BadRequestException("The specified Status is invalid!!");
 						}
 					}
 				}
 
 				update.set("Comments", oldComments);
-				update.set("defectHistory", oldStatus);  
-			if (!(defectModelHolder.containsKey("status")))
+				update.set("defectHistory", oldStatus);
+				if (!(defectModelHolder.containsKey("status")))
 					update.set("presentStatus", oldDefect.getPresentStatus());
+				logger.info("Updating the changes");
 				mongotemplate.findAndModify(query, update, DefectModel.class);
 			}
 
 			else {
+				logger.warn("Comments are mandatory");
 				throw new BadRequestException("Please specify some comments");
 			}
-
+			logger.info("Defect Id has been updated");
 			return id + " has been updated successfully";
 		}
 	}
@@ -150,15 +160,19 @@ public class DefectService {
 	 **/
 
 	public String deleteDefect(String id) {
-		DefectModel oldDefect = mongotemplate.findById(id, DefectModel.class); 
-		if(oldDefect==null)
+		DefectModel oldDefect = mongotemplate.findById(id, DefectModel.class);
+		if (oldDefect == null) {
+			logger.warn("The defect is not present in database");
 			throw new BadRequestException("ID not available");
+		}
 		List<Status> oldStatus = oldDefect.getDefectHistory();
 		List<Comments> oldComments = oldDefect.getComments();
-		if (oldDefect != null && (!oldStatus.get((oldStatus.size()) - 1).getCurrentStatus().equals("Cancelled"))) {
+		logger.info("Checking the status of the defect..");
+		if (oldDefect != null && (!oldDefect.getPresentStatus().equals("Cancelled"))) {
+			logger.info("Changing to Cancelled status..");
 			Status status = new Status();
 			status.setAssignedUser(oldDefect.getAssignedUser());
-			status.setStatusBefore(oldStatus.get((oldStatus.size()) - 1).getCurrentStatus());
+			status.setStatusBefore(oldDefect.getPresentStatus());
 			status.setCurrentStatus("Cancelled");
 			status.setComment("The ID is deleted successfully");
 			status.setTimestamp(LocalDateTime.now());
@@ -169,12 +183,15 @@ public class DefectService {
 			comment.setTimestamp(LocalDateTime.now());
 			oldComments.add(comment);
 			oldDefect.setComments(oldComments);
-			oldDefect.setDefectHistory(oldStatus); 
+			oldDefect.setDefectHistory(oldStatus);
 			oldDefect.setPresentStatus("Cancelled");
 			mongotemplate.save(oldDefect);
+			logger.info("Comments and defect history collection has been updated");
 		} else {
+			logger.warn("The defect is already Cancelled");
 			throw new BadRequestException("The defect ID cannot be deleted");
 		}
+		logger.info("Defect has been deleted successfully");
 		return id + " is successfully deleted";
 	}
 
@@ -188,12 +205,16 @@ public class DefectService {
 	 */
 
 	public DefectModel getDefect(String id) {
-		DefectModel defect = mongotemplate.findById(id, DefectModel.class); 
-		if(defect==null)
+		DefectModel defect = mongotemplate.findById(id, DefectModel.class);
+		if (defect == null) {
+			logger.warn("The Id is unavailable");
 			throw new BadRequestException("The ID is unavailable");
+		}
 		if (defect.getPresentStatus().equals("Cancelled")) {
+			logger.warn("The Id is in Cancelled status");
 			throw new BadRequestException("The specified Defect ID is cancelled...Cannot be displayed");
 		}
+		logger.info("Defect is retrieved from database");
 		return defect;
 	}
 
@@ -209,14 +230,17 @@ public class DefectService {
 		List<DefectModel> resultedDefects = new ArrayList<DefectModel>();
 		for (DefectModel defect : allDefects) {
 			List<Status> status = defect.getDefectHistory();
-		if (!(status.get((status.size()) - 1).getCurrentStatus().equals("Cancelled"))) {
-			resultedDefects.add(defect);			}
+			if (!(status.get((status.size()) - 1).getCurrentStatus().equals("Cancelled"))) {
+				resultedDefects.add(defect);
+			}
 		}
 		if (resultedDefects.isEmpty()) {
+			logger.warn("There are no Open defects in database");
 			throw new BadRequestException("There are no defects available at present!!");
 		}
+		logger.info("All the Open defects have been displayed");
 		return resultedDefects;
-	
+
 	}
 
 	/**
@@ -231,17 +255,19 @@ public class DefectService {
 		List<DefectModel> defects = mongotemplate.findAll(DefectModel.class);
 		List<DefectModel> resultedDefects = new ArrayList<>();
 		for (DefectModel defect : defects) {
-			if (defect.getProjectID().equals(projectID) && !(defect.getDefectHistory().get((defect.getDefectHistory().size()) - 1)
-					.getCurrentStatus().equals("Cancelled"))) {
+			if (defect.getProjectID().equals(projectID) && !(defect.getDefectHistory()
+					.get((defect.getDefectHistory().size()) - 1).getCurrentStatus().equals("Cancelled"))) {
 				resultedDefects.add(defect);
 			}
 		}
 		if (resultedDefects.isEmpty()) {
+			logger.warn("There are no active defects for the project Id");
 			throw new BadRequestException("There are no active defects for the specified Project ID");
 		}
+		logger.info("All the defects of the project have been displayed");
 		return resultedDefects;
-	} 
-	
+	}
+
 	/**
 	 * Method to get number of defects with Open Status.
 	 *
@@ -250,16 +276,17 @@ public class DefectService {
 	 * @return Count of Open Status Defects.
 	 */
 	public int openDefectsCount() {
-		int count=0;
-		List<DefectModel> defects=mongotemplate.findAll(DefectModel.class); 
-		for(DefectModel defect:defects) {
+		int count = 0;
+		List<DefectModel> defects = mongotemplate.findAll(DefectModel.class);
+		for (DefectModel defect : defects) {
 			if (!(defect.getPresentStatus().equals("Cancelled"))) {
 				count++;
 			}
 		}
+		logger.info("Returning count of open defects");
 		return count;
 	}
-	
+
 	/**
 	 * Method to get all defects with Closed Status.
 	 *
@@ -268,16 +295,17 @@ public class DefectService {
 	 * @return Count of Closed Status Defects.
 	 */
 	public int closedDefectsCount() {
-		int count=0;
-		List<DefectModel> defects=mongotemplate.findAll(DefectModel.class); 
-		for(DefectModel defect:defects) {
+		int count = 0;
+		List<DefectModel> defects = mongotemplate.findAll(DefectModel.class);
+		for (DefectModel defect : defects) {
 			if (defect.getPresentStatus().equals("Cancelled")) {
 				count++;
 			}
 		}
+		logger.info("Returning count of closed defects");
 		return count;
-	} 
-	
+	}
+
 	/**
 	 * Method to get all defects with Open Status.
 	 *
@@ -286,17 +314,19 @@ public class DefectService {
 	 * @return List of DefectModel Object.
 	 * @throws BadRequestException for no active defects.
 	 */
-	public List<DefectModel> getOpendefects(){
-		Query q=new Query();
-		q.addCriteria(Criteria.where("presentStatus").ne("Cancelled")); 
-		List<DefectModel> defects=mongotemplate.find(q, DefectModel.class);
+	public List<DefectModel> getOpendefects() {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("presentStatus").ne("Cancelled"));
+		List<DefectModel> defects = mongotemplate.find(q, DefectModel.class);
 		if (defects.isEmpty()) {
+			logger.warn("There are no open defects");
 			throw new BadRequestException("Sorry!! There are no Open defects at present..");
-		} 
-		else
+		} else {
+			logger.info("All the open defects are displayed");
 			return defects;
+		}
 	}
-	
+
 	/**
 	 * Method to get all defects with Closed Status.
 	 *
@@ -305,16 +335,19 @@ public class DefectService {
 	 * @return List of DefectModel Object.
 	 * @throws BadRequestException for no closed defects.
 	 */
-	public List<DefectModel> getCloseddefects(){
-		Query q=new Query();
+	public List<DefectModel> getCloseddefects() {
+		Query q = new Query();
 		q.addCriteria(Criteria.where("presentStatus").is("Cancelled"));
-		List<DefectModel> defects=mongotemplate.find(q, DefectModel.class);
+		List<DefectModel> defects = mongotemplate.find(q, DefectModel.class);
 		if (defects.isEmpty()) {
+			logger.warn("There are no closed defects");
 			throw new BadRequestException("Sorry!! All the defects are in Open Status..");
-		} 
-		else
+		} else {
+			logger.info("All the closed defects are displayed");
 			return defects;
+		}
 	}
+
 	/**
 	 * Method to get defect history.
 	 *
@@ -324,10 +357,13 @@ public class DefectService {
 	 * @throws BadRequestException for invalid defect ID.
 	 */
 	public List<Status> getHistoryByID(String id) {
-		DefectModel defect = mongotemplate.findById(id, DefectModel.class); 
-		if(defect==null)
+		DefectModel defect = mongotemplate.findById(id, DefectModel.class);
+		if (defect == null) {
+			logger.warn("Id is not present in database");
 			throw new BadRequestException("The ID is unavailable");
+		}
+		logger.info("The history of the defect is displayed");
 		return defect.getDefectHistory();
 	}
-	
+
 }
