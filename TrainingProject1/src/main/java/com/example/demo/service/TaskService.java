@@ -82,6 +82,7 @@ public class TaskService {
 		reqsummodel.setNo_of_task_notcompleted(reqsummodel.getNo_of_task_notcompleted() + 1);
 		reqsummodel.setReqTasks(reqtaskCollection);
 		mongotemplate.save(reqsummodel);
+		LOGGER.info("New task is created");
 		return "Task added";
 	}
 
@@ -130,7 +131,7 @@ public class TaskService {
 				newtask.setRiskAnalysis(this.riskNotification(taskhistory, newtask, taskmodel));
 				mongotemplate.save(newtask);
 				reqtaskservice.updateSum(reqId, newtask);
-				return "Todo has been updated";
+				return "Todo has been updated\n"+"No of days left: "+(daysBetween-1);
 			} else {
 				throw new BadRequestException("Task cannot be updated");
 			}

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.exception.TaskNotFoundException;
 import com.example.demo.model.RequirementSummarizationModel;
 import com.example.demo.model.TaskHistory;
 import com.example.demo.model.TaskModel;
@@ -53,7 +52,6 @@ public class TaskController {
 	 * @param task
 	 * @param taskId
 	 * @return String and HTTP status update
-	 * @throws TaskNotFoundException
 	 */
 	@PutMapping("/{reqId}/updatetask/{taskId}")
 	public ResponseEntity<Object> updateTask(@PathVariable String reqId, @RequestBody Map<String,String> task, @PathVariable String taskId) {
@@ -66,7 +64,6 @@ public class TaskController {
 	 * 
 	 * @param taskid
 	 * @return String and HTTP status update
-	 * @throws TaskNotFoundException
 	 */
 	@PutMapping("/{reqId}/updatetodo/{taskid}")
 	public ResponseEntity<Object> updateTodo(@PathVariable String reqId, @RequestBody TaskModel taskmodel,@PathVariable String taskid) {
@@ -111,7 +108,6 @@ public class TaskController {
 	 * 
 	 * @param taskid
 	 * @return TaskModel
-	 * @throws TaskNotFoundException
 	 */
 	@GetMapping("/gettask/{taskid}")
 	public TaskModel getTask(@PathVariable String taskid) {
@@ -135,7 +131,6 @@ public class TaskController {
 	 * 
 	 * @param taskid
 	 * @return String and HTTP Status update
-	 * @throws TaskNotFoundException
 	 */
 	@DeleteMapping("/delete/{reqId}/{taskid}")
 	public ResponseEntity<Object> deleteTask(@PathVariable String reqId,@PathVariable String taskid) {

@@ -27,7 +27,7 @@ class TaskServiceTest {
 		task.setTaskName("Testing");
 		task.setTaskType("Testing");
 		task.setTaskDescription("Testing the module");
-		assertTrue(taskservice.saveTask(task, "Prj5Req13","Prj5") instanceof String);
+		assertTrue(taskservice.saveTask(task, "Prj6Req1","Prj6") instanceof String);
 	}
 	
 	@Test
