@@ -15,13 +15,13 @@ class RequirementServiceTest {
 	@Autowired
 	private RequirementService reqservice;
 
-	@Test
-	void addRequirementTest() {
-		Requirement req = new Requirement();
-		req.setRequirementDescription("requirement changed");
-		req.setStatus("status - onhold");
-		assertTrue(reqservice.addRequirement(req, "Prj1") instanceof String);
-	}
+//	@Test
+//	void addRequirementTest() {
+//		Requirement req = new Requirement();
+//		req.setRequirementDescription("requirement changed");
+//		req.setStatus("status - onhold");
+//		assertTrue(reqservice.addRequirement(req, "Prj1") instanceof String);
+//	}
 
 	@Test
 	void getallRequirementsTest() {

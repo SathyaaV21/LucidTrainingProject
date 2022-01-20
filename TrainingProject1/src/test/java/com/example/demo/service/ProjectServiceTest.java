@@ -14,16 +14,16 @@ class ProjectServiceTest {
 	@Autowired
 	private ProjectService projectservice;
 	
-	@Test
-	void addProjectTest() throws ProjectNotFoundException {
-		Project pro = new Project();
-		pro.setProjectName("project1");
-		pro.setProjectDescription("desc");
-		pro.getProjectName();
-		pro.getProjectDescription();
-		assertTrue(projectservice.addProject(pro) instanceof String);
-
-	}
+//	@Test
+//	void addProjectTest() throws ProjectNotFoundException {
+//		Project pro = new Project();
+//		pro.setProjectName("project1");
+//		pro.setProjectDescription("desc");
+//		pro.getProjectName();
+//		pro.getProjectDescription();
+//		assertTrue(projectservice.addProject(pro) instanceof String);
+//
+//	}
 
 	@Test
 	void getallprojectsTest() throws ProjectNotFoundException {
