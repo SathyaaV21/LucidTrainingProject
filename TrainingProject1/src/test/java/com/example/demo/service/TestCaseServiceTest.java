@@ -15,24 +15,24 @@ class TestCaseServiceTest {
 	@Autowired
 	private TestCaseService testservice;
 
-//	@Test
-//	void addTestcaseTest() {
-//		TestCase test = new TestCase();
-//		test.setTestCaseName("test 1");
-//		test.setDescription("desc new");
-//		test.setStatus("status new");
-//		test.setExpectedResults("should pass");
-//		test.setActualResults("passed");
-//		test.getTestCaseName();
-//		test.getDescription();
-//		test.getStatus();
-//		test.getExpectedResults();
-//		test.getActualResults();
-//		test.getProjectId();
-//		test.getTestCaseId();
-//		test.getRequirementId();
-//		assertTrue(testservice.addTestcase(test, "Prj4", "Prj4Req2") instanceof String);
-//	}
+	@Test
+	void addTestcaseTest() throws ProjectNotFoundException {
+		TestCase test = new TestCase();
+		test.setTestCaseName("test 1");
+		test.setDescription("desc new");
+		test.setStatus("status new");
+		test.setExpectedResults("should pass");
+		test.setActualResults("passed");
+		test.getTestCaseName();
+		test.getDescription();
+		test.getStatus();
+		test.getExpectedResults();
+		test.getActualResults();
+		test.getProjectId();
+		test.getTestCaseId();
+		test.getRequirementId();
+		assertTrue(testservice.addTestcase(test, "Prj4", "Prj4Req2") instanceof String);
+	}
 
 	@Test
 	void getTestcasesTest() {

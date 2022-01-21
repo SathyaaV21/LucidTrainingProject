@@ -5,7 +5,6 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
-import com.example.demo.controller.RequirementController;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
 import com.example.demo.model.TestCase;
-//import com.example.demo.model.Testcase;
+
 @Service
 public class TestCaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TestCaseService.class);
@@ -47,13 +44,17 @@ public class TestCaseService {
 	 * 
 	 * @param the Project id, requirement Id and TestcaseModel is passed.
 	 * @return status of the Added testcase .
+	 * @throws ProjectNotFoundException 
 	 */
 
-	public String addTestcase(TestCase testcase, String projectId, String requirementId) {
+	public String addTestcase(TestCase testcase, String projectId, String requirementId) throws ProjectNotFoundException {
 			testcase.setProjectId(projectId); 
 			testcase.setRequirementId(requirementId);
 			
 			ReqHolder req=mongotemplate.findById(projectId,ReqHolder.class);
+			if(req==null) {
+				throw new ProjectNotFoundException("Project id not found");
+			}
 			List<Requirement> reqList=req.getRequirement();
 			List<Requirement> req_=new ArrayList<Requirement>();
 			for(Requirement i:reqList) {
@@ -67,15 +68,6 @@ public class TestCaseService {
 			}
 			req.setRequirement(req_);
 			mongotemplate.save(req);
-			
-//			List<TestCase> test=mongotemplate.findAll(TestCase.class);
-//			int i=1; 
-//			for(TestCase t:test) {
-//				if(t.getRequirementId().equals(requirementId)){
-//					i++;
-//				}
-//			}
-//			testcase.setTestCaseId(requirementId+"Tc"+Integer.toString(i));
 			mongotemplate.insert(testcase);
 			logger.info("testcase added successfully");
 			return "Testcase added";
@@ -90,7 +82,7 @@ public class TestCaseService {
 	 * @throws Handles Exception.
 	 * 
 	 */
-	public String updateTestcase(Map<String,String> testcase, String testcaseId) throws ProjectNotFoundException {
+	public String updateTestcase(Map<String,String> testcase, String testcaseId) {
 
 		Query query=new Query();
 		query.addCriteria(Criteria.where("_id").is(testcaseId)); 
@@ -115,11 +107,10 @@ public class TestCaseService {
 		List<TestCase> testcase=mongotemplate.findAll(TestCase.class);
 		int count=0;
 		for(TestCase test:testcase) {
-			if (test.getProjectId().equals(projectId))
+			if ((test.getProjectId().equals(projectId)) && !(test.getStatus().equals("Failed")))
 			{
-				if(!(test.getStatus().equals("Failed"))) {
 					count++;
-				}
+				
 			}
 		}
 		logger.info("returned count of open testcases with respect to project Id");
@@ -136,11 +127,10 @@ public class TestCaseService {
 		List<TestCase> testcase=mongotemplate.findAll(TestCase.class);
 		int count=0;
 		for(TestCase test:testcase) {
-			if (test.getRequirementId().equals(requirementId))
+			if ((test.getRequirementId().equals(requirementId)) && !(test.getStatus().equals("Failed")))
 			{
-				if(!(test.getStatus().equals("Failed"))) {
 					count++;
-				}
+				
 			}
 		}
 		logger.info("returned count of open testcases with respect to requirement Id");

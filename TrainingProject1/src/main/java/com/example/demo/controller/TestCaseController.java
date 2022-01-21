@@ -53,11 +53,12 @@ public class TestCaseController {
 	 * 
 	 * @param Project Id,Requirement id,testcase model
 	 * @return Respective status of Added testCases.
+	 * @throws ProjectNotFoundException 
 	 */
 
 	@PostMapping("testcase/{projectId}/{requirementId}")
 	public void createTestcase(@PathVariable String projectId, @PathVariable String requirementId,
-			@Valid @RequestBody TestCase testcase) {
+			@Valid @RequestBody TestCase testcase) throws ProjectNotFoundException {
 		logger.info("In creating testcase");
 		testservice.addTestcase(testcase, projectId, requirementId);
 	}
@@ -74,7 +75,7 @@ public class TestCaseController {
 
 	@PutMapping("testcase/{testcaseId}")
 	public void updateTestcase(@RequestBody Map<String,String> testcase,@PathVariable String testcaseId)
-			throws ProjectNotFoundException {
+	{
 		logger.info("In updating testcase");
 		testservice.updateTestcase( testcase, testcaseId);
 	}

@@ -68,7 +68,6 @@ class DefectServiceTest {
 		  def.setSeverity(2); 
 	  when(mongotemplate.findById("Def10", DefectModel.class)).thenReturn(def);
 	  assertEquals(def, defectService.getDefect("Def10")); 
-	  assertTrue(defectService.getDefect("Def1") instanceof DefectModel); 
 	  }
 	  
 	  @Test 

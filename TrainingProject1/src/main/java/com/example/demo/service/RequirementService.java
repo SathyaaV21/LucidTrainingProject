@@ -4,14 +4,11 @@
 package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-
-import com.example.demo.controller.RequirementController;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
@@ -104,10 +101,12 @@ public class RequirementService {
 
 		for (Requirement r : req) {
 			if (r.getRequirementId().equals(requirementId)) {
-				if(requirement.getRequirementDescription()!=null)
+				if(requirement.getRequirementDescription()!=null) {
 				r.setRequirementDescription(requirement.getRequirementDescription());
-				if(requirement.getStatus()!=null)
+				}
+				if(requirement.getStatus()!=null) {
 				r.setStatus(requirement.getStatus());
+				}
 			}
 		}
 		reqHolder.setRequirement(req);
