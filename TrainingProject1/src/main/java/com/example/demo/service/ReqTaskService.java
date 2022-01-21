@@ -7,6 +7,8 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class ReqTaskService {
 	
 	@Autowired
 	private MongoTemplate mongotemplate;
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReqTaskService.class);
 	List<TaskModel> reqtaskCollection = new ArrayList<TaskModel>();
 
 	/**
@@ -30,6 +32,7 @@ public class ReqTaskService {
 	 * @return String
 	 */
 	public String createreqSum(RequirementSummarizationModel reqsummodel) {
+		LOGGER.info("Summarization created");
 		reqsummodel.setCompletionPercentage(0);
 		reqsummodel.setNo_of_task_completed(0);
 		reqsummodel.setNo_of_task_notcompleted(0);
@@ -60,6 +63,7 @@ public class ReqTaskService {
 			reqsummodel.setNo_of_task_notcompleted(reqsummodel.getNo_of_task_notcompleted() - 1);
 		}
 		reqsummodel.setCompletionPercentage((100*reqsummodel.getNo_of_task_completed() )/ reqsummodel.getNo_of_tasks());
+		LOGGER.info("Task has been created");
 		mongotemplate.save(reqsummodel);
 	}
 
@@ -71,6 +75,7 @@ public class ReqTaskService {
 	public List<TaskModel> getallreqTasks(String reqId) {
 		RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId, RequirementSummarizationModel.class);
 		reqtaskCollection = reqsummodel.getReqTasks();
+		LOGGER.info("Creating list of tasks for the requirement");
 		return reqtaskCollection;
 	}
 
@@ -79,6 +84,7 @@ public class ReqTaskService {
 	 * @return All the summarizations of the requirements
 	 */
 	public List<RequirementSummarizationModel> getallreqSum() {
+		LOGGER.info("Getting all the requirement summarizations");
 		return mongotemplate.findAll(RequirementSummarizationModel.class);
 	}
 
@@ -88,6 +94,7 @@ public class ReqTaskService {
 	 * @return 
 	 */
 	public RequirementSummarizationModel getreqSum(String reqId) {
+		LOGGER.info("Getting the summarization for the provided requirement");
 		return mongotemplate.findById(reqId, RequirementSummarizationModel.class);
 	}
 }
