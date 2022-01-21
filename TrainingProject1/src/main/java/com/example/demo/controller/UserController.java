@@ -46,17 +46,16 @@ public class UserController {
 	 *         initiated.
 	 */
 	
-	  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	  
-	  @PostMapping("/user")
-	  public String addUser(@RequestBody User user) {
-	  
-	  
-	  userService.saveUser(user);
-	  
-	  return "Added user details";
-	  }
-	 
+	/*
+	 * @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	 * 
+	 * @PostMapping("/user") public String addUser(@RequestBody User user) {
+	 * 
+	 * 
+	 * userService.saveUser(user);
+	 * 
+	 * return "Added user details"; }
+	 */
 	
 	//add a proper registration service.
 	

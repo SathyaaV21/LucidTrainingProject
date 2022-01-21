@@ -43,7 +43,7 @@ private RoleService roleService;
  * @param "rolename":"someRoleName" (HashMap)
  * @return ResponseEntity stating the the new role has been add to the Role collection.
  */
-//@PreAuthorize("hasAuthority('ROLE_ADMIN') ")
+@PreAuthorize("hasAuthority('ROLE_ADMIN') ")
 @PostMapping("/role")
 public ResponseEntity<?> addNewRole(@Valid @RequestBody HashMap<String, String> dataHashMap) {
 	return ResponseEntity.ok(roleService.addNewRole(dataHashMap.get("rolename")));

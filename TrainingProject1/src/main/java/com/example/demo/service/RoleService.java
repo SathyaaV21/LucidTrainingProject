@@ -86,32 +86,13 @@ public MessageResponse deleteRole(String roleid) {
 	}
 	Query query = Query.query(Criteria.where("_id").is(roleid));
 	Role role = mongoTemplate.findOne(query, Role.class);
-	//System.out.println(role.getId());
-	//role.setIsRolestatusactive(false);
-	
-	//Query query2 = Query.query(Criteria.where("id").exists(true));
-//	Query query3 = Query.query(Criteria.where("name").is(role.getId()));
 	
 	Query query3 = Query.query(Criteria.where("name").is(role.getName()));
 	
 	Update update = new Update().pull("roles", query3);
 	mongoTemplate.updateMulti( new Query(), update, User.class );
 	
-	/*
-	 * List<User> allUsers=mongoTemplate.findAll(User.class);
-	 * 
-	 * for (User i : allUsers) { System.out.println("!!!"+i.getUsername());
-	 * Set<Role> oldroles=i.getRoles(); Set<Role> newroles = new HashSet<Role>(); if
-	 * (oldroles!=null) { for(Role j :oldroles) { System.out.println(j.getId());
-	 * System.out.println(j.getName());
-	 * 
-	 * if (j.getId().equals(role.getId())) {
-	 * 
-	 * } else { newroles.add(j); }} i.setRoles(newroles); mongoTemplate.save(i); }}
-	 * 
-	 * mongoTemplate.updateMulti(query2, update, User.class);
-	 */
-	  
+	
 	  
 	  mongoTemplate.findAndRemove(query, Role.class);
 	  
@@ -122,34 +103,7 @@ public MessageResponse deleteRole(String roleid) {
 	return new MessageResponse("Role is removed");
 }
 
-/**
- * Service that allows administrator to update a role in the application.
- * This updates the role name in the user as well.
- * @param role id, role name and role status.
- * @return MessageResponse stating that the role has been updated successfully.
- */
-/*
- * public MessageResponse updateRole(String roleId, String roleName) { if
- * (!roleRepository.existsById(roleId)) { return new
- * MessageResponse("Error: Role is not available"); } roleName = "ROLE_" +
- * roleName.toUpperCase(); Query query = new
- * Query().addCriteria(Criteria.where("_id").is(roleId)); if
- * (roleRepository.existsByName("ROLE_" + roleName.toUpperCase())) { return new
- * MessageResponse("Error: Role is already in use!");} Update update = new
- * Update().set("name", roleName); mongoTemplate.findAndModify(query, update,
- * Role.class);
- * 
- * Query query1 = Query.query(Criteria.where("id").is(roleId)); Role role =
- * mongoTemplate.findOne(query1, Role.class); Query query2 =
- * Query.query(Criteria.where("id").exists(true)); Query query3 =
- * Query.query(Criteria.where("$id").is(role.getId())); Update update2 = new
- * Update().pull("roles", query3); Update update3 = new Update().push("roles",
- * roleName);
- * 
- * mongoTemplate.updateMulti(query2, update2, User.class);
- * mongoTemplate.updateMulti(query2, update3, User.class); return new
- * MessageResponse("Role has been updated"); }
- */
+
 
 /**
  * Service that allows administrator to delete role from the application.
@@ -189,15 +143,5 @@ public Role findById(String Id) {
 	
 	return role;
 	}
-
-public Role findByName(String roleName) {
-	Query query = Query.query(Criteria.where("name").is(roleName));
-	
-	Role role = mongoTemplate.findOne(query, Role.class);
-	if (role.getName()!=null){
-	return role;
-}else{
-	Role userRole = new Role("ROLE_0","JUSTUSER",false);
-return userRole;
-}}}
+}
 
