@@ -18,34 +18,34 @@ import com.example.demo.model.TaskModel;
 class TaskServiceTest {
 	@Autowired
 	private TaskService taskservice;
-	
+
 	@Test
 	void saveTaskTest() {
-		TaskModel task=new TaskModel();
+		TaskModel task = new TaskModel();
 		task.setAssignedTo("Ramapriya");
 		task.setEffort(100);
 		task.setTaskName("Testing");
 		task.setTaskType("Testing");
 		task.setTaskDescription("Testing the module");
-		assertTrue(taskservice.saveTask(task, "Prj6Req1","Prj6") instanceof String);
+		assertTrue(taskservice.saveTask(task, "Prj10Req1", "Prj10") instanceof String);
 	}
-	
+
 	@Test
 	void updateTaskTest() {
-		Map<String, String> taskmap=new HashMap<String,String>();
-		taskmap.put("taskName","Testing");
-		taskmap.put("taskDescription","Testing the module" );
+		Map<String, String> taskmap = new HashMap<String, String>();
+		taskmap.put("taskName", "Testing");
+		taskmap.put("taskDescription", "Testing the module");
 		taskmap.put("assignedTo", "Ramapriya");
-		assertTrue(taskservice.updateTask(taskmap, "Prj6Req1","Prj6Req1tsk13") instanceof String);
+		assertTrue(taskservice.updateTask(taskmap, "Prj10Req1", "Prj10Req1tsk4") instanceof String);
 	}
-	
+
 	@Test
 	void updateTodoTest() {
-		TaskModel task=new TaskModel();
+		TaskModel task = new TaskModel();
 		task.setTodo(1);
-		assertTrue(taskservice.updateTodo("Prj6Req1", "Prj6Req1tsk13", task) instanceof String);
+		assertTrue(taskservice.updateTodo("Prj10Req1", "Prj10Req1tsk4", task) instanceof String);
 	}
-	
+
 	@Test
 	void viewTasksTest() {
 		assertTrue(taskservice.viewTasks().get(0) instanceof TaskModel);
@@ -53,17 +53,18 @@ class TaskServiceTest {
 
 	@Test
 	void getTaskTest() {
-		assertTrue(taskservice.getTask("Prj6Req1tsk13") instanceof TaskModel);
+		assertTrue(taskservice.getTask("Prj10Req1tsk4") instanceof TaskModel);
 	}
-	
+
 	@Test
 	void gettaskHistoryTest() {
-		assertTrue(taskservice.gettaskHistory("Prj6Req1tsk13").get(0) instanceof TaskHistory);
+		assertTrue(taskservice.gettaskHistory("Prj10Req1tsk4").get(0) instanceof TaskHistory);
 	}
-	
+
 	/*
-	 * @Test void deleteTaskTest() { assertTrue(taskservice.deleteTask("Task-0")
-	 * instanceof String); }
+	 * @Test void deleteTaskTest() {
+	 * assertTrue(taskservice.deleteTask("Prj6Req1","Prj10Req1tsk1") instanceof
+	 * String); }
 	 */
-	 
+
 }

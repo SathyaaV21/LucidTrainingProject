@@ -237,7 +237,7 @@ public class TaskService {
 	 * @return String
 	 * @throws BadRequestException
 	 */
-	public void deleteTask(String reqId, String taskid) {
+	public String deleteTask(String reqId, String taskid) {
 		TaskModel taskmodel = mongotemplate.findById(taskid, TaskModel.class);
 		if (taskmodel != null) {
 			LOGGER.info("Deleting the task");
@@ -261,6 +261,7 @@ public class TaskService {
 			}
 			reqsummodel.setReqTasks(empty);
 			mongotemplate.save(reqsummodel);
+			return "Task has been deleted";
 
 		} else {
 			throw new BadRequestException("Task ID " + taskid + " is not found");
