@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,15 +49,18 @@ public class TestCaseController {
 	 *
 	 * 
 	 * @param Project Id,Requirement id,testcase model
+	 * @return 
 	 * @return Respective status of Added testCases.
 	 * @throws ProjectNotFoundException 
 	 */
 
 	@PostMapping("testcase/{projectId}/{requirementId}")
-	public void createTestcase(@PathVariable String projectId, @PathVariable String requirementId,
+	public String createTestcase(@PathVariable String projectId, @PathVariable String requirementId,
 			@Valid @RequestBody TestCase testcase) throws ProjectNotFoundException {
 		logger.info("In creating testcase");
 		testservice.addTestcase(testcase, projectId, requirementId);
+		return ("Status Code : " + HttpStatus.OK + '\n' + "Status Message : Success " + '\n'
+				+ "Description : Testcase added successfully ");
 	}
 	
 
@@ -66,14 +70,16 @@ public class TestCaseController {
 	 * 
 	 * @param Project id,requirement Id, TestCase Id and TestCaseModel
 	 * @return 
+	 * @return 
 	 * @return Respective status and information of TestCase Update.
 	 */
 
 	@PutMapping("testcase/{testcaseId}")
-	public void updateTestcase(@RequestBody Map<String,String> testcase,@PathVariable String testcaseId)
+	public String updateTestcase(@RequestBody Map<String,String> testcase,@PathVariable String testcaseId)
 	{
 		logger.info("In updating testcase");
 		testservice.updateTestcase( testcase, testcaseId);
+		return "Testcase updated successfully";
 	}
 	
 	

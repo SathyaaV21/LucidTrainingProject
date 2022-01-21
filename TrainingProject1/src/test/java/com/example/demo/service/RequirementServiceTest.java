@@ -1,3 +1,6 @@
+/**
+	* 	@author Manju
+	*/
 package com.example.demo.service;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,7 @@ class RequirementServiceTest {
 	@Test
 	void addRequirementTest() {
 		Requirement req = new Requirement();
-		req.setRequirementDescription("requirement changed");
+		req.setRequirementDescription("Requirement ");
 		req.setStatus("status - onhold");
 		assertTrue(reqservice.addRequirement(req, "Prj10") instanceof String);
 	}
@@ -38,7 +41,17 @@ class RequirementServiceTest {
 
 //	@Test
 //	void deleteReqTest() throws ProjectNotFoundException {
-//		assertTrue(reqservice.deleteReq("Prj2Req3", "Prj2") instanceof String);
+//		assertTrue(reqservice.deleteReq("Prj10Req1", "Prj10") instanceof String);
 //	}
 
 }
+
+
+
+
+
+
+
+
+
+

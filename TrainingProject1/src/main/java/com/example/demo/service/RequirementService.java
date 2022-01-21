@@ -32,7 +32,7 @@ public class RequirementService {
 	 * Method to add Requirements for the Project in the Database
 	 * 
 	 * @param the Project id and RequirementModel is passed.
-	 * @return status of the Added Requirement .
+	 * @return 
 	 */
 
 	public String addRequirement(Requirement requirement, String projectId) {
@@ -66,7 +66,7 @@ public class RequirementService {
 		reqsummodel.setPrg_Id(projectId);
 		reqtaskservice.createreqSum(reqsummodel);
 		logger.info("requirement created");
-		return "Requirement added successfully";
+		return "added requirement";
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class RequirementService {
 	 * Method to Update Requirements for the Project in the Database
 	 * 
 	 * @param the Requirement id and project id is passed.
-	 * @return status of the updated Requirement .
+	 * @return 
 	 * @throws ProjectNotFoundException 
 	 */
 
@@ -113,7 +113,7 @@ public class RequirementService {
 
 		mongotemplate.save(reqHolder);
 		logger.info("requirement updated success");
-		return "Requirement updated";
+		return "Updated";
 	}
 
 	/**

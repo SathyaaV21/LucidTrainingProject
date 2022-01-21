@@ -89,7 +89,7 @@ public class ProjectService {
 	 * Method to update specific Project by project Id from Database
 	 * 
 	 * @param the Project id and Projectmodel is passed.
-	 * @return Status of the Project Update.
+	 * @return 
 	 * @throws ProjectNotFoundException
 	 * 
 	 */
@@ -104,7 +104,7 @@ public class ProjectService {
 		}
 		mongotemplate.findAndModify(query, update, Project.class);
 		logger.info("Project updated for the specific id");
-		return "project Updated";
+		return "Updated success";
 
 	}
 }

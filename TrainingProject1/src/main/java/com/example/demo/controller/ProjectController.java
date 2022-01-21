@@ -76,12 +76,14 @@ public class ProjectController {
 		 *
 		 * 
 		 * @param ProjectModel and project Id is passed
+		 * @return 
 		 * @return Respective status of ProjectModel Update.
 		 */
 		@PutMapping("project/{projectId}")
-		public void updateproject(@RequestBody Map<String,String> project,@PathVariable String projectId){
+		public String updateproject(@RequestBody Map<String,String> project,@PathVariable String projectId){
 			logger.info("Request sent to update a project");
 			projectservice.updateproject(project,projectId);
+			return "Project updated ";
 		}
 
 	}

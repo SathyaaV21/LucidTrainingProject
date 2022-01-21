@@ -1,3 +1,7 @@
+/**
+	* 	@author Manju
+	*/
+
 package com.example.demo.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,19 +36,19 @@ class ProjectServiceTest {
 	@Test
 	public void GetProjectByIdTest() throws ProjectNotFoundException {
 		Project pro = new Project();
-		pro.setProjectId("Prj34");
-		pro.setProjectDescription("description new changed");
-		pro.setProjectName("mockito project");
-		when(mongotemplate.findById("Prj34", Project.class)).thenReturn(pro);
-		assertEquals(pro, projectservice.getByProjectId("Prj34"));
+		pro.setProjectId("Prj25");
+		pro.setProjectDescription("For unit Testing purpose");
+		pro.setProjectName("Junit mockito");
+		when(mongotemplate.findById("Prj25", Project.class)).thenReturn(pro);
+		assertEquals(pro, projectservice.getByProjectId("Prj25"));
 
 	}
 
 	@Test
 	void addProjectTest() throws ProjectNotFoundException {
 		Project pro = new Project();
-		pro.setProjectName("project1");
-		pro.setProjectDescription("desc");
+		pro.setProjectName("junit");
+		pro.setProjectDescription("Testing using junit");
 		pro.getProjectName();
 		pro.getProjectDescription();
 		assertTrue(service.addProject(pro) instanceof String);
