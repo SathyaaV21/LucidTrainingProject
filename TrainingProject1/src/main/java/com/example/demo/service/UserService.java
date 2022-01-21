@@ -203,14 +203,73 @@ public class UserService {
 					new Query().addCriteria(Criteria.where("id").is(roleId)),
 					Role.class);
 			Query query = Query.query(Criteria.where("id").is(userId));
-			Query query2 = Query.query(Criteria.where("$id").is( roleId));
+			Query query2 = Query.query(Criteria.where("name").is( role.getName()));
 			Update update = new Update().pull("roles", query2);
-			mongoTemplate.updateMulti(query, update, User.class);
+			mongoTemplate.updateFirst(query, update, User.class);
 			
+			 Query query3 = new Query();
+		        query3.addCriteria(Criteria.where("roles.name").is(role.getName()));
+		        
+		       List<User> activeroles= mongoTemplate.find(query3, User.class);
+		       System.out.println(activeroles);
+		       if(activeroles.isEmpty()) {
+		    	   role.setIsRolestatusactive(false);
+		       }
+			mongoTemplate.save(role);
+			////set role to inactive in roleDb aswell.
 			
 			
 			
 			return new MessageResponse(role.getName() + " Role has been successful removed from the user " + userId);
+		
+	}
+
+	public ResponseEntity<?> updateUser(String Id, Map<String, String> updateMap) {
+		
+		Query query = Query.query(Criteria.where("id").is(Id));
+		
+		//User user= mongoTemplate.findOne(query, User.class);
+		
+		
+		
+		Update update1 =new Update();
+		
+		/*
+		 * if (updateMap.get("oldPassword")!=null) {
+		 * 
+		 * System.out.println(encoder.encode(updateMap.get("oldPassword")));
+		 * System.out.println("/////////////////////////////");
+		 * System.out.println(user.getPassword());
+		 * 
+		 * if(encoder.encode(updateMap.get("oldPassword"))==user.getPassword()) {
+		 * System.out.println(encoder.encode(updateMap.get("oldPassword")));
+		 * System.out.println("/////////////////////////////");
+		 * System.out.println(user.getPassword());
+		 */
+			if (updateMap.get("newPassword")!=null) {
+
+				update1.set("password",encoder.encode(updateMap.get("newPassword")));
+			}
+			
+	/*
+	 * else {return ResponseEntity .badRequest() .body(new
+	 * MessageResponse("Old password and entered password does not match.!")); }}
+	 */
+			
+			if (updateMap.get("phonenumber")!=null) {
+				if(updateMap.get("phonenumber").length()==10) {
+				update1.set("phonenumber",updateMap.get("phonenumber"));
+			}else {return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Enter correct mobile number."));
+		}
+				}
+		
+		
+		mongoTemplate.findAndModify(query, update1, User.class);
+		
+			return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+		
 		
 	}
 

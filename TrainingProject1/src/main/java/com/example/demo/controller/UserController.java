@@ -5,6 +5,7 @@
 package com.example.demo.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
 //import java.util.Optional;
 
@@ -117,7 +118,7 @@ public class UserController {
 
 	
 	
-	  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	  //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	  
 	  @PostMapping("/addroletouser/{userId}/{roleId}") 
 	  public ResponseEntity<?>addRoleToUser(@Valid @PathVariable String userId,@PathVariable String roleId) {
@@ -136,4 +137,11 @@ public class UserController {
 		return ResponseEntity
 				.ok(userService.deleteRoleFromUser(userId,roleId));
 	}
+	
+	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
+	@PostMapping("/updateuser/{Id}")
+	public ResponseEntity<?> updateUser(@PathVariable String Id,@RequestBody Map<String,String> update) {
+		return userService.updateUser(Id,update);
+		}
 	}

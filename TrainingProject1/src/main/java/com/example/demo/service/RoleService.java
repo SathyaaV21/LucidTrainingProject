@@ -4,9 +4,12 @@
  */
 package com.example.demo.service;
 
-import java.util.HashMap;
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.HashSet;
 import java.util.List;
 //import java.util.Optional;
+//import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,14 +86,40 @@ public MessageResponse deleteRole(String roleid) {
 	}
 	Query query = Query.query(Criteria.where("_id").is(roleid));
 	Role role = mongoTemplate.findOne(query, Role.class);
-	role.setIsRolestatusactive(false);
-	mongoTemplate.save(role);
-
-	Query query2 = Query.query(Criteria.where("id").exists(true));
-	Query query3 = Query.query(Criteria.where("$id").is(role.getId()));
+	//System.out.println(role.getId());
+	//role.setIsRolestatusactive(false);
+	
+	//Query query2 = Query.query(Criteria.where("id").exists(true));
+//	Query query3 = Query.query(Criteria.where("name").is(role.getId()));
+	
+	Query query3 = Query.query(Criteria.where("name").is(role.getName()));
+	
 	Update update = new Update().pull("roles", query3);
-	mongoTemplate.updateMulti(query2, update, User.class);
-	return new MessageResponse("Role is set inactive");
+	mongoTemplate.updateMulti( new Query(), update, User.class );
+	
+	/*
+	 * List<User> allUsers=mongoTemplate.findAll(User.class);
+	 * 
+	 * for (User i : allUsers) { System.out.println("!!!"+i.getUsername());
+	 * Set<Role> oldroles=i.getRoles(); Set<Role> newroles = new HashSet<Role>(); if
+	 * (oldroles!=null) { for(Role j :oldroles) { System.out.println(j.getId());
+	 * System.out.println(j.getName());
+	 * 
+	 * if (j.getId().equals(role.getId())) {
+	 * 
+	 * } else { newroles.add(j); }} i.setRoles(newroles); mongoTemplate.save(i); }}
+	 * 
+	 * mongoTemplate.updateMulti(query2, update, User.class);
+	 */
+	  
+	  
+	  mongoTemplate.findAndRemove(query, Role.class);
+	  
+	  
+	 	
+	
+	
+	return new MessageResponse("Role is removed");
 }
 
 /**
@@ -99,28 +128,28 @@ public MessageResponse deleteRole(String roleid) {
  * @param role id, role name and role status.
  * @return MessageResponse stating that the role has been updated successfully.
  */
-public MessageResponse updateRole(String roleId, String roleName) {
-	if (!roleRepository.existsById(roleId)) {
-		return new MessageResponse("Error: Role is not available");
-	}
-	roleName = "ROLE_" + roleName.toUpperCase();
-	Query query = new Query().addCriteria(Criteria.where("_id").is(roleId));
-	if (roleRepository.existsByName("ROLE_" + roleName.toUpperCase())) {
-		return new MessageResponse("Error: Role is already in use!");}
-	Update update = new Update().set("name", roleName);
-	mongoTemplate.findAndModify(query, update, Role.class);
-	
-	Query query1 = Query.query(Criteria.where("id").is(roleId));
-	Role role = mongoTemplate.findOne(query1, Role.class);
-	Query query2 = Query.query(Criteria.where("id").exists(true));
-	Query query3 = Query.query(Criteria.where("$id").is(role.getId()));
-	Update update2 = new Update().pull("roles", query3);
-	Update update3 = new Update().push("roles", roleName);
-	
-	mongoTemplate.updateMulti(query2, update2, User.class);
-	mongoTemplate.updateMulti(query2, update3, User.class);
-	return new MessageResponse("Role has been updated");
-}
+/*
+ * public MessageResponse updateRole(String roleId, String roleName) { if
+ * (!roleRepository.existsById(roleId)) { return new
+ * MessageResponse("Error: Role is not available"); } roleName = "ROLE_" +
+ * roleName.toUpperCase(); Query query = new
+ * Query().addCriteria(Criteria.where("_id").is(roleId)); if
+ * (roleRepository.existsByName("ROLE_" + roleName.toUpperCase())) { return new
+ * MessageResponse("Error: Role is already in use!");} Update update = new
+ * Update().set("name", roleName); mongoTemplate.findAndModify(query, update,
+ * Role.class);
+ * 
+ * Query query1 = Query.query(Criteria.where("id").is(roleId)); Role role =
+ * mongoTemplate.findOne(query1, Role.class); Query query2 =
+ * Query.query(Criteria.where("id").exists(true)); Query query3 =
+ * Query.query(Criteria.where("$id").is(role.getId())); Update update2 = new
+ * Update().pull("roles", query3); Update update3 = new Update().push("roles",
+ * roleName);
+ * 
+ * mongoTemplate.updateMulti(query2, update2, User.class);
+ * mongoTemplate.updateMulti(query2, update3, User.class); return new
+ * MessageResponse("Role has been updated"); }
+ */
 
 /**
  * Service that allows administrator to delete role from the application.
@@ -148,6 +177,18 @@ public List<Role> displayAllActiveRoleDetail() {
 		throw new BadRequestException("Request format is wrong!");
 	}
 }
+
+public Role findById(String Id) {
+	if (!roleRepository.existsById(Id)) {
+		throw new BadRequestException(Id+ " is not found in the database.");
+	}
+	
+	Query query = Query.query(Criteria.where("_id").is(Id));
+	
+	Role role = mongoTemplate.findOne(query, Role.class);
+	
+	return role;
+	}
 
 public Role findByName(String roleName) {
 	Query query = Query.query(Criteria.where("name").is(roleName));
