@@ -86,6 +86,7 @@ public MessageResponse deleteRole(String roleid) {
 	}
 	Query query = Query.query(Criteria.where("_id").is(roleid));
 	Role role = mongoTemplate.findOne(query, Role.class);
+	System.out.println(role);
 	
 	Query query3 = Query.query(Criteria.where("name").is(role.getName()));
 	

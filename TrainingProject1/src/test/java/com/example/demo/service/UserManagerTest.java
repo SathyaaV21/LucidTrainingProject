@@ -9,6 +9,7 @@ import static org.springframework.data.mongodb.core.FindAndModifyOptions.options
 
 import java.io.IOError;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,22 +78,30 @@ public class UserManagerTest {
 	@Mock
 	MongoOperations mongoOperations;
 
-	/*
-	 * @Test public void signUpTest() throws IOException { SignupRequest user = new
-	 * SignupRequest(); user.setUsername("Sooryaa");
-	 * user.setEmail("sooryaa@gmail.com"); user.setPassword("pass"); User usr = new
-	 * User(user.getUsername(), user.getEmail(), user.getPassword());
-	 * Mockito.when(userService.saveUser(usr)).thenReturn(null);
-	 * assertTrue(authController.registerUser(user) instanceof ResponseEntity<?>); }
-	 * 
-	 * @Test public void signInTest() throws IOException { LoginRequest user = new
-	 * LoginRequest(); user.setUsername("Sathyaa");
-	 * 
-	 * user.setPassword("pass");
-	 * 
-	 * assertTrue(authController.authenticateUser(user) instanceof
-	 * ResponseEntity<?>); }
-	 */
+	
+	@Test
+	public void signUpTest() throws IOException {
+		SignupRequest user = new SignupRequest();
+		user.setUsername("Sooryaa");
+		user.setEmail("sooryaa@gmail.com");
+		user.setPassword("pass");
+		User usr = new User(user.getUsername(), user.getEmail(), user.getPassword());
+		Mockito.when(userService.saveUser(usr)).thenReturn(null);
+		assertTrue(authController.registerUser(user) instanceof ResponseEntity<?>);
+	}
+
+	@Test
+	public void signInTest() throws IOException {
+		LoginRequest loginRequest = new LoginRequest();
+		loginRequest.setUsername("Sooryaa");
+
+		loginRequest.setPassword("pass");
+		User user = new User("Sooryaa", "qwerty", "sathyaa@gmail.com");
+		Mockito.when(userRepository.existsByUsername(loginRequest.getUsername())).thenReturn(true);
+		Query query = Query.query(Criteria.where("username").is(loginRequest.getUsername()));
+		Mockito.when(mongoTemplate.findOne(query, User.class)).thenReturn(user);
+		assertTrue(authController.authenticateUser(loginRequest) instanceof ResponseEntity<?>);
+	}
 
 	@Test
 	public void saveUserTest() throws IOException {
@@ -107,22 +116,14 @@ public class UserManagerTest {
 	public void findUserById() throws IOException {
 		User user = new User("USR_1", "Sathyaa", "qwerty", "sathyaa@gmail.com");
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is("USR1"));
-		//query.fields().exclude("password");
+		Mockito.when(userRepository.existsById("USR_1")).thenReturn(true);
+		query.addCriteria(Criteria.where("id").is("USR_1"));
+		query.fields().exclude("password");
 		Mockito.when(mongoTemplate.findOne(query, User.class)).thenReturn(user);
 
-		assertEquals(user, userService.findUser("USR1"));
+		assertEquals(user, userService.findUser("USR_1"));
 	}
 	
-	/*
-	 * @Test public void findUserByIdException() throws IOException { User user =
-	 * new User("USR_1", "Sathyaa", "qwerty", "sathyaa@gmail.com"); Query query =
-	 * new Query(); query.addCriteria(Criteria.where("id").is("USR1"));
-	 * //query.fields().exclude("password");
-	 * Mockito.when(mongoTemplate.findOne(query, User.class)).thenReturn(user);
-	 * 
-	 * assertThatExceptionOfType( userService.findUser("USR_1")); }
-	 */
 	
 
 	@Test
@@ -144,8 +145,6 @@ public class UserManagerTest {
 		String roleId="ROLE_1";
 		User user = new User(userId, "Sathyaa", "qwerty", "sathyaa@gmail.com");
 		Role role = new Role(roleId, "Admin", true);
-		System.out.println(role);
-System.out.println("HEREEEEEEEEEEEEEEEEEEEEE");
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(userId));
 
@@ -154,15 +153,11 @@ System.out.println("HEREEEEEEEEEEEEEEEEEEEEE");
 		Mockito.when(roleRepository.existsById(roleId)).thenReturn(true);
 		Mockito.when(mongoTemplate.findOne(new Query().addCriteria(Criteria.where("id").is(roleId)), Role.class)).thenReturn(role);
 		Mockito.when(mongoTemplate.save(role)).thenReturn(role);
-		//Mockito.when(mongoTemplate.findAndModify(query, update, User.class)).thenReturn(user);
-		
-//		Mockito.when(mongoOperations.findAndModify(query, update, options().returnNew(true).upsert(false), User.class)).thenReturn(user);
-		
+	
 
-		System.out.println(options().returnNew(true).upsert(false));
-		System.out.println(update);
-		Mockito.when(mongoOperations.findAndModify(query, update, org.mockito.ArgumentMatchers.any(org.springframework.data.mongodb.core.FindAndModifyOptions.class), User.class)).thenReturn(null);
-		assertEquals(user,userService.addRoleToUser(userId, roleId));
+		
+		Mockito.when(mongoOperations.findAndModify(query, update, options().returnNew(true).upsert(false), User.class)).thenReturn(user);
+		assertNull(userService.addRoleToUser(userId, roleId));
 	}
 	
 	@Test
@@ -177,24 +172,36 @@ System.out.println("HEREEEEEEEEEEEEEEEEEEEEE");
 	}
 	
 
-	/*
-	 * @Test public void deleteRoleFromUserTest() throws IOException { User user =
-	 * new User("USR_1", "Sathyaa", "qwerty", "sathyaa@gmail.com"); Role role = new
-	 * Role("ROLE_1", "Admin", true);
-	 * 
-	 * Query query = new Query();
-	 * query.addCriteria(Criteria.where("id").is("USR_1")); Query query2 =
-	 * Query.query(Criteria.where("$id").is("ROLE_1")); Update update = new
-	 * Update().addToSet("roles", query2);
-	 * 
-	 * mongoTemplate.updateMulti(query, update, User.class);
-	 * 
-	 * Mockito.when(mongoTemplate.updateMulti(query, update,
-	 * User.class)).thenReturn();
-	 * 
-	 * assertTrue(userService.deleteRoleFromUser("USR_1", "ROLE_1") instanceof
-	 * MessageResponse); }
-	 */
+	
+	@Test
+	public void deleteRoleFromUserTest() throws IOException {
+		User user = new User("USR_1", "Sathyaa", "qwerty", "sathyaa@gmail.com");
+		Role role = new Role("ROLE_1", "Admin", true);
+
+		
+		Mockito.when(userRepository.existsById("USR_1")).thenReturn(true);
+		Mockito.when(roleRepository.existsById("ROLE_1")).thenReturn(true);
+		
+		Mockito.when(mongoTemplate.findOne(new Query().addCriteria(Criteria.where("id").is("ROLE_1")), Role.class)).thenReturn(role);
+		
+		Query query = Query.query(Criteria.where("id").is("USR_1"));
+		Query query2 = Query.query(Criteria.where("name").is(role.getName()));
+		Update update = new Update().pull("roles", query2);
+		Mockito.when(mongoTemplate.updateFirst(query, update, User.class)).thenReturn(null);
+		
+		Query query3 = new Query();
+		query3.addCriteria(Criteria.where("roles.name").is(role.getName()));
+		List<User> activeroles= new ArrayList<User>();
+		Mockito.when(mongoTemplate.find(query3, User.class)).thenReturn(activeroles);
+		
+		//Mockito.when(activeroles.isEmpty()).thenReturn(true);
+		Mockito.when(mongoTemplate.save(role)).thenReturn(role);
+
+		
+
+		assertTrue(userService.deleteRoleFromUser("USR_1", "ROLE_1") instanceof MessageResponse);
+	}
+	 
 
 	@Test
 	public void displayAllActiveRoleDetailTest() throws IOException {
@@ -232,8 +239,9 @@ System.out.println("HEREEEEEEEEEEEEEEEEEEEEE");
 	public void deleteRoleTest() throws IOException {
 		Role role = new Role("ROLE_2", "Tester", true);
 		Mockito.when(roleRepository.existsById("ROLE_2")).thenReturn(true);
-		Query query = Query.query(Criteria.where("_id"));
+		Query query = Query.query(Criteria.where("_id").is("ROLE_2"));
 		Mockito.when(mongoTemplate.findOne(query, Role.class)).thenReturn(role);
+		
 		Query query3 = Query.query(Criteria.where("name").is("Tester"));
 		
 		Update update = new Update().pull("roles", query3);

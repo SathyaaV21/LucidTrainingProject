@@ -166,10 +166,7 @@ public class UserService {
 		mongoTemplate.save(role);
 
 		Update update = new Update().addToSet("roles", role);
-		System.out.println("!!!!!!!!!HEREEEEEEEEE");
-		
-		System.out.println(options().returnNew(true).upsert(false));
-		System.out.println(update);
+	
 
 		return mongoOperations.findAndModify(query, update, options().returnNew(true).upsert(false), User.class);
 
@@ -201,7 +198,7 @@ public class UserService {
 		query3.addCriteria(Criteria.where("roles.name").is(role.getName()));
 
 		List<User> activeroles = mongoTemplate.find(query3, User.class);
-		System.out.println(activeroles);
+		
 		if (activeroles.isEmpty()) {
 			role.setIsRolestatusactive(false);
 		}
