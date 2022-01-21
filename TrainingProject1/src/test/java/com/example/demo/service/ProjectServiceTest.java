@@ -40,16 +40,16 @@ class ProjectServiceTest {
 
 	}
 
-	@Test
-	void addProjectTest() throws ProjectNotFoundException {
-		Project pro = new Project();
-		pro.setProjectName("project1");
-		pro.setProjectDescription("desc");
-		pro.getProjectName();
-		pro.getProjectDescription();
-		assertTrue(service.addProject(pro) instanceof String);
-
-	}
+//	@Test
+//	void addProjectTest() throws ProjectNotFoundException {
+//		Project pro = new Project();
+//		pro.setProjectName("project1");
+//		pro.setProjectDescription("desc");
+//		pro.getProjectName();
+//		pro.getProjectDescription();
+//		assertTrue(service.addProject(pro) instanceof String);
+//
+//	}
 
 	@Test
 	void getallprojectsTest() throws ProjectNotFoundException {
@@ -59,8 +59,8 @@ class ProjectServiceTest {
 	@Test
 	void updateprojectTest() {
 		Map<String, String> pro = new HashMap<String, String>();
-		pro.put("projectName", "name");
-		pro.put("projectDescription", "changed");
+		pro.put("projectName", "Requirement management");
+		pro.put("projectDescription", "Adding Project,Requirement,Testcase services");
 		assertTrue(service.updateproject(pro, "Prj2") instanceof String);
 	}
 

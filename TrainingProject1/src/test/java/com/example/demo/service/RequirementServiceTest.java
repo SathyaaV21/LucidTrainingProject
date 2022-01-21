@@ -20,7 +20,7 @@ class RequirementServiceTest {
 		Requirement req = new Requirement();
 		req.setRequirementDescription("requirement changed");
 		req.setStatus("status - onhold");
-		assertTrue(reqservice.addRequirement(req, "Prj1") instanceof String);
+		assertTrue(reqservice.addRequirement(req, "Prj10") instanceof String);
 	}
 
 	@Test
@@ -31,7 +31,7 @@ class RequirementServiceTest {
 	@Test
 	void updatereqbyIdTest() throws ProjectNotFoundException {
 		Requirement req = new Requirement();
-		req.setRequirementDescription("hiii");
+		req.setRequirementDescription("Create service to Create a new project");
 		assertTrue(reqservice.updateReq(req, "Prj2Req1", "Prj2") instanceof String);
 
 	}
