@@ -93,9 +93,6 @@ public class RequirementService {
 	public String updateReq(Requirement requirement, String requirementId, String projectId) throws ProjectNotFoundException {
 
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
-		if (reqHolder==null) {
-			throw new ProjectNotFoundException("Reqholder is null");
-		}
 		List<Requirement> req = reqHolder.getRequirement();
 		
 
@@ -127,9 +124,6 @@ public class RequirementService {
 	public String deleteReq(String requirementId, String projectId) throws ProjectNotFoundException {
 		try {
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
-		if (reqHolder == null) {
-			throw new ProjectNotFoundException("req not found");
-		}
 		List<Requirement> req = reqHolder.getRequirement();
 
 		for (Requirement r : req) {

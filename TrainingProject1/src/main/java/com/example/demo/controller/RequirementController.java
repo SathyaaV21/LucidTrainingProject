@@ -45,6 +45,7 @@ public class RequirementController {
 	@PostMapping("requirement/{projectId}")
 	public String createRequirement(@PathVariable String projectId,@Valid  @RequestBody Requirement requirement) {
 		logger.info("In creating requirement");
+		reqservice.addRequirement(requirement, projectId);
 		return ("Requirement added successfully"+ '\n' + "Status Code : " + HttpStatus.OK);
 	}
 	
