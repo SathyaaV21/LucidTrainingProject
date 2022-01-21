@@ -71,31 +71,4 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 }
 
 	
-	/*
-	 * @EnableWebSecurity public class SecurityConfiguration extends
-	 * WebSecurityConfigurerAdapter {
-	 * 
-	 * @Override protected void configure(AuthenticationManagerBuilder auth) throws
-	 * Exception { // TODO Auto-generated method stub
-	 * 
-	 * //Will do this Dynamically using UserDb auth.inMemoryAuthentication()
-	 * .withUser("Admin").password("pass").roles("ADMIN").and()
-	 * .withUser("Developer").password("password").roles("DEVELOPER").and()
-	 * .withUser("User").password("user").roles("USER"); }
-	 * 
-	 * @Override protected void configure(HttpSecurity http) throws Exception {
-	 * http.authorizeRequests()
-	 * .antMatchers("/api/v1/role","/api/v1/role/{Id}").hasRole("ADMIN")
-	 * .antMatchers("/api/v1/user","/api/v1/user/{Id}").hasAnyRole("ADMIN",
-	 * "DEVELOPER") .antMatchers("/getstring").hasAnyRole("ADMIN",
-	 * "DEVELOPER","USER") .and().formLogin(); } //add an authenticate api instead
-	 * of using the form and return a jwt instead of giving the access so that
-	 * //session handler is enabled
-	 * 
-	 * @Bean public PasswordEncoder getPasswordEncoder() { return
-	 * NoOpPasswordEncoder.getInstance(); } }
-	 */
-
 	
-	
-	//"/authenticate","/welcome","/subs","/api/v1/**"

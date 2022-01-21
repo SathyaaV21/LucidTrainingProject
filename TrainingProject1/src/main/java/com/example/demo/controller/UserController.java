@@ -38,36 +38,13 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
-	/**
-	 * API specific for ADMIN to add new user.
-	 * @param User user.
-	 * @return ResponseEntity stating that the request has been successfully
-	 *         initiated.
-	 */
-	
-	/*
-	 * @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	 * 
-	 * @PostMapping("/user") public String addUser(@RequestBody User user) {
-	 * 
-	 * 
-	 * userService.saveUser(user);
-	 * 
-	 * return "Added user details"; }
-	 */
-	
-	//add a proper registration service.
-	
-	
-	  
+
 	/**
 	 * API To view all the users in the system. 
 	 * @return ResponseEntity with information about all the users.
 	 */
 			  
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
-	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@GetMapping("/users")
 	public ResponseEntity<?> displayAllUserDetail() {
 		System.out.println("displayAllUserDetail started");
@@ -113,11 +90,7 @@ public class UserController {
 	 *         requested role.
 	 */
 	
-	
-
-	
-	
-	  //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	  
 	  @PostMapping("/addroletouser/{userId}/{roleId}") 
 	  public ResponseEntity<?>addRoleToUser(@Valid @PathVariable String userId,@PathVariable String roleId) {

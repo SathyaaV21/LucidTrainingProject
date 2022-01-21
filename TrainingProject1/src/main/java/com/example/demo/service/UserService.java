@@ -105,7 +105,7 @@ public class UserService {
 	 *         successfully deleted.
 	 */
 	public MessageResponse deleteUser(String Id) {
-		try {
+		
 
 			if (!userRepository.existsById(Id))
 				return new MessageResponse(Id + "does not exist!");
@@ -118,11 +118,8 @@ public class UserService {
 			mongoTemplate.save(user);
 
 			return new MessageResponse(Id + " has been successfully set to inactive status.");
-		} catch (Exception e) {
-			LOGGER.warn(e.getMessage());
-			throw new BadRequestException("Request format is wrong!");
-		}
-	}
+		} 
+	
 
 	/**
 	 * Service to display the information of the current user
