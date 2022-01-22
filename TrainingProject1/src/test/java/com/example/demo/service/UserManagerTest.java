@@ -10,7 +10,9 @@ import static org.springframework.data.mongodb.core.FindAndModifyOptions.options
 import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,7 +55,9 @@ public class UserManagerTest {
 //	@Autowired
 	@InjectMocks
 	UserService userService;
-
+	
+	@Mock
+	UserService userServe;
 	@Mock
 	private UserRepository userRepository;
 
@@ -86,7 +90,7 @@ public class UserManagerTest {
 		user.setEmail("sooryaa@gmail.com");
 		user.setPassword("pass");
 		User usr = new User(user.getUsername(), user.getEmail(), user.getPassword());
-		Mockito.when(userService.saveUser(usr)).thenReturn(null);
+		Mockito.when(userServe.saveUser(usr)).thenReturn(null);
 		assertTrue(authController.registerUser(user) instanceof ResponseEntity<?>);
 	}
 
@@ -250,5 +254,20 @@ public class UserManagerTest {
 		assertTrue(roleServices.deleteRole("ROLE_2") instanceof MessageResponse);
 	}
 
-	
+	@Test
+	public void updateRoleTest() throws IOException {
+		Map<String,String> hashMap=new HashMap<>();
+		hashMap.put("password","qwerty");
+		hashMap.put("phonenumber","1234567890");
+		Query query = Query.query(Criteria.where("id").is("USR_1"));
+		User user = new User("USR_1", "Sathyaa", "qwerty", "sathyaa@gmail.com");
+
+		Update update1 = new Update();
+		update1.set("password", encoder.encode("qwerty"));
+		update1.set("phonenumber", "0123456789");
+		Mockito.when(mongoTemplate.findAndModify(query, update1, User.class)).thenReturn(user);
+		
+		assertTrue(userService.updateUser("USR_1", hashMap) instanceof ResponseEntity<?>);
+		
+	}
 }
