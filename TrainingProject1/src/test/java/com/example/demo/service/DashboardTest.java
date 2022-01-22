@@ -34,7 +34,7 @@ public class DashboardTest {
 	
 	@Test
 	public void getRTMTest() throws ProjectNotFoundException {
-		assertEquals(dashboardService.getRTM().size(),5);
+		assertTrue(dashboardService.getRTM().get(0) instanceof RTM);
 		
 	}
 	
