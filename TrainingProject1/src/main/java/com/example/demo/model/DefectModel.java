@@ -9,7 +9,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -32,7 +31,6 @@ public class DefectModel {
 	private List<Status> defectHistory;
 	private List<Comments> comments;
 	private List<String> attachment; 
-
 	private int severity;
 
 	public DefectModel() {

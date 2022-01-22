@@ -53,7 +53,10 @@ public class DefectService {
 				new Status(defect.getAssignedUser(), null, "New", "The defect has been stored", LocalDateTime.now()));
 		defect.setDefectHistory(statusList);
 		defect.setComments(commentList);
-		defect.setPresentStatus("New");
+		defect.setPresentStatus("New"); 
+		if(!(defect.getSeverity()>0 && defect.getSeverity()<4)) {
+			throw new BadRequestException("Please enter valid severity");
+		}
 		mongotemplate.save(defect);
 		logger.info("Defect is created successfully");
 		return "Added successfully in the database with defectID " + defect.getId();

@@ -70,7 +70,7 @@ public class DefectController {
 	 * @param Project ID(String)
 	 * @return List of DefectModel Object
 	 */
-	@GetMapping("/getdetailsdefect/{projectID}")
+	@GetMapping("/getdefectdetails/{projectID}")
 	public List<DefectModel> getProjectDefect(@PathVariable String projectID) {
 		logger.info("Getting all defects of a project");
 		return defectService.getProjectDefect(projectID);
@@ -96,7 +96,7 @@ public class DefectController {
 	 * @param ID(String)
 	 * @return List of DefectModel Object
 	 */
-	@GetMapping("/getidDefect/{id}")
+	@GetMapping("/getdefectbyid/{id}")
 	public DefectModel getDefect(@PathVariable String id) {
 		logger.info("Getting a specified defect");
 		return defectService.getDefect(id);
@@ -109,7 +109,7 @@ public class DefectController {
 	 * @param ID(String)
 	 * @return A string of acknowledgement
 	 */
-	@DeleteMapping("/deleteiddefect/{id}")
+	@DeleteMapping("/deletedefectbyid/{id}")
 	public ResponseEntity<?> deleteDefect(@PathVariable String id) {
 		logger.info("Deleting a defect");
 		return ResponseEntity.ok(new ResponseModel(defectService.deleteDefect(id)));
@@ -122,7 +122,7 @@ public class DefectController {
 	 * @param ID(String)
 	 * @return A list of Status.
 	 */
-	@GetMapping("/gethistorydefect/{id}")
+	@GetMapping("/gethistorybyid/{id}")
 	public List<Status> getHistoryByID(@PathVariable String id) {
 		logger.info("Getting the history of a defect");
 		return defectService.getHistoryByID(id);

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.BadRequestException;
@@ -83,6 +84,7 @@ public class ReqTaskService {
 	 * Service to get requirement summarization of all the available requirements 
 	 * @return All the summarizations of the requirements
 	 */
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_DEVELOPER')")
 	public List<RequirementSummarizationModel> getallreqSum() {
 		LOGGER.info("Getting all the requirement summarizations");
 		return mongotemplate.findAll(RequirementSummarizationModel.class);
