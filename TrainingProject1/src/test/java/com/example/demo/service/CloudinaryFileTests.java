@@ -1,7 +1,8 @@
 package com.example.demo.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals
-;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 
@@ -57,12 +58,12 @@ public class CloudinaryFileTests {
 	public void getFileByDefectIdTest() {
 
 		Query query = new Query();
-		query.addCriteria(Criteria.where(Constants.DEFECT_ID).is("DEF_3"));
+		query.addCriteria(Criteria.where(Constants.DEFECT_ID).is("def_3"));
 
 		File testFile = new File();
 
 		when(mongo.findOne(query, File.class)).thenReturn( new File());
-		assertEquals(testFile.getDefect_id(), service.getFileById("DEF_3").getDefect_id());
+		assertEquals(testFile.getDefect_id(), service.getFileById("def_3").getDefect_id());
 
 	}
 	
@@ -73,10 +74,13 @@ public class CloudinaryFileTests {
 	}
 	
 	@Test
-	public void deleteFilebyDefectIdTest() {
-		Assertions.assertThrows(FileNotFoundException.class, () -> service.deleteAllFiles("DEF_2"));
+	public void deleteFilebyDefectIdTest() throws IOException {
+		CloudinaryFileService mockService=org.mockito.Mockito.mock(CloudinaryFileService.class);
+		File testFile=Cloudinary.uploadToCloudinary(file, "def_15");
+		when(mockService.deleteAllFiles("def_15")).thenReturn("deleted");
+		assertTrue(mockService.deleteAllFiles("def_15") instanceof String);
 	}
-	
+
 	@Test
 	void uploadToCloudinaryTest() throws IOException {
 
