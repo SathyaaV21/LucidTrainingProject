@@ -84,7 +84,7 @@ public class ReqTaskService {
 	 * Service to get requirement summarization of all the available requirements 
 	 * @return All the summarizations of the requirements
 	 */
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_DEVELOPER')")
+	
 	public List<RequirementSummarizationModel> getallreqSum() {
 		LOGGER.info("Getting all the requirement summarizations");
 		return mongotemplate.findAll(RequirementSummarizationModel.class);

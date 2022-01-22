@@ -91,7 +91,7 @@ public class TaskController {
 	 * 
 	 * @return Requirement summarization model
 	 */
-	@PreAuthorize("hasAuthority('ROLE_ANALYST') or hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_DEVELOPER')")
 	@GetMapping("/getallreqsum")
 	public List<RequirementSummarizationModel> getallreqSum() {
 		return reqtaskservice.getallreqSum();
