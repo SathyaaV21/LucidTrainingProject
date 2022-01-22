@@ -9,5 +9,6 @@ public final class Constants {
     public static final String CLOUDINARY_UPLOAD_PRESET = "iezzs9yk";
     public static final String DEFECT_ID = "defect_id";
     public static final String REQUIREMENT_ID = "requirement_Id";
-    public static final String FILE_DOCUMENT="filedocument";
+    public static final String FILE_DOCUMENT="filedocument"; 
+    public static final String CANCELLED_STATUS="Cancelled";
 }
