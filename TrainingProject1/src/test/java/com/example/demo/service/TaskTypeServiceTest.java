@@ -40,8 +40,21 @@ class TaskTypeServiceTest {
 		assertTrue(service.viewtaskType().get(0) instanceof TaskTypeModel);
 	}
 
-	/*
-	 * @Test void deletetaskTypeTest() {
-	 * assertTrue(tasktypeservice.deletetaskType(1) instanceof String); }
-	 */
+//
+//	  @Test void deletetaskTypeTest() {
+//	  assertTrue(tasktypeservice.deletetaskType(1) instanceof String); }
+	 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -51,7 +51,7 @@ class DefectServiceTest {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("status", "Retest");
 		parameters.put("comment", "Status updated");
-		assertTrue(defect.updateDefect(parameters, "Def21") instanceof String);
+		assertTrue(defect.updateDefect(parameters, "Def26") instanceof String);
 	}
 
 	@Test
@@ -95,7 +95,7 @@ class DefectServiceTest {
 
 	@Test
 	public void deleteDefecttest() {
-		assertTrue(defect.deleteDefect("Def21") instanceof String);
+		assertTrue(defect.deleteDefect("Def34") instanceof String);
 	}
 
 	@Test

@@ -38,10 +38,10 @@ class RequirementServiceTest {
 		assertTrue(reqservice.updateReq(req, "Prj2Req1", "Prj2") instanceof String);
 
 	}
-
+//
 //	@Test
 //	void deleteReqTest() throws ProjectNotFoundException {
-//		assertTrue(reqservice.deleteReq("Prj10Req1", "Prj10") instanceof String);
+//		assertTrue(reqservice.deleteReq("Prj10Req6", "Prj10") instanceof String);
 //	}
 
 }
