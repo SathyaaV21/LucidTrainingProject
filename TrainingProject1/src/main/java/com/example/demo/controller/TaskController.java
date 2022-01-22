@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class TaskController {
 	 * @param newtask
 	 * @return String
 	 */
+	@PreAuthorize("hasAuthority('ROLE_ANALYST')")
 	@PostMapping("/{prgId}/{reqId}/addtask")
 	public String addTask(@PathVariable String prgId,@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
 		return taskservice.saveTask(taskmodel, reqId, prgId);
@@ -53,6 +55,7 @@ public class TaskController {
 	 * @param taskId
 	 * @return String and HTTP status update
 	 */
+	
 	@PutMapping("/{reqId}/updatetask/{taskId}")
 	public ResponseEntity<Object> updateTask(@PathVariable String reqId, @RequestBody Map<String,String> task, @PathVariable String taskId) {
 		taskservice.updateTask(task, reqId, taskId);
@@ -88,6 +91,7 @@ public class TaskController {
 	 * 
 	 * @return Requirement summarization model
 	 */
+	@PreAuthorize("hasAuthority('ROLE_ANALYST') or hasAuthority('ROLE_ADMIN')")
 	@GetMapping("/getallreqsum")
 	public List<RequirementSummarizationModel> getallreqSum() {
 		return reqtaskservice.getallreqSum();

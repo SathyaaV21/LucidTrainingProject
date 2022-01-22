@@ -24,13 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Role;
 import com.example.demo.service.RoleService;
 
-
-/**
- * All the APIs are accessible only by ROLE_ADMIN
- *
- */
-
-
 @RestController
 @RequestMapping("/api/v1/")
 public class RoleController {
@@ -72,36 +65,18 @@ public ResponseEntity<?> displayAllActiveRoleDetail() {
 
 /**
  * API To delete a role to the application.
- * @return ResponseEntity stating that the role is successfully set inactive.
+ * @return ResponseEntity stating that the role is successfully removed.
  */
-//when deleted here, delete roles from users aswell!
+
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @DeleteMapping("/role/{Id}")
 public ResponseEntity<?> deleteRole(@Valid @PathVariable String Id) {
 	return ResponseEntity.ok(roleService.deleteRole(Id));
 }
 
-///**
-// * API To update a existing role in the application.
-// * @param "roleId":"","roleName":"","roleStatus":""
-// * @return ResponseEntity stating that the role has been updated successfully.
-// */
-
-//when name is update, update name in users aswell.
-/*
- * @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_MANAGER')")
- * 
- * @PutMapping("/role/{Id}") public ResponseEntity<?>
- * updateRole(@Valid @PathVariable String Id,@RequestBody HashMap<String,
- * String> dataHashMap) { String name=dataHashMap.get("roleName"); return
- * ResponseEntity.ok(roleService.updateRole(Id, name));
-} */
-
-
-
 /**
  * API To view a role using role id..
- * @return ResponseEntity stating that the role is successfully set inactive.
+ * @return The role object with the specified Id is shown .
  */
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @GetMapping("/role/{Id}")

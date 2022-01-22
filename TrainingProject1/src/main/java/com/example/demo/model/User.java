@@ -31,17 +31,17 @@ public class User {
 	@Id
 	private String id;
 
-	@NotBlank
+	@NotBlank(message="Username should not be null.")
 	private String username;
 
-	@Email
+	@Email(message="Please enter a valid email id.")
 	private String email;
 
-	@NotBlank
+	@NotBlank(message="Password sould not be blank.")
 	@Size(min = 2)
 	private String password;
 
-	@Size(min = 10, max = 10)
+	@Size(min = 10, max = 10,message="Please enter a valid phone number.")
 	private String phonenumber;
 	
 	private boolean isUserStatusActive;
@@ -51,7 +51,7 @@ public class User {
 
 	public User() {
 	}
-//hi checking source tree push
+
 	public String getId() {
 		return id;
 	}

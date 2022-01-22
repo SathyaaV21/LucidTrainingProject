@@ -4,9 +4,7 @@
  */
 package com.example.demo.service;
 
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.HashSet;
+
 import java.util.List;
 //import java.util.Optional;
 //import java.util.Set;
@@ -30,7 +28,7 @@ import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 
 
-//import com.example.demo.repository.RoleRepository;
+
 @Service
 
 public class RoleService {

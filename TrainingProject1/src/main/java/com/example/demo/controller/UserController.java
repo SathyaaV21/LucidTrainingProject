@@ -4,32 +4,29 @@
  */
 package com.example.demo.controller;
 
-import java.util.HashMap;
+
 import java.util.Map;
 
-//import java.util.Optional;
+
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import com.example.demo.model.User;
-//import com.example.demo.security.services.UserDetailsImpl;
-//import com.example.demo.repository.UserRepository;
+
+
 import com.example.demo.service.UserService;
 
 @RestController
@@ -67,13 +64,13 @@ public class UserController {
 	
 	
 	/**
-	 * API specific to Administrator to find a user using username from the database.
+	 * API  to find a user using userName from the database.
 	 * @param user Id
 	 * @return ResponseEntity stating that the particular user has been successfully
 	 *         deleted.
 	 */
 	
-	///set user status to false.and make changes in signin also.
+
 	
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
 	@DeleteMapping("/user/{Id}")
@@ -109,7 +106,11 @@ public class UserController {
 		return ResponseEntity
 				.ok(userService.deleteRoleFromUser(userId,roleId));
 	}
-	
+	/**
+	 * API to update a particular user.
+	 * @param User Id, Email, PhoneNumber.
+	 * @return ResponseEntity stating that the user has been updated.
+	 */
 	
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER') or hasAuthority('ROLE_MODERATOR')")
 	@PostMapping("/updateuser/{Id}")

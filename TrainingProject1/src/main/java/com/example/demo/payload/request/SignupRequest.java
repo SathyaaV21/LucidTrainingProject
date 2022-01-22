@@ -4,7 +4,6 @@
  */
 package com.example.demo.payload.request;
 
-import java.util.Set;
 
 
 import javax.validation.constraints.*;
@@ -19,22 +18,13 @@ public class SignupRequest {
     @Email
     private String email;
     
-    private Set<String> roles;
+
     
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
   
-    @Size(min = 10, max = 10)
-	private String phonenumber;
-    
-    public String getPhonenumber() {
-		return phonenumber;
-	}
 
-	public void setPhonenumber(String phonenumber) {
-		this.phonenumber = phonenumber;
-	}
 
 	public String getUsername() {
         return username;
@@ -60,11 +50,5 @@ public class SignupRequest {
         this.password = password;
     }
     
-    public Set<String> getRoles() {
-      return this.roles;
-    }
-    
-    public void setRole(Set<String> roles) {
-      this.roles = roles;
-    }
+   
 }

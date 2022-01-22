@@ -4,9 +4,9 @@
  */
 package com.example.demo.controller;
 
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -31,9 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import com.example.demo.model.ERole;
-import com.example.demo.model.Role;
-import com.example.demo.model.Sequence;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
@@ -44,7 +41,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.security.filter.JwtUtils;
 import com.example.demo.security.services.UserDetailsImpl;
 import com.example.demo.service.RoleService;
-import com.example.demo.service.SequenceGenService;
+
 import com.example.demo.service.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -69,8 +66,7 @@ public class AuthController {
 	@Autowired
 	MongoTemplate mongoTemplate;
 	
-	@Autowired
-	private SequenceGenService service;
+
 
 	@Autowired
 	JwtUtils jwtUtils;
