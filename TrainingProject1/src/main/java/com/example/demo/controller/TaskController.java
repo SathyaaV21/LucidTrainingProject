@@ -42,7 +42,6 @@ public class TaskController {
 	 * @param newtask
 	 * @return String
 	 */
-	@PreAuthorize("hasAuthority('ROLE_ANALYST')")
 	@PostMapping("/{prgId}/{reqId}/addtask")
 	public String addTask(@PathVariable String prgId,@PathVariable String reqId, @RequestBody TaskModel taskmodel) {
 		return taskservice.saveTask(taskmodel, reqId, prgId);

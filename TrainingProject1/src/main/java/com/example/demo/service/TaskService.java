@@ -245,7 +245,6 @@ public class TaskService {
 			mongotemplate.remove(taskmodel);
 			RequirementSummarizationModel reqsummodel = mongotemplate.findById(reqId,
 					RequirementSummarizationModel.class);
-			// reqsummodel.setReqTasks(reqtaskservice.getallreqTasks(reqId));
 			if (taskmodel.getTaskStatus().equals("Completed"))
 				reqsummodel.setNo_of_task_completed(reqsummodel.getNo_of_task_completed() - 1);
 			else
