@@ -42,10 +42,7 @@ public class DefectController {
 	 * @param Defect object
 	 * @return The ID of the newly created Defect.
 	 */
-<<<<<<< HEAD
-=======
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TESTER')")
->>>>>>> f3569cd22fb58695d206daa94c824fd65f503d96
 	@PostMapping("/adddefect")
 	public ResponseEntity<?> addDefect(@RequestBody DefectModel defect) {
 		logger.info("Creating a new defect");
