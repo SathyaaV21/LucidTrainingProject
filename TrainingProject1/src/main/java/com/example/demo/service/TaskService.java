@@ -239,6 +239,7 @@ public class TaskService {
 	 */
 	public String deleteTask(String reqId, String taskid) {
 		TaskModel taskmodel = mongotemplate.findById(taskid, TaskModel.class);
+		System.out.println(taskmodel.getTaskId());
 		if (taskmodel != null) {
 			LOGGER.info("Deleting the task");
 			mongotemplate.remove(taskmodel);
