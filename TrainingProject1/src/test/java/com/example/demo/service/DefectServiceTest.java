@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +17,11 @@ import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
-import com.example.demo.model.Attachments;
+import com.example.demo.model.Comments;
 import com.example.demo.model.DefectModel;
 import com.example.demo.model.Status;
 
@@ -27,7 +32,9 @@ class DefectServiceTest {
 	private DefectService defect;
 
 	@Mock
-	private MongoTemplate mongotemplate;
+	private MongoTemplate mongotemplate; 
+	@Mock
+	private SequenceGenService service;
 
 	@Spy
 
@@ -36,23 +43,155 @@ class DefectServiceTest {
 
 	@Test
 	void addDefecttest() {
-		DefectModel def = new DefectModel();
+		DefectModel def = new DefectModel(); 
+		def.setId("Def1");
 		def.setDescription("Memory Exceeded");
 		def.setActualResult("Time Limit Exceeded");
 		def.setPresentStatus("New");
 		def.setProjectID("Prj5");
 		def.setAssignedUser("Manju");
-		def.setSeverity(2);
-		assertTrue(defect.addDefect(def) instanceof String);
+		Status status=new Status();
+		status.setAssignedUser("Manju");
+		status.setComment("Defect has been raised");
+		status.setCurrentStatus("New");
+		status.setStatusBefore(null);
+		status.setTimestamp(LocalDateTime.now());
+		Comments comment=new Comments(); 
+		comment.setAssignedUser("Manju"); 
+		comment.setComment("Defect has been raised"); 
+		comment.setTimestamp(LocalDateTime.now()); 
+		List<Status> sample1=new ArrayList<>();  
+		List<Comments> sample2=new ArrayList<>();
+		sample1.add(status);sample2.add(comment);
+		def.setDefectHistory(sample1); 
+		def.setComments(sample2);
+		def.setSeverity(2); 
+		when(service.getCount("Hii")).thenReturn(1);
+		when(mongotemplate.save(def)).thenReturn(def); 
+		assertTrue(defectService.addDefect(def) instanceof String);
 	}
 
 	@Test
-	public void testUpdateDefect() {
+	public void UpdateDefecttest1() {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("status", "Retest");
 		parameters.put("comment", "Status updated");
-		assertTrue(defect.updateDefect(parameters, "Def26") instanceof String);
+		
+		DefectModel def = new DefectModel(); 
+		def.setId("Def1");
+		def.setDescription("Memory Exceeded");
+		def.setActualResult("Time Limit Exceeded");
+		def.setPresentStatus("New");
+		def.setProjectID("Prj5");
+		def.setAssignedUser("Manju");
+		Status status=new Status();
+		status.setAssignedUser("Manju");
+		status.setComment("Defect has been raised");
+		status.setCurrentStatus("New");
+		status.setStatusBefore(null);
+		status.setTimestamp(LocalDateTime.now());
+		Comments comment=new Comments(); 
+		comment.setAssignedUser("Manju"); 
+		comment.setComment("Defect has been raised"); 
+		comment.setTimestamp(LocalDateTime.now()); 
+		List<Status> sample1=new ArrayList<>();  
+		List<Comments> sample2=new ArrayList<>();
+		sample1.add(status);sample2.add(comment);
+		def.setDefectHistory(sample1); 
+		def.setComments(sample2);
+		def.setSeverity(2); 
+		
+		Query query=new Query();
+		query.addCriteria(Criteria.where("_id").is("Def1"));
+		
+		Update update=new Update();
+		update.set("status", "Retest");
+		update.set("comment", "Status updated");
+		when(mongotemplate.findById("Def1", DefectModel.class)).thenReturn(def); 
+		when(mongotemplate.findAndModify(query, update,DefectModel.class)).thenReturn(def);
+		assertTrue(defectService.updateDefect(parameters, "Def1") instanceof String);
 	}
+	
+	@Test
+	public void UpdateDefecttest2() {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("status", "New");
+		parameters.put("comment", "Status updated");
+		
+		DefectModel def = new DefectModel(); 
+		def.setId("Def1");
+		def.setDescription("Memory Exceeded");
+		def.setActualResult("Time Limit Exceeded");
+		def.setPresentStatus("New");
+		def.setProjectID("Prj5");
+		def.setAssignedUser("Manju");
+		Status status=new Status();
+		status.setAssignedUser("Manju");
+		status.setComment("Defect has been raised");
+		status.setCurrentStatus("New");
+		status.setStatusBefore(null);
+		status.setTimestamp(LocalDateTime.now());
+		Comments comment=new Comments(); 
+		comment.setAssignedUser("Manju"); 
+		comment.setComment("Defect has been raised"); 
+		comment.setTimestamp(LocalDateTime.now()); 
+		List<Status> sample1=new ArrayList<>();  
+		List<Comments> sample2=new ArrayList<>();
+		sample1.add(status);sample2.add(comment);
+		def.setDefectHistory(sample1); 
+		def.setComments(sample2);
+		def.setSeverity(2); 
+		
+		Query query=new Query();
+		query.addCriteria(Criteria.where("_id").is("Def1"));
+		
+		Update update=new Update();
+		update.set("status", "New");
+		update.set("comment", "Status updated");
+		when(mongotemplate.findById("Def1", DefectModel.class)).thenReturn(def); 
+		when(mongotemplate.findAndModify(query, update,DefectModel.class)).thenReturn(def);
+		assertTrue(defectService.updateDefect(parameters, "Def1") instanceof String);
+	}
+	
+	@Test
+	public void UpdateDefecttest3() {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("comment", "Status updated");
+		
+		DefectModel def = new DefectModel(); 
+		def.setId("Def1");
+		def.setDescription("Memory Exceeded");
+		def.setActualResult("Time Limit Exceeded");
+		def.setPresentStatus("New");
+		def.setProjectID("Prj5");
+		def.setAssignedUser("Manju");
+		Status status=new Status();
+		status.setAssignedUser("Manju");
+		status.setComment("Defect has been raised");
+		status.setCurrentStatus("New");
+		status.setStatusBefore(null);
+		status.setTimestamp(LocalDateTime.now());
+		Comments comment=new Comments(); 
+		comment.setAssignedUser("Manju"); 
+		comment.setComment("Defect has been raised"); 
+		comment.setTimestamp(LocalDateTime.now()); 
+		List<Status> sample1=new ArrayList<>();  
+		List<Comments> sample2=new ArrayList<>();
+		sample1.add(status);sample2.add(comment);
+		def.setDefectHistory(sample1); 
+		def.setComments(sample2);
+		def.setSeverity(2); 
+		
+		Query query=new Query();
+		query.addCriteria(Criteria.where("_id").is("Def1"));
+		
+		Update update=new Update();
+		update.set("comment", "Status updated");
+		when(mongotemplate.findById("Def1", DefectModel.class)).thenReturn(def); 
+		when(mongotemplate.findAndModify(query, update,DefectModel.class)).thenReturn(def);
+		assertTrue(defectService.updateDefect(parameters, "Def1") instanceof String);
+	}
+
 
 	@Test
 	public void testGetAllDefects() {
@@ -80,7 +219,18 @@ class DefectServiceTest {
 
 	@Test
 	public void openDefectsCounttest() {
-		assertTrue(Integer.toString(defect.openDefectsCount()) instanceof String);
+		DefectModel def = new DefectModel();
+		def.setId("Def10");
+		def.setDescription("Memory Exceeded");
+		def.setActualResult("Time Limit Exceeded");
+		def.setPresentStatus("New");
+		def.setProjectID("P11");
+		def.setAssignedUser("U1");
+		def.setSeverity(2);
+		List<DefectModel> test=new ArrayList<>();
+		test.add(def);
+		when(mongotemplate.findAll(DefectModel.class)).thenReturn(test);
+		assertTrue(Integer.toString(defectService.openDefectsCount()) instanceof String);
 	}
 
 	@Test
@@ -90,12 +240,53 @@ class DefectServiceTest {
 
 	@Test
 	public void getOpendefectsTest() {
-		assertTrue(defect.getOpendefects().get(0) instanceof DefectModel);
+		DefectModel def = new DefectModel();
+		def.setId("Def10");
+		def.setDescription("Memory Exceeded");
+		def.setActualResult("Time Limit Exceeded");
+		def.setPresentStatus("New");
+		def.setProjectID("P11");
+		def.setAssignedUser("U1");
+		def.setSeverity(2);
+		List<DefectModel> test=new ArrayList<>();
+		test.add(def);
+		
+		Query q=new Query();
+		q.addCriteria(Criteria.where("presentStatus").ne("Cancelled"));
+		when(mongotemplate.find(q,DefectModel.class)).thenReturn(test);
+		assertTrue(defectService.getOpendefects().get(0) instanceof DefectModel);
 	}
 
 	@Test
 	public void deleteDefecttest() {
-		assertTrue(defect.deleteDefect("Def34") instanceof String);
+		
+		DefectModel def = new DefectModel(); 
+		def.setId("Def1");
+		def.setDescription("Memory Exceeded");
+		def.setActualResult("Time Limit Exceeded");
+		def.setPresentStatus("New");
+		def.setProjectID("Prj5");
+		def.setAssignedUser("Manju");
+		Status status=new Status();
+		status.setAssignedUser("Manju");
+		status.setComment("Defect has been raised");
+		status.setCurrentStatus("New");
+		status.setStatusBefore(null);
+		status.setTimestamp(LocalDateTime.now());
+		Comments comment=new Comments(); 
+		comment.setAssignedUser("Manju"); 
+		comment.setComment("Defect has been raised"); 
+		comment.setTimestamp(LocalDateTime.now()); 
+		List<Status> sample1=new ArrayList<>();  
+		List<Comments> sample2=new ArrayList<>();
+		sample1.add(status);sample2.add(comment);
+		def.setDefectHistory(sample1); 
+		def.setComments(sample2);
+		def.setSeverity(2); 
+		
+		when(mongotemplate.findById("Def1", DefectModel.class)).thenReturn(def);
+		when(mongotemplate.save(def)).thenReturn(def);
+		assertTrue(defectService.deleteDefect("Def1") instanceof String);
 	}
 
 	@Test
