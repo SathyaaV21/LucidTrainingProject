@@ -43,7 +43,7 @@ class TaskServiceTest {
 	void updateTodoTest() {
 		TaskModel task = new TaskModel();
 		task.setTodo(1);
-		assertTrue(taskservice.updateTodo("Prj10Req1", "Prj10Req1tsk4", task) instanceof String);
+		assertTrue(taskservice.updateTodo("Prj6Req1", "Prj6Req1tsk14", task) instanceof String);
 	}
 
 	@Test
@@ -53,12 +53,12 @@ class TaskServiceTest {
 
 	@Test
 	void getTaskTest() {
-		assertTrue(taskservice.getTask("Prj10Req1tsk4") instanceof TaskModel);
+		assertTrue(taskservice.getTask("Prj6Req1tsk14") instanceof TaskModel);
 	}
 
 	@Test
 	void gettaskHistoryTest() {
-		assertTrue(taskservice.gettaskHistory("Prj10Req1tsk4").get(0) instanceof TaskHistory);
+		assertTrue(taskservice.gettaskHistory("Prj6Req1tsk14").get(0) instanceof TaskHistory);
 	}
 
 	/*
