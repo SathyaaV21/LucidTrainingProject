@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.constants.Constants;
@@ -102,7 +103,7 @@ public class CloudinaryFileService {
 	 * @return String with respective status and information.
 	 * @throws BadRequestException handles Exception.
 	 */
-
+	@PreAuthorize("hasAuthority('ROLE_TESTER')")
 	public String deleteAllFiles(String defect_id) {
 
 		Query q = new Query();
