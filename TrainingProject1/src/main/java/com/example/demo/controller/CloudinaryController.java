@@ -85,6 +85,7 @@ public class CloudinaryController {
 	 * @param defect_id as HashMap.
 	 * @return String stating the message.
 	 */
+	
 	@PreAuthorize("hasAuthority('ROLE_TESTER')")
 	@DeleteMapping("/deleteallfilesbyid")
 	public String deleteAllFiles(@RequestBody HashMap<String, String> dataHashMap) {
