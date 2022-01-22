@@ -103,7 +103,6 @@ public class CloudinaryFileService {
 	 * @return String with respective status and information.
 	 * @throws BadRequestException handles Exception.
 	 */
-	@PreAuthorize("hasAuthority('ROLE_TESTER')")
 	public String deleteAllFiles(String defect_id) {
 
 		Query q = new Query();
