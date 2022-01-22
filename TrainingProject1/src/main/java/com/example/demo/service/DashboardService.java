@@ -68,7 +68,7 @@ public class DashboardService {
 		}
 		
 		
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < projects.size(); i++) {
 
 		RTM rtm = new RTM();
 		List<DashRequirements> tempRequirements = new ArrayList<DashRequirements>();

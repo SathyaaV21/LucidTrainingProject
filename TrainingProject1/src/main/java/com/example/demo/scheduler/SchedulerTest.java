@@ -3,6 +3,7 @@
 */
 package com.example.demo.scheduler;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,11 +53,11 @@ public class SchedulerTest {
 		
 	}
 
-	@Scheduled(cron="0 0 14 * * *")
+	@Scheduled(cron="0 15 21 * * *")
 	public void setStartCount() throws ProjectNotFoundException {
 		LOGGER.info("Scheduler started to set start count of day");
 		defectCounts=new DefectCount();
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < projects.size(); i++) {
 			TestCaseCount testcaseCount=new TestCaseCount();
 			String projId = projects.get(i).getProjectId();
 			int startCount=testcaseService.getOpenTestcaseCount(projId);
@@ -69,13 +70,14 @@ public class SchedulerTest {
 		defectCounts.setStartCount(defectStartCount);
 		
 	}
-	@Scheduled(cron="0 05 14 * * *")
+	@Scheduled(cron="0 16 21 * * *")
 	public void setEndCount() {
 		LOGGER.info("Scheduler started to set end count of day");
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < projects.size(); i++) {
 			String projId = projects.get(i).getProjectId();
 			int endCount=testcaseService.getOpenTestcaseCount(projId);
 			testcaseCounts.get(i).setEndCount(endCount);
+			testcaseCounts.get(i).setTimestamp(LocalDateTime.now());
 		}
 		for(TestCaseCount t: testcaseCounts) {
 			mongo.save(t);
@@ -83,6 +85,7 @@ public class SchedulerTest {
 		}
 		int defectEndCount=defectService.openDefectsCount();
 		defectCounts.setEndCount(defectEndCount);
+		defectCounts.setTimestamp(LocalDateTime.now());
 		mongo.save(defectCounts);
 		
 }}

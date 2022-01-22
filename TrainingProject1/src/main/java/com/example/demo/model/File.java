@@ -5,6 +5,8 @@
 package com.example.demo.model;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,7 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties
 @Document(collection = "files")
 public class File {
-//		@Id
+	    
+	    @NotNull(message = "Defect ID is mandatory") 
 		private String defect_id;
 		private List<FileDocument> filedocument;
 

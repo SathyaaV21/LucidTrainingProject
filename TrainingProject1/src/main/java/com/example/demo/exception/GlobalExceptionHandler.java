@@ -34,6 +34,19 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
 		
 	}
+	@ExceptionHandler(FileNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> handleFileNotFoundException(FileNotFoundException errorResponse){
+		ExceptionResponse response=new ExceptionResponse();
+		  response.setErrorCode(HttpStatus.BAD_REQUEST.name());
+		  response.setErrorMessage(errorResponse.getMessage());
+		  response.setTimestamp(LocalDateTime.now());
+		 
+		return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	
 
 }
 
