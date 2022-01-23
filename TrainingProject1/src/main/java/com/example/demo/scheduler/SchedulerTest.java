@@ -53,7 +53,7 @@ public class SchedulerTest {
 		
 	}
 
-	@Scheduled(cron="0 15 21 * * *")
+	@Scheduled(cron="0 37 21 * * *")
 	public void setStartCount() throws ProjectNotFoundException {
 		LOGGER.info("Scheduler started to set start count of day");
 		defectCounts=new DefectCount();
@@ -70,7 +70,7 @@ public class SchedulerTest {
 		defectCounts.setStartCount(defectStartCount);
 		
 	}
-	@Scheduled(cron="0 16 21 * * *")
+	@Scheduled(cron="0 38 21 * * *")
 	public void setEndCount() {
 		LOGGER.info("Scheduler started to set end count of day");
 		for(int i = 0; i < projects.size(); i++) {
