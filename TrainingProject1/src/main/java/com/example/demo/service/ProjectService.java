@@ -2,6 +2,7 @@
 * 	@author Manju
 */
 package com.example.demo.service;
+
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -21,7 +22,6 @@ public class ProjectService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
-
 	@Autowired
 	private MongoTemplate mongotemplate;
 
@@ -34,24 +34,23 @@ public class ProjectService {
 	 */
 
 	public String addProject(Project pro) {
-		
 
-		List<Project> proList=mongotemplate.findAll(Project.class);
-		int i=1; 
-		for(Project p:proList) {
-				i++;
-			}
-		pro.setProjectId("Prj"+Integer.toString(i));
+		List<Project> proList = mongotemplate.findAll(Project.class);
+		int i = 1;
+		for (Project p : proList) {
+			i++;
+		}
+		pro.setProjectId("Prj" + Integer.toString(i));
 		mongotemplate.insert(pro);
 		logger.info("Project created");
 		return "Project added";
-		}
+	}
 
 	/**
 	 * Method to get every Projects from the database.
 	 * 
 	 * @return Fetch all Projects from the Mongo Database.
-	 * @throws ProjectNotFoundException.	 
+	 * @throws ProjectNotFoundException.
 	 */
 
 	public List<Project> viewProjects() throws ProjectNotFoundException {
@@ -69,7 +68,7 @@ public class ProjectService {
 	 * 
 	 * @param the Project id is passed.
 	 * @return Project Details of the project.
-	 * @throws ProjectNotFoundException.	
+	 * @throws ProjectNotFoundException.
 	 * 
 	 */
 
@@ -89,13 +88,12 @@ public class ProjectService {
 	 * Method to update specific Project by project Id from Database
 	 * 
 	 * @param the Project id and Projectmodel is passed.
-	 * @return 
+	 * @return
 	 * @throws ProjectNotFoundException
 	 * 
 	 */
 
-
-	public String updateproject(Map<String, String> project, String projectId){
+	public String updateproject(Map<String, String> project, String projectId) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(projectId));
 		Update update = new Update();
@@ -108,19 +106,3 @@ public class ProjectService {
 
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

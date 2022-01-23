@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.ReqHolder;
 import com.example.demo.model.Requirement;
-import com.example.demo.model.RequirementSummarizationModel;
 
 @Service
 
@@ -23,9 +22,6 @@ public class RequirementService {
 
 	@Autowired
 	private MongoTemplate mongotemplate;
-
-	@Autowired
-	private ReqTaskService reqtaskservice;
 
 	/**
 	 * Method to add Requirements for the Project in the Database
@@ -59,11 +55,6 @@ public class RequirementService {
 			req.setRequirement(r);
 			mongotemplate.save(req);
 		}
-
-		RequirementSummarizationModel reqsummodel = new RequirementSummarizationModel();
-		reqsummodel.setReq_Id(requirement.getRequirementId());
-		reqsummodel.setPrg_Id(projectId);
-		reqtaskservice.createreqSum(reqsummodel);
 		logger.info("requirement created");
 		return "added requirement";
 	}
@@ -89,8 +80,7 @@ public class RequirementService {
 	 * @throws ProjectNotFoundException
 	 */
 
-	public String updateReq(Requirement requirement, String requirementId, String projectId)
-			throws ProjectNotFoundException {
+	public String updateReq(Requirement requirement, String requirementId, String projectId) {
 
 		ReqHolder reqHolder = mongotemplate.findById(projectId, ReqHolder.class);
 

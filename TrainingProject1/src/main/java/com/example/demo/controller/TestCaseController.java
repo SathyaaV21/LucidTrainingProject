@@ -2,6 +2,7 @@
 * 	@author Manju
 */
 package com.example.demo.controller;
+
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -20,13 +21,10 @@ import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.TestCase;
 import com.example.demo.service.TestCaseService;
 
-
-
 @RequestMapping("/api/v1")
 @RestController
 public class TestCaseController {
 	private static final Logger logger = LoggerFactory.getLogger(TestCaseController.class);
-
 
 	@Autowired
 	private TestCaseService testservice;
@@ -36,23 +34,21 @@ public class TestCaseController {
 	 * 
 	 * @return List of testcases from the database.
 	 */
-	
-	
+
 	@GetMapping("/testcase")
 	public List<TestCase> getTestcases() {
 		logger.info("request sent to fetch testcases");
 		return testservice.viewTestcases();
 	}
-	
-	
+
 	/**
 	 * Method to add TestCases
 	 *
 	 * 
 	 * @param Project Id,Requirement id,testcase model
-	 * @return 
+	 * @return
 	 * @return Respective status of Added testCases.
-	 * @throws ProjectNotFoundException 
+	 * @throws ProjectNotFoundException
 	 */
 
 	@PostMapping("testcase/{projectId}/{requirementId}")
@@ -63,65 +59,22 @@ public class TestCaseController {
 		return ("Status Code : " + HttpStatus.OK + '\n' + "Status Message : Success " + '\n'
 				+ "Description : Testcase added successfully ");
 	}
-	
 
 	/**
 	 * Method to update testCase
 	 *
 	 * 
 	 * @param Project id,requirement Id, TestCase Id and TestCaseModel
-	 * @return 
-	 * @return 
+	 * @return
+	 * @return
 	 * @return Respective status and information of TestCase Update.
 	 */
 
 	@PutMapping("testcase/{testcaseId}")
-	public String updateTestcase(@RequestBody Map<String,String> testcase,@PathVariable String testcaseId)
-	{
+	public String updateTestcase(@RequestBody Map<String, String> testcase, @PathVariable String testcaseId) {
 		logger.info("In updating testcase");
-		testservice.updateTestcase( testcase, testcaseId);
+		testservice.updateTestcase(testcase, testcaseId);
 		return "Testcase updated successfully";
 	}
-	
-	
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

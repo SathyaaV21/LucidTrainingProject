@@ -2,6 +2,7 @@
 * 	@author Manju
 */
 package com.example.demo.service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,55 +23,53 @@ import com.example.demo.model.TestCase;
 public class TestCaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TestCaseService.class);
 
-	
 	@Autowired
 	private MongoTemplate mongotemplate;
-	
+
 	/**
 	 * Method to get all Testcases for the particular requirement in the Database
 	 * 
 	 * @return all testcases .
 	 */
 
-	
-	public List<TestCase> viewTestcases()  {
+	public List<TestCase> viewTestcases() {
 		logger.info("Testcases fetched and returned");
 		return mongotemplate.findAll(TestCase.class);
 
-}
-	
+	}
+
 	/**
 	 * Method to add Testcase for the particular requirement in the Database
 	 * 
 	 * @param the Project id, requirement Id and TestcaseModel is passed.
 	 * @return status of the Added testcase .
-	 * @throws ProjectNotFoundException 
+	 * @throws ProjectNotFoundException
 	 */
 
-	public String addTestcase(TestCase testcase, String projectId, String requirementId) throws ProjectNotFoundException {
-			testcase.setProjectId(projectId); 
-			testcase.setRequirementId(requirementId);
-			
-			ReqHolder req=mongotemplate.findById(projectId,ReqHolder.class);
-			if(req==null) {
-				throw new ProjectNotFoundException("Project id not found");
-			}
-			List<Requirement> reqList=req.getRequirement();
-			List<Requirement> req_=new ArrayList<Requirement>();
-			for(Requirement i:reqList) {
-				if(i.getRequirementId().equals(requirementId)) {
-					testcase.setTestCaseId(requirementId+"tc"+Integer.toString(i.getTestCount()));
-					i.setTestCount(i.getTestCount()+1);
-					req_.add(i);
-				}
-				else
-					req_.add(i);
-			}
-			req.setRequirement(req_);
-			mongotemplate.save(req);
-			mongotemplate.insert(testcase);
-			logger.info("testcase added successfully");
-			return "Testcase added";
+	public String addTestcase(TestCase testcase, String projectId, String requirementId)
+			throws ProjectNotFoundException {
+		testcase.setProjectId(projectId);
+		testcase.setRequirementId(requirementId);
+
+		ReqHolder req = mongotemplate.findById(projectId, ReqHolder.class);
+		if (req == null) {
+			throw new ProjectNotFoundException("Project id not found");
+		}
+		List<Requirement> reqList = req.getRequirement();
+		List<Requirement> req_ = new ArrayList<Requirement>();
+		for (Requirement i : reqList) {
+			if (i.getRequirementId().equals(requirementId)) {
+				testcase.setTestCaseId(requirementId + "tc" + Integer.toString(i.getTestCount()));
+				i.setTestCount(i.getTestCount() + 1);
+				req_.add(i);
+			} else
+				req_.add(i);
+		}
+		req.setRequirement(req_);
+		mongotemplate.save(req);
+		mongotemplate.insert(testcase);
+		logger.info("testcase added successfully");
+		return "Testcase added";
 	}
 
 	/**
@@ -79,44 +78,43 @@ public class TestCaseService {
 	 * @param the Project id , testcase id, and testcase model is passed.
 	 * @return status of updated testcase
 	 * @throws ProjectNotFoundException
-	 * @throws Handles Exception.
+	 * @throws Handles                  Exception.
 	 * 
 	 */
-	public String updateTestcase(Map<String,String> testcase, String testcaseId) {
+	public String updateTestcase(Map<String, String> testcase, String testcaseId) {
 
-		Query query=new Query();
-		query.addCriteria(Criteria.where("_id").is(testcaseId)); 
-		Update update=new Update();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(testcaseId));
+		Update update = new Update();
 		for (Map.Entry test : testcase.entrySet()) {
 			update.set((String) test.getKey(), test.getValue());
-		} 
-		mongotemplate.findAndModify(query, update,TestCase.class);
+		}
+		mongotemplate.findAndModify(query, update, TestCase.class);
 		logger.info("testcase updated successfully");
-		return "Testcase updated"; 
-		
+		return "Testcase updated";
+
 	}
-	
+
 	/**
 	 * Method to get Testcase count for particular Project from the Database
 	 * 
 	 * @param the Project id
 	 * @return status count of testcases of particular project.
 	 */
-	
+
 	public int getOpenTestcaseCount(String projectId) {
-		List<TestCase> testcase=mongotemplate.findAll(TestCase.class);
-		int count=0;
-		for(TestCase test:testcase) {
-			if ((test.getProjectId().equals(projectId)) && !(test.getStatus().equals("Failed")))
-			{
-					count++;
-				
+		List<TestCase> testcase = mongotemplate.findAll(TestCase.class);
+		int count = 0;
+		for (TestCase test : testcase) {
+			if ((test.getProjectId().equals(projectId)) && !(test.getStatus().equals("Failed"))) {
+				count++;
+
 			}
 		}
 		logger.info("returned count of open testcases with respect to project Id");
 		return count;
 	}
-	
+
 	/**
 	 * Method to get Testcase count for particular Requirement from the Database
 	 * 
@@ -124,64 +122,15 @@ public class TestCaseService {
 	 * @return status count of testcases of particular requirement.
 	 */
 	public int getRequirementTestcaseCount(String requirementId) {
-		List<TestCase> testcase=mongotemplate.findAll(TestCase.class);
-		int count=0;
-		for(TestCase test:testcase) {
-			if ((test.getRequirementId().equals(requirementId)) && !(test.getStatus().equals("Failed")))
-			{
-					count++;
-				
+		List<TestCase> testcase = mongotemplate.findAll(TestCase.class);
+		int count = 0;
+		for (TestCase test : testcase) {
+			if ((test.getRequirementId().equals(requirementId)) && !(test.getStatus().equals("Failed"))) {
+				count++;
+
 			}
 		}
 		logger.info("returned count of open testcases with respect to requirement Id");
 		return count;
 	}
 }
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,93 +1,118 @@
 /**
 	* 	@author Manju
+	* 
+	* 
 	*/
 
 package com.example.demo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.http.ResponseEntity;
-
 import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.Project;
-import com.example.demo.model.Requirement;
-import com.example.demo.model.User;
 
 @SpringBootTest
 
 class ProjectServiceTest {
 
-	@Autowired
-	private ProjectService service;
+	@Mock
+	private MongoTemplate mongotemplate;
+
+	@Spy
 
 	@InjectMocks
 	private ProjectService projectservice;
 
-	@Mock
-	Project project;
-
-	@Mock
-	MongoTemplate mongoTemplate;
-
 	@Test
-	public void GetProjectByIdTest() throws ProjectNotFoundException {
+	public void addProjectTest() throws ProjectNotFoundException {
 		Project pro = new Project();
 		pro.setProjectId("Prj78");
 		pro.setProjectDescription("For unit Testing purpose");
 		pro.setProjectName("Junit mockito");
 
-		when(mongoTemplate.save(pro)).thenReturn(pro);
-		assertEquals("Project added", projectservice.addProject(pro));
+		when(mongotemplate.save(pro)).thenReturn(pro);
+		assertTrue(projectservice.addProject(pro) instanceof String);
 
 	}
 
 	@Test
-	void getallprojectsTest() throws ProjectNotFoundException {
-		assertTrue(service.viewProjects().get(0) instanceof Project);
-	}
+	public void updateProjectTest() {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("projectName", "Retest");
+		parameters.put("projectDescription", "Status updated");
 
-	@Test
-	void updateprojectTest() {
-		Map<String, String> pro = new HashMap<String, String>();
-		pro.put("projectName", "Requirement management");
-		pro.put("projectDescription", "Adding Project,Requirement,Testcase services");
-		Query query = Query.query(Criteria.where("_id").is("Prj2"));
+		Project pro = new Project();
+		pro.setProjectId("Prj88");
+		pro.setProjectDescription("For unit Testing purpose");
+		pro.setProjectName("Junit mockito");
+
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is("Prj88"));
 
 		Update update = new Update();
-		update.set("projectName", "Updated success");
-		update.set("projectDescription", "Updated using Mockito");
-		
-		Mockito.when(mongoTemplate.findAndModify(query, update, Project.class));
+		update.set("projectName", "Retest");
+		update.set("projectDescription", "Status updated");
+		when(mongotemplate.findById("Prj88", Project.class)).thenReturn(pro);
+		when(mongotemplate.findAndModify(query, update, Project.class)).thenReturn(pro);
+		assertTrue(projectservice.updateproject(parameters, "Prj88") instanceof String);
 
-		assertTrue(service.updateproject(pro, "Prj2") instanceof String);
 	}
 
+	@Test
+	public void getallProjectTest() throws ProjectNotFoundException {
+		when(mongotemplate.findAll(Project.class)).thenReturn(Stream.of(new Project()).collect(Collectors.toList()));
+		assertEquals(1, projectservice.viewProjects().size());
+
+	}
+
+	@Test
+
+	public void testGetProjectById() throws ProjectNotFoundException {
+		Project pro = new Project();
+		pro.setProjectId("Prj34");
+		pro.setProjectDescription("description new changed");
+		pro.setProjectName("mockito project");
+
+		when(mongotemplate.findById("Prj34", Project.class)).thenReturn(pro);
+		assertEquals(pro, projectservice.getByProjectId("Prj34"));
+
+	}
+
+	@Test
+	public void getsingleprojectTest() {
+		Project pro = new Project();
+		pro.setProjectId("Prj34");
+		pro.setProjectDescription("description new changed");
+		pro.setProjectName("mockito project");
+
+		when(mongotemplate.findById("Prj34", Project.class)).thenReturn(null);
+		Assertions.assertThrows(ProjectNotFoundException.class, () -> projectservice.getByProjectId(null));
+
+	}
+
+	@Test
+	public void getallProjectsTest() throws ProjectNotFoundException {
+
+		ProjectService service = new ProjectService();
+		ProjectNotFoundException exception = assertThrows(ProjectNotFoundException.class, () -> service.viewProjects());
+		assertEquals("Projects Not Found", exception.getMessage());
+
+	}
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -2,6 +2,7 @@
 	* 	@author Manju
 	*/
 package com.example.demo.controller;
+
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -21,92 +22,69 @@ import com.example.demo.exception.ProjectNotFoundException;
 import com.example.demo.model.Project;
 import com.example.demo.service.ProjectService;
 
-
 @RequestMapping("/api/v1")
 @RestController
 public class ProjectController {
 	private static final Logger logger = LoggerFactory.getLogger(ProjectController.class);
 
-	
-		@Autowired
-		private ProjectService projectservice;
+	@Autowired
+	private ProjectService projectservice;
 
-		/**
-		 * Method to create project.
-		 *
-		 * 
-		 * @param ProjectModel.
-		 * @return status of project.
-		 */
-		
-		@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER')")
-		@PostMapping("/project")
+	/**
+	 * Method to create project.
+	 *
+	 * 
+	 * @param ProjectModel.
+	 * @return status of project.
+	 */
 
-		public String CreateProject(@Valid @RequestBody Project project) {
-			logger.info("Creating a new project");
-			return ("Status Code : " + HttpStatus.OK + '\n' + "Status Message : Success " + '\n'
-					+ "Description : Project created successfully "+ '\n' +projectservice.addProject(project));
-		}
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')or hasAuthority('ROLE_MANAGER')")
+	@PostMapping("/project")
 
-		/**
-		 * Method to Fetch all projects.
-		 * 
-		 * @return List of all the Projects from the database.
-		 */
+	public String CreateProject(@Valid @RequestBody Project project) {
+		logger.info("Creating a new project");
+		return ("Status Code : " + HttpStatus.OK + '\n' + "Status Message : Success " + '\n'
+				+ "Description : Project created successfully " + '\n' + projectservice.addProject(project));
+	}
 
-		@GetMapping("/project")
-		public List<Project> getProjects() throws ProjectNotFoundException {
-			logger.info("Request sent to view all projects");
-			return projectservice.viewProjects();
-		}
+	/**
+	 * Method to Fetch all projects.
+	 * 
+	 * @return List of all the Projects from the database.
+	 */
 
-		/**
-		 * Method to get a specific project
-		 * 
-		 * @param Project Id
-		 * @return Project model of the respective project Id is passed.
-		 */
-		@GetMapping("/project/{Id}")
-		public Project getprojectByID(@PathVariable String Id) throws ProjectNotFoundException {
-			logger.info("Request sent to view a particular project by Id");
-			return projectservice.getByProjectId(Id);
+	@GetMapping("/project")
+	public List<Project> getProjects() throws ProjectNotFoundException {
+		logger.info("Request sent to view all projects");
+		return projectservice.viewProjects();
+	}
 
-		}
-
-		/**
-		 * Method to Update project
-		 *
-		 * 
-		 * @param ProjectModel and project Id is passed
-		 * @return 
-		 * @return Respective status of ProjectModel Update.
-		 */
-		@PutMapping("project/{projectId}")
-		public String updateproject(@RequestBody Map<String,String> project,@PathVariable String projectId){
-			logger.info("Request sent to update a project");
-			projectservice.updateproject(project,projectId);
-			return "Project updated ";
-		}
+	/**
+	 * Method to get a specific project
+	 * 
+	 * @param Project Id
+	 * @return Project model of the respective project Id is passed.
+	 */
+	@GetMapping("/project/{Id}")
+	public Project getprojectByID(@PathVariable String Id) throws ProjectNotFoundException {
+		logger.info("Request sent to view a particular project by Id");
+		return projectservice.getByProjectId(Id);
 
 	}
 
+	/**
+	 * Method to Update project
+	 *
+	 * 
+	 * @param ProjectModel and project Id is passed
+	 * @return
+	 * @return Respective status of ProjectModel Update.
+	 */
+	@PutMapping("project/{projectId}")
+	public String updateproject(@RequestBody Map<String, String> project, @PathVariable String projectId) {
+		logger.info("Request sent to update a project");
+		projectservice.updateproject(project, projectId);
+		return "Project updated ";
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
